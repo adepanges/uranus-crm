@@ -1,0 +1,37 @@
+.DS_Store
+
+resources/cache/blade/*
+!resources/cache/blade/index.html
+
+module/*/cache/*
+!module/*/cache/index.html
+
+module/*/logs/*
+!module/*/logs/index.html
+
+!module/*/*/.htaccess
+
+composer.lock
+/vendor/
+
+# IDE Files
+#-------------------------
+/nbproject/
+.idea/*
+
+## Sublime Text cache files
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+/tests/tests/
+/tests/results/
+
+# symlink ignore
+module/*/helpers/
+module/*/language/
+module/*/libraries/
+module/*/third_party/
+
+package-lock\.json
