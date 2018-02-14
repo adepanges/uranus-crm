@@ -52,7 +52,7 @@ insert  into `master_payment_method`(`payment_method_id`,`name`,`desc`,`third_pa
 
 /*Data for the table `module_feature` */
 
-insert  into `module_feature`(`feature_id`,`menu_id`,`name`,`label`,`status`) values (1,1,'users_view','View Users',1),(2,1,'users_add','Tambah User',1),(3,1,'users_upd','Ubah User',1),(4,1,'users_del','Hapus Users',0),(5,1,'users_role_view','View Role User',1),(6,1,'users_role_add','Tambah Role Users',1),(7,1,'users_role_del','Hapus Role User',1);
+insert  into `module_feature`(`feature_id`,`menu_id`,`name`,`label`,`status`) values (1,1,'users_view','View Users',1),(2,1,'users_list','Tambah User',1),(3,1,'users_add','Tambah User',1),(4,1,'users_upd','Ubah User',1),(5,1,'users_del','Hapus Users',0),(6,1,'users_role_list','View Role User',1),(7,1,'users_role_add','Tambah Role Users',1),(8,1,'users_role_del','Hapus Role User',1);
 
 /*Data for the table `module_menu` */
 
@@ -64,7 +64,11 @@ insert  into `modules`(`module_id`,`link`,`name`,`status`) values (1,'sso','SSO'
 
 /*Data for the table `network` */
 
+insert  into `network`(`network_id`,`name`,`status`) values (1,'Creathinker',1);
+
 /*Data for the table `network_event` */
+
+insert  into `network_event`(`network_event_id`,`network_id`,`event_id`,`callback_link`,`status`) values (1,1,3,'http://ctctrk.com/p.ashx?a=5&e=5&f=pb&r=',1),(2,1,4,'http://ctctrk.com/p.ashx?a=5&e=20&f=pb&r=',1),(3,1,5,'http://ctctrk.com/p.ashx?a=5&e=21&f=pb&r=',1);
 
 /*Data for the table `network_order` */
 
@@ -86,11 +90,15 @@ insert  into `modules`(`module_id`,`link`,`name`,`status`) values (1,'sso','SSO'
 
 /*Data for the table `sso_role` */
 
-insert  into `sso_role`(`role_id`,`name`,`label`,`status`) values (1,'ADMINISTRATOR','Administrator',1),(2,'MANAGER','Manajer',0);
+insert  into `sso_role`(`role_id`,`name`,`label`,`status`) values (1,'ADMINISTRATOR','Administrator',1),(2,'MANAGER','Manajer',0),(3,'FINANCE','Keuangan',0),(4,'LOGISTICS','Logistik',0),(5,'Sales','Penjualan',0);
 
 /*Data for the table `sso_role_access` */
 
+insert  into `sso_role_access`(`role_access_id`,`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`) values (1,1,1,1,1,'users_view',1),(2,1,1,1,1,'users_list',1),(3,1,1,1,1,'users_add',1),(4,1,1,1,1,'users_upd',1),(5,1,1,1,1,'users_del',1),(6,1,1,1,1,'users_role_view',1),(7,1,1,1,1,'users_role_add',1),(8,1,1,1,1,'users_role_del',1);
+
 /*Data for the table `sso_user` */
+
+insert  into `sso_user`(`user_id`,`username`,`password`,`email`,`first_name`,`last_name`,`status`) values (1,'admin','0cc175b9c0f1b6a831c399e269772661','admin@dermeva.co.id','Admin','',1);
 
 /*Data for the table `sso_user_role` */
 

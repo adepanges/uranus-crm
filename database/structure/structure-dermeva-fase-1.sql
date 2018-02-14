@@ -166,7 +166,7 @@ CREATE TABLE `module_feature` (
   UNIQUE KEY `name` (`name`),
   KEY `FK_reference_29` (`menu_id`),
   CONSTRAINT `FK_reference_29` FOREIGN KEY (`menu_id`) REFERENCES `module_menu` (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `module_menu` */
 
@@ -198,7 +198,7 @@ CREATE TABLE `network` (
   `name` varchar(255) DEFAULT NULL,
   `status` smallint(6) DEFAULT '0',
   PRIMARY KEY (`network_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `network_event` */
 
@@ -207,13 +207,13 @@ CREATE TABLE `network_event` (
   `network_id` int(11) DEFAULT NULL,
   `event_id` int(11) DEFAULT NULL,
   `callback_link` varchar(255) DEFAULT NULL,
-  `tatus` smallint(6) DEFAULT '0',
+  `status` smallint(6) DEFAULT '0',
   PRIMARY KEY (`network_event_id`),
   KEY `FK_reference_41` (`network_id`),
   KEY `FK_reference_42` (`event_id`),
   CONSTRAINT `FK_reference_41` FOREIGN KEY (`network_id`) REFERENCES `network` (`network_id`),
   CONSTRAINT `FK_reference_42` FOREIGN KEY (`event_id`) REFERENCES `master_event` (`event_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `network_order` */
 
@@ -382,7 +382,7 @@ CREATE TABLE `sso_role` (
   `label` varchar(255) DEFAULT NULL,
   `status` smallint(6) DEFAULT '0',
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sso_role_access` */
 
@@ -403,7 +403,7 @@ CREATE TABLE `sso_role_access` (
   CONSTRAINT `FK_reference_5` FOREIGN KEY (`role_id`) REFERENCES `sso_role` (`role_id`),
   CONSTRAINT `FK_reference_6` FOREIGN KEY (`menu_id`) REFERENCES `module_menu` (`menu_id`),
   CONSTRAINT `FK_reference_7` FOREIGN KEY (`feature_id`) REFERENCES `module_feature` (`feature_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sso_user` */
 
@@ -416,7 +416,7 @@ CREATE TABLE `sso_user` (
   `last_name` varchar(255) DEFAULT NULL,
   `status` smallint(6) DEFAULT '0',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `sso_user_role` */
 
