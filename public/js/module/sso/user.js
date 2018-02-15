@@ -119,15 +119,26 @@ $('#btnSaveUserModal').click(function(e){
         })
         .done(function( response ) {
             $('.preloader').fadeOut();
-            var title = 'Berhasil!';
+            var title = 'Berhasil!',
+                timer = 1000;
+                showConfirmButton = false;
+
             if(!response.status) {
+                var timer = 3000;
                 title = 'Gagal!';
+                showConfirmButton = true;
             } else {
                 $('#userForm')[0].reset()
                 userTable.ajax.reload()
                 $('#userModal').modal('toggle')
             }
-            swal(title, response.message);
+
+            swal({
+                title: title,
+                text: response.message,
+                timer: timer,
+                showConfirmButton: showConfirmButton
+            });
         });
     }
 })
@@ -156,7 +167,13 @@ function delUser(id){
                 userTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
-                swal(title, response.message);
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: 2000,
+                    showConfirmButton: true
+                });
             });
         }
     });
