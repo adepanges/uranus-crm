@@ -9,7 +9,7 @@
   height: 100%;
   top: 0px;
   position: fixed;
-  z-index: 99999;
+  z-index: 100000;
   background: #fff;
 }
 .preloader .cssload-speeding-wheel {

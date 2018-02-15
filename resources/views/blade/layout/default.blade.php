@@ -76,6 +76,49 @@
 
         <script type="text/javascript">
             document.datatable_search_change_event = false;
+
+            function serialzeForm(selector){
+                var formArray = $(selector).serializeArray(),
+                    dataForm = {};
+
+                formArray.forEach(function(val, index){
+                    dataForm[val.name] = val.value;
+                })
+                return dataForm;
+            }
+
+            function formValidator(selector){
+                var form = $(selector);
+                form.validator('validate');
+                var hasErr = form.find(".has-error").length;
+                return (hasErr == 0);
+            }
+
+            function formPopulate(selector, data) {
+                var form = $(selector);
+                $.each(data, function(key, value) {
+                    var ctrl = $('[name='+key+']', form);
+                    switch(ctrl.prop("type")) {
+                        case "radio": case "checkbox":
+                            var check_val = (ctrl.prop('value') == value);
+
+                            console.log(check_val);
+                            console.log(ctrl.is(':checked'));
+
+                            if(ctrl.prop("class") == 'js-switch' && check_val != ctrl.is(':checked')){
+                                $(ctrl).parent().find('.switchery').trigger('click');
+                                console.log('changed');
+                            } else {
+                                // ctrl.each(function() {
+                                //     if($(this).attr('value') == value) $(this).attr("checked",value);
+                                // });
+                            }
+                            break;
+                        default:
+                            ctrl.val(value);
+                    }
+                });
+            }
         </script>
 @show
 

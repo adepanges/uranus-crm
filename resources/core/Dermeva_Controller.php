@@ -64,5 +64,6 @@ class Dermeva_Controller extends CI_Controller {
     {
         header('Content-Type: application/json');
         echo json_encode($resp);
+        exit;
     }
 }

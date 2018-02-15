@@ -28,3 +28,10 @@ if (!function_exists('dump')) {
         exit;
     }
 }
+
+if (!function_exists('is_valid_md5')) {
+    function is_valid_md5($md5 ='')
+    {
+        return preg_match('/^[a-f0-9]{32}$/', $md5);
+    }
+}

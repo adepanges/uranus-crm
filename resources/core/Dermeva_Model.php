@@ -6,7 +6,8 @@ class Dermeva_Model extends CI_Model {
         $datatable_param = NULL,
         $table = '',
         $orderable_field = [],
-        $searchable_field = [];
+        $searchable_field = [],
+        $fillable_field = [];
 
     function __construct()
     {
@@ -16,6 +17,24 @@ class Dermeva_Model extends CI_Model {
     function set_datatable_param($params)
     {
         $this->datatable_param = $params;
+    }
+
+    protected function _sanity_field($data, $field = [])
+    {
+        $data_clear = [];
+        if(empty($field)) $field = $this->fillable_field;
+        if(!empty($field) && !empty($data))
+        {
+            foreach ($data as $key => $value)
+            {
+                if(in_array($key, $field))
+                {
+                    if(is_array($value)) $value = json_encode($data[$value]);
+                    $data_clear[$key] = $value;
+                }
+            }
+        }
+        return $data_clear;
     }
 
     protected function _combine_datatable_param($sql, $count = false)
