@@ -23,6 +23,12 @@
         <!-- color CSS -->
         <link href="{{ base_url('css/colors/default.css') }}" id="theme" rel="stylesheet">
 @show
+        <script type="text/javascript">
+            document.app = {
+                base_url: '{{ base_url() }}',
+                site_url: '{{ site_url() }}'
+            }
+        </script>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -65,6 +71,12 @@
         <script src="{{ base_url('js/waves.js') }}"></script>
         <!-- Custom Theme JavaScript -->
         <script src="{{ base_url('js/custom.js') }}"></script>
+        <!--Style Switcher -->
+        <script src="{{ base_url('plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>
+
+        <script type="text/javascript">
+            document.datatable_search_change_event = false;
+        </script>
 @show
 
 @include('render_info')

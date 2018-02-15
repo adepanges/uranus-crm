@@ -115,7 +115,7 @@ $config['enable_hooks'] = FALSE;
 | https://codeigniter.com/user_guide/general/creating_libraries.html
 |
 */
-$config['subclass_prefix'] = 'Uranus_';
+$config['subclass_prefix'] = 'Dermeva_';
 
 /*
 |--------------------------------------------------------------------------
@@ -379,9 +379,9 @@ $config['encryption_key'] = 'i03M-$XEfS_en&r2J7Cqo-Kk#De6u!Wg';
 |
 */
 $config['sess_driver'] = 'database';
-$config['sess_cookie_name'] = 'uranus_session';
+$config['sess_cookie_name'] = 'dermeva_sess';
 $config['sess_expiration'] = (3600)*24;
-$config['sess_save_path'] = 'sso_web_session';
+$config['sess_save_path'] = 'sso_session_web';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
@@ -523,4 +523,4 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-$config['app_name'] = 'Uranus System';
+$config['app_name'] = 'Dermeva Indonesia';
