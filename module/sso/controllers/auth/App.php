@@ -5,6 +5,6 @@ class App extends SSO_Controller {
 
 	public function index()
 	{
-        redirect('user');
+        if($this->_is_sso_signed()) redirect($this->config->item('portal_link'));
 	}
 }

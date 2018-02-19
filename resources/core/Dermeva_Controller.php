@@ -8,6 +8,55 @@ class Dermeva_Controller extends CI_Controller {
     {
         parent::__construct();
         $this->load->helper('uranus');
+
+        $this->data = [
+            'title' => $this->config->item('app_name'),
+            'profile' => $this->session->userdata('profile'),
+            'logout_link' => $this->config->item('sso_link').'/auth/log/out'
+        ];
+
+        // $this->load->library('encryption');
+        // $this->encryption->initialize([
+        //     'driver' => 'openssl',
+        //     'cipher' => 'aes-256',
+        //     'mode' => 'cbc',
+        // ]);
+    }
+
+    protected function _sso_profile()
+    {
+        return $this->session->userdata('profile');
+    }
+
+    protected function _is_sso_signed()
+    {
+        return (!empty($this->_sso_profile()) && $this->session->userdata('sso') == 1);
+    }
+
+    protected function _restrict_access($feature_name, $channel = 'web')
+    {
+        if(!$this->_is_sso_signed())
+        {
+            switch ($channel) {
+                case 'web':
+                    # web
+                    $this->session->set_userdata([
+                        'error_message' => 'Anda tidak memiliki hak akses',
+                        'sso' => 0
+                    ]);
+
+                    redirect('auth/log/in');
+                    break;
+
+                default:
+                    # rest
+                    $this->_response_json([
+                        'status' => 0,
+                        'message' => 'Anda tidak memiliki hak akses'
+                    ]);
+                    break;
+            }
+        }
     }
 
     protected function _set_data($data)

@@ -35,3 +35,16 @@ if (!function_exists('is_valid_md5')) {
         return preg_match('/^[a-f0-9]{32}$/', $md5);
     }
 }
+
+if (!function_exists('random_string')) {
+    function random_string($random_string_length = 5)
+    {
+        $string = '';
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $max = strlen($characters) - 1;
+        for ($i = 0; $i < $random_string_length; $i++) {
+             $string .= $characters[mt_rand(0, $max)];
+        }
+        return $string;
+    }
+}
