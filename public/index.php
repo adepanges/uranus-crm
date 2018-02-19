@@ -1,3 +1,3 @@
 <?php
 
-header('location: sso.php');
+header('location: portal.php');

@@ -524,3 +524,6 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 $config['app_name'] = 'Dermeva Indonesia';
+
+$config['portal_link'] = $config['base_url'].'portal.php';
+$config['sso_link'] = $config['base_url'].'sso.php';
