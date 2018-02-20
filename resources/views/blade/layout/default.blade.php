@@ -21,7 +21,7 @@
         <!-- Custom CSS -->
         <link href="{{ base_url('css/style.css') }}" rel="stylesheet">
         <!-- color CSS -->
-        <link href="{{ base_url('css/colors/megna.css') }}" id="theme" rel="stylesheet">
+        <link href="{{ base_url('css/colors/megna-dark.css') }}" id="theme" rel="stylesheet">
 @show
         <script type="text/javascript">
             document.app = {
@@ -46,20 +46,21 @@
             </svg>
         </div>
 
+        <div class="wrapper">
 @include('main-inc/default/top_navigation')
 @include('main-inc/default/sidebar')
 
 
-        <!-- Page Content -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
+            <!-- Page Content -->
+            <div id="page-wrapper">
+                <div class="container-fluid">
 @yield('content')
+                </div>
+                <!-- /.container-fluid -->
+                <footer class="footer text-center"> {{ date('Y') }} &copy; Dermeva </footer>
             </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> {{ date('Y') }} &copy; Dermeva </footer>
+            <!-- /#page-wrapper -->
         </div>
-        <!-- /#page-wrapper -->
-
 @section('load_js')
         <script src="{{ base_url('plugins/bower_components/jquery/dist/jquery.min.js') }}"></script>
         <!-- Bootstrap Core JavaScript -->
