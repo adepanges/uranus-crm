@@ -13,6 +13,7 @@ class Init extends SSO_Controller {
         $role_access = [];
         $role_active = [];
         $role_active_access = [];
+        $access_list = [];
 
         $module = [];
         $menu = [];
@@ -27,6 +28,7 @@ class Init extends SSO_Controller {
         $role_active_access = isset($role_access[$role_active['role_name']])?$role_access[$role_active['role_name']]:[];
 
         foreach ($role_active_access as $key => $value) {
+            $access_list[$value['feature_name']] = (int) $value['feature_accessable'];
 
             if($value['is_menu'] == 1 && $value['feature_accessable'] == 1)
             {
@@ -49,6 +51,7 @@ class Init extends SSO_Controller {
             'role_access' => $role_access,
             'role_active' => $role_active,
             'role_active_access' => $role_active_access,
+            'access_list' => $access_list,
             'module' => $module,
             'menu' => $menu
         ]);

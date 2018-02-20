@@ -14,9 +14,10 @@ class App extends SSO_Controller {
 
     public function save()
     {
-        $this->load->model('user_model');
-
         $user_id = (int) $this->input->post('user_id');
+        if($user_id) $this->_restrict_access('sso_users_upd', 'rest');
+        else $this->_restrict_access('sso_users_add', 'rest');
+
         $data = [
             'username' => $this->input->post('username'),
             'password' => $this->input->post('password'),
@@ -30,6 +31,7 @@ class App extends SSO_Controller {
         if(is_valid_md5($data['password'])) unset($data['password']);
         else $data['password'] = md5(trim($data['password']));
 
+        $this->load->model('user_model');
         if($this->user_model->check_unique_data([
             'username' => $data['username'],
         ], $user_id) > 0)

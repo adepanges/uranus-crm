@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Del extends SSO_Controller {
     public function index($id = 0)
     {
+        $this->_restrict_access('sso_users_del', 'rest');
+
         $user_id = (int) $id;
         if(!$user_id) $this->_response_json([
             'status' => 0,

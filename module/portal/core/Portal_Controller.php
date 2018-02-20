@@ -12,6 +12,4 @@ class Portal_Controller extends Dermeva_Controller {
             redirect($this->config->item('sso_link'));
         }
     }
-
-
 }
