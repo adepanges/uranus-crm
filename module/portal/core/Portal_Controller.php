@@ -9,7 +9,7 @@ class Portal_Controller extends Dermeva_Controller {
 
         if(!$this->_is_sso_signed())
         {
-            redirect($this->config->item('sso_link'));
+            redirect($this->config->item('sso_link').'/auth/log/out');
         }
     }
 }

@@ -21,12 +21,13 @@
         <!-- Custom CSS -->
         <link href="{{ base_url('css/style.css') }}" rel="stylesheet">
         <!-- color CSS -->
-        <link href="{{ base_url('css/colors/default.css') }}" id="theme" rel="stylesheet">
+        <link href="{{ base_url('css/colors/megna.css') }}" id="theme" rel="stylesheet">
 @show
         <script type="text/javascript">
             document.app = {
                 base_url: '{{ base_url() }}',
-                site_url: '{{ site_url() }}'
+                site_url: '{{ site_url() }}',
+                access_list: {!! json_encode($access_list) !!}
             }
         </script>
 
@@ -55,7 +56,7 @@
 @yield('content')
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> {{ date('Y') }} &copy; Uranus </footer>
+            <footer class="footer text-center"> {{ date('Y') }} &copy; Dermeva </footer>
         </div>
         <!-- /#page-wrapper -->
 
@@ -75,8 +76,6 @@
         <script src="{{ base_url('plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>
 
         <script type="text/javascript">
-            document.datatable_search_change_event = false;
-
             function serialzeForm(selector){
                 var formArray = $(selector).serializeArray(),
                     dataForm = {};

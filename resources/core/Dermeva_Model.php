@@ -93,7 +93,7 @@ class Dermeva_Model extends CI_Model {
             }
             else
             {
-                $sql =  "SELECT count(*) as count FROM ({$sql}) a ".$search_query.' '.$order_query;
+                $sql =  "SELECT count(*) as count FROM ({$sql}) a";
             }
         }
         return $sql;

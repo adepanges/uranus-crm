@@ -19,7 +19,12 @@
                 <ul class="nav navbar-top-links navbar-right pull-right">
                     <!-- /.Task dropdown -->
                     <li class="dropdown">
-                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="{{ base_url('images/users/7.jpg') }}" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">{{ $profile['first_name'] }}</b><span class="caret"></span> </a>
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+                            <img src="{{ base_url('images/users/7.jpg') }}" alt="user-img" width="36" class="img-circle">
+                            <b class="hidden-xs">{{ $profile['first_name'] }}</b>
+                            <span style="font-size: 10px;">as {{ $role_active->role_label }}</span>
+                            <span class="caret"></span>
+                        </a>
                         <ul class="dropdown-menu dropdown-user animated flipInX">
                             <li>
                                 <div class="dw-user-box">

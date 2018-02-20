@@ -1,12 +1,7 @@
 $(document).ready(function(){
-    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-    $('.js-switch').each(function() {
-        new Switchery($(this)[0], $(this).data());
-    });
-
-    var numberer_user = 1;
-    userTable = $('#UserTable').on('preXhr.dt', function ( e, settings, data ){
-            numberer_user = data.start + 1;
+    var numberer = 1;
+    roleTable = $('#RoleTable').on('preXhr.dt', function ( e, settings, data ){
+            numberer = data.start + 1;
             $('.row .white-box').block({
                 message: '<h3>Please Wait...</h3>',
                 css: {
@@ -20,7 +15,7 @@ $(document).ready(function(){
                 $("div.dataTables_filter input").unbind();
                 $("div.dataTables_filter input").keyup( function (e) {
                     if (e.keyCode == 13) {
-                        userTable.search( this.value ).draw();
+                        roleTable.search( this.value ).draw();
                     }
                 });
             }
@@ -32,7 +27,7 @@ $(document).ready(function(){
             serverSide: true,
             bInfo: false,
             ajax: {
-                url: document.app.site_url + '/user/get',
+                url: document.app.site_url + '/user/role/get/' + user_role.user_id,
                 type: 'POST'
             },
             columns: [
@@ -41,44 +36,23 @@ $(document).ready(function(){
                     width: "5%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        return numberer_user++;
+                        return numberer++;
                     }
                 },
-                { data: "username" },
-                { data: "email" },
-                { data: "first_name" },
-                { data: "last_name" },
+                { data: "role_label" },
+                { data: "franchise_name" },
+                { data: "created_at" },
                 {
-                    data: "status",
-                    render: function ( data, type, full, meta ) {
-                        var text = '<span class="label label-danger">deactivated</span>';
-                        if(data == 1) text = '<span class="label label-success">activated</span>';
-                        return text;
-                    }
-                },
-                {
-                    data: 'user_id',
+                    data: 'user_role_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
-                        //
-                        if(document.app.access_list.sso_users_upd)
-                        {
-                            // edit
-                            button.push('<button onclick="updUser('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
-                        }
 
-                        if(document.app.access_list.sso_users_del)
+                        if(document.app.access_list.sso_users_role_del)
                         {
                             // hapus
-                            button.push('<button onclick="delUser('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
-                        }
-
-                        if(document.app.access_list.sso_users_role_set)
-                        {
-                            // set access
-                            button.push('<a href="'+document.app.site_url+'/user/role/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
+                            button.push('<button onclick="delRole('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
                         }
 
                         return button.join('');
@@ -93,39 +67,24 @@ $(document).ready(function(){
     // })
 });
 
-
-function addUser(){
-    $('#userForm')[0].reset();
-    $('#userModal').modal({
+function addRole(){
+    $('#roleForm')[0].reset();
+    formPopulate('#roleForm', {
+        user_id: user_role.user_id
+    });
+    $('#roleModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-function updUser(id){
-    $('.preloader').fadeIn();
-    $.ajax({
-        method: "POST",
-        url: document.app.site_url+'/user/get/byid/'+id
-    })
-    .done(function( response ) {
-        $('.preloader').fadeOut();
-        formPopulate('#userForm', response)
-    });
-
-    $('#userModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-}
-
-$('#btnSaveUserModal').click(function(e){
-    if(formValidator('#userForm')){
-        var data = serialzeForm('#userForm');
+$('#btnSaveRoleModal').click(function(e){
+    if(formValidator('#roleForm')){
+        var data = serialzeForm('#roleForm');
         $('.preloader').fadeIn();
         $.ajax({
             method: "POST",
-            url: document.app.site_url+'/user/app/save',
+            url: document.app.site_url+'/user/role/add',
             data: data
         })
         .done(function( response ) {
@@ -139,9 +98,9 @@ $('#btnSaveUserModal').click(function(e){
                 title = 'Gagal!';
                 showConfirmButton = true;
             } else {
-                $('#userForm')[0].reset()
-                userTable.ajax.reload()
-                $('#userModal').modal('toggle')
+                $('#roleForm')[0].reset()
+                roleTable.ajax.reload()
+                $('#roleModal').modal('toggle')
             }
 
             swal({
@@ -154,10 +113,10 @@ $('#btnSaveUserModal').click(function(e){
     }
 })
 
-function delUser(id){
+function delRole(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus user ini!",
+        text: "Anda akan menghapus role ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -171,11 +130,11 @@ function delUser(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/user/del/index/'+id
+                url: document.app.site_url+'/user/role/del/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                userTable.ajax.reload()
+                roleTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 

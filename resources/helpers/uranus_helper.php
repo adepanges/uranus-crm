@@ -25,7 +25,6 @@ if (!function_exists('dump')) {
         if(is_array($args) && isset($args[0])) var_dump($args[0]);
         else var_dump($args);
         echo '</pre>';
-        exit;
     }
 }
 

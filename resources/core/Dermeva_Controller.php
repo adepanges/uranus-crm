@@ -12,6 +12,8 @@ class Dermeva_Controller extends CI_Controller {
         $this->data = [
             'title' => $this->config->item('app_name'),
             'profile' => $this->session->userdata('profile'),
+            'access_list' => (object) $this->session->userdata('access_list'),
+            'role_active' => (object) $this->session->userdata('role_active'),
             'logout_link' => $this->config->item('sso_link').'/auth/log/out'
         ];
 

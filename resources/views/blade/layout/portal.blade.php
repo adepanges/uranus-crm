@@ -21,7 +21,7 @@
         <!-- Custom CSS -->
         <link href="{{ base_url('css/style.css') }}" rel="stylesheet">
         <!-- color CSS -->
-        <link href="{{ base_url('css/colors/default.css') }}" id="theme" rel="stylesheet">
+        <link href="{{ base_url('css/colors/megna.css') }}" id="theme" rel="stylesheet">
 @show
         <script type="text/javascript">
             document.app = {

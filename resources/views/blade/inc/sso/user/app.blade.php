@@ -16,12 +16,13 @@
         <script src="{{ base_url('plugins/bower_components/datatables-bootstrap/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/datatables-bootstrap/Buttons-1.5.1/js/buttons.flash.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/blockUI/jquery.blockUI.js') }}"></script>
-        <script src="{{ base_url('js/module/sso/user.js') }}" type="text/javascript"></script>
         <!-- Sweet-Alert  -->
         <script src="{{ base_url('plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
         <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
+        
+        <script src="{{ base_url('js/module/sso/user.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -31,6 +32,7 @@
                     <h4 class="page-title">Management User</h4> </div>
                 <!-- /.page title -->
             </div>
+
             <!-- .row -->
             <div class="row">
                 <div class="col-md-12">
@@ -46,7 +48,9 @@
                                     <th>Status</th>
                                     <th>
                                         Action
-                                        <button onclick="addUser()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
+                                        @if($access_list->sso_users_add)
+                                            <button onclick="addUser()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
+                                        @endif
                                     </th>
                                 </tr>
                             </thead>
