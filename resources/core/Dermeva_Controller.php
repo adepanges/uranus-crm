@@ -35,27 +35,42 @@ class Dermeva_Controller extends CI_Controller {
 
     protected function _restrict_access($feature_name, $channel = 'web')
     {
-        if(!$this->_is_sso_signed())
+        $access_list = $this->session->userdata('access_list');
+        $prohibited = TRUE;
+
+
+
+        if(is_array($feature_name))
+        {
+            foreach ($feature_name as $key => $value) {
+                if(isset($access_list[$value]) && $access_list[$value] == 1)
+                {
+                    $prohibited = FALSE;
+                }
+            }
+        }
+        else if(isset($access_list[$feature_name]) && $access_list[$feature_name] == 1)
+        {
+            $prohibited = FALSE;
+        }
+
+        if(!$this->_is_sso_signed() || $prohibited)
         {
             switch ($channel) {
-                case 'web':
-                    # web
-                    $this->session->set_userdata([
-                        'error_message' => 'Anda tidak memiliki hak akses',
-                        'sso' => 0
-                    ]);
-
-                    redirect('auth/log/in');
-                    break;
-
-                default:
+                case 'rest':
                     # rest
                     $this->_response_json([
                         'status' => 0,
                         'message' => 'Anda tidak memiliki hak akses'
                     ]);
                     break;
+
+                default:
+                    # web
+                    $this->blade->view('error/403');
+                    break;
             }
+            exit;
         }
     }
 
