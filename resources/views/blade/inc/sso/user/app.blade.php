@@ -21,7 +21,7 @@
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
         <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
-        
+
         <script src="{{ base_url('js/module/sso/user.js') }}" type="text/javascript"></script>
 @endsection
 
@@ -29,7 +29,7 @@
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">Management User</h4> </div>
+                    <h4 class="page-title">User</h4> </div>
                 <!-- /.page title -->
             </div>
 

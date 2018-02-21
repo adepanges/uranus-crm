@@ -6,7 +6,7 @@
                     <ul class="nav" id="side-menu">
                         <li>
                             <a href="{{ site_url('user') }}">
-                                <i class="mdi mdi-settings fa-fw"></i>
+                                <i class="sticon ti-user"></i>
                                 <span class="hide-menu">User</span>
                             </a>
                         </li>

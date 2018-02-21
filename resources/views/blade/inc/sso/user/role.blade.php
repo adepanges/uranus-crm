@@ -36,7 +36,7 @@
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">Management User Role</h4>
+                    <h4 class="page-title">User Role</h4>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 pull-right">
                     <a href="{{ site_url('user') }}" class="btn btn-success form-control">Kembali</a>
