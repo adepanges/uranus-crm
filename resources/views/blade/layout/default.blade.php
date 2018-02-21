@@ -47,8 +47,8 @@
         </div>
 
         <div class="wrapper">
-@include('main-inc/default/top_navigation')
-@include('main-inc/default/sidebar')
+
+@yield('header')
 
 
             <!-- Page Content -->

@@ -8,6 +8,7 @@
         <link href="{{ base_url('plugins/bower_components/datatables-bootstrap/Buttons-1.5.1/css/buttons.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ base_url('plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
+        
 @endsection
 
 @section('load_js')
@@ -21,20 +22,19 @@
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
         <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
-
-        <script src="{{ base_url('js/module/sso/user.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/management/cs_team.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')
 @include('main-inc.default.top_navigation')
-@include('main-inc.default.sso_sidebar')
+@include('main-inc.default.management_sidebar')
 @endsection
 
 @section('content')
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">User</h4> </div>
+                    <h4 class="page-title">Management CS Team</h4> </div>
                 <!-- /.page title -->
             </div>
 
@@ -42,14 +42,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <table id="UserTable" class="table">
+                        <table id="csTeamTable" class="table">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
+                                    <th>Nama Tim</th>
+                                    <th>Franchise</th>
+                                    <th>Leader</th>
+                                    <th>Jumlah CS</th>
                                     <th>Status</th>
                                     <th>
                                         Action
@@ -65,46 +65,31 @@
             </div>
             <!-- .row -->
 
-            <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+            <div class="modal fade" id="csTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="exampleModalLabel1">User</h4> </div>
                         <div class="modal-body">
-                            <form id="userForm" data-toggle="validator" data-delay="100">
+                            <form id="csTeamForm" data-toggle="validator" data-delay="100">
                                 <input type="hidden" name="user_id">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Username</label>
-                                    <input type="text" class="form-control" name="username" data-error="Hmm, Username harap diisi" required>
+                                    <label for="recipient-name" class="control-label">Nama Tim</label>
+                                    <input type="text" class="form-control" name="name" data-error="Hmm, Username harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Password</label>
-                                    <i style="font-size: 9px;">Abaikan jika tidak dirubah</i>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <input type="password" name="password" data-toggle="validator" data-minlength="6" class="form-control" id="inputPassword" placeholder="Password" required> <span class="help-block">Minimal 6 Karakter</span>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="password" name="password" class="form-control" data-match="#inputPassword" data-match-error="Hmm, password tidak sama" placeholder="Confirm" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
+                                    <label for="recipient-name" class="control-label">Franchise</label>
+                                    <select class="form-control" name="franchise_id">
+                                        <option value="1" selected>Dermeva Kosmetik Indonesia</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Leader Tim</label>
+                                    <div id="prefetch">
+                                        <input class="typeahead form-control" type="text">
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="control-label">Email</label>
-                                    <input type="email" class="form-control" name="email" data-error="Hmm, Email harap diisi dan valid" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Nama depan</label>
-                                    <input type="text" class="form-control" name="first_name" data-error="Hmm, nama depan harap diisi" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Nama belakang</label>
-                                    <input type="text" class="form-control" name="last_name">
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="control-label" style="margin-right: 10px;">Active</label>

@@ -32,6 +32,11 @@
         </script>
 @endsection
 
+@section('header')
+@include('main-inc.default.top_navigation')
+@include('main-inc.default.sso_sidebar')
+@endsection
+
 @section('content')
             <div class="row bg-title">
                 <!-- .page title -->
