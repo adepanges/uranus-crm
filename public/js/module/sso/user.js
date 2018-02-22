@@ -96,6 +96,9 @@ $(document).ready(function(){
 
 function addUser(){
     $('#userForm')[0].reset();
+    formPopulate('#userForm', {
+        user_id: 0
+    })
     $('#userModal').modal({
         backdrop: 'static',
         keyboard: false

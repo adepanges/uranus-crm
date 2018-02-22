@@ -12,7 +12,7 @@ class Cs_team_model extends Management_Model {
     function get_datatable()
     {
         $sql = "SELECT
-            a.*, b.name AS franchise_name, c.username,
+            a.*, b.name AS franchise_name, CONCAT(c.first_name,' ',c.last_name) as username,
             CAST(d.jumlah_cs AS UNSIGNED) as jumlah_cs
         FROM management_team_cs a
         LEFT JOIN franchise b ON a.franchise_id = b.franchise_id

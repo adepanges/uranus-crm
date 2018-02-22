@@ -11,7 +11,7 @@ class Cs_team_member_model extends Management_Model {
 
     function get_datatable($id)
     {
-        $sql = "SELECT a.*, b.username
+        $sql = "SELECT a.*, CONCAT(b.first_name,' ',b.last_name) as username
             FROM management_team_cs_member a
             LEFT JOIN sso_user b ON a.user_id = b.user_id AND b.status = 1
             WHERE a.team_cs_id = $id";
