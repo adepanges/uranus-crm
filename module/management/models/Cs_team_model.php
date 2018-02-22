@@ -6,7 +6,7 @@ class Cs_team_model extends Management_Model {
         $datatable_param = NULL,
         $table = 'management_team_cs',
         $orderable_field = ['name','franchise_name','franchise_name','jumlah_cs','status'],
-        $fillable_field = ['team_cs_id','franchise_id','leader_id','name','desc','status',],
+        $fillable_field = ['team_cs_id','franchise_id','leader_id','name','desc','status','created_at','updated_at'],
         $searchable_field = ['name','franchise_name','franchise_name'];
 
     function get_datatable()
