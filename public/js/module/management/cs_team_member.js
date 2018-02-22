@@ -1,12 +1,7 @@
 $(document).ready(function(){
-    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-    $('.js-switch').each(function() {
-        new Switchery($(this)[0], $(this).data());
-    });
-
-    var numberer_user = 1;
-    csTeamTable = $('#csTeamTable').on('preXhr.dt', function ( e, settings, data ){
-            numberer_user = data.start + 1;
+    var numberer = 1;
+    memberTable = $('#MemberTable').on('preXhr.dt', function ( e, settings, data ){
+            numberer = data.start + 1;
             $('.row .white-box').block({
                 message: '<h3>Please Wait...</h3>',
                 css: {
@@ -20,7 +15,7 @@ $(document).ready(function(){
                 $("div.dataTables_filter input").unbind();
                 $("div.dataTables_filter input").keyup( function (e) {
                     if (e.keyCode == 13) {
-                        csTeamTable.search( this.value ).draw();
+                        memberTable.search( this.value ).draw();
                     }
                 });
             }
@@ -32,7 +27,7 @@ $(document).ready(function(){
             serverSide: true,
             bInfo: false,
             ajax: {
-                url: document.app.site_url + '/cs_team/get',
+                url: document.app.site_url + '/cs_team/member/get/' + cs_team.team_cs_id,
                 type: 'POST'
             },
             columns: [
@@ -41,50 +36,22 @@ $(document).ready(function(){
                     width: "5%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        return numberer_user++;
+                        return numberer++;
                     }
                 },
-                { data: "name" },
-                { data: "franchise_name" },
                 { data: "username" },
+                { data: "created_at" },
                 {
-                    data: "jumlah_cs",
-                    render: function ( data, type, full, meta ) {
-                        var parsed = parseInt(data);
-                        return (isNaN(parsed)?0:parsed);
-                    }
-                },
-                {
-                    data: "status",
-                    render: function ( data, type, full, meta ) {
-                        var text = '<span class="label label-danger">deactivated</span>';
-                        if(data == 1) text = '<span class="label label-success">activated</span>';
-                        return text;
-                    }
-                },
-                {
-                    data: 'team_cs_id',
+                    data: 'team_cs_member_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
-                        //
-                        if(document.app.access_list.management_cs_team_upd)
-                        {
-                            // edit
-                            button.push('<button onclick="updCSTeam('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
-                        }
 
-                        if(document.app.access_list.management_cs_team_del)
+                        if(document.app.access_list.management_cs_team_member_del)
                         {
                             // hapus
-                            button.push('<button onclick="delCSTeam('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
-                        }
-
-                        if(document.app.access_list.management_cs_team_member)
-                        {
-                            // set access
-                            button.push('<a href="'+document.app.site_url+'/cs_team/member/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
+                            button.push('<button onclick="delMember('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
                         }
 
                         return button.join('');
@@ -93,17 +60,18 @@ $(document).ready(function(){
             ]
         });
 
-    $('#csTeamModal').on('shown.bs.modal', function () {
-      initLeaderTim();
+
+    $('#memberModal').on('shown.bs.modal', function () {
+      initMemberTim();
     })
 });
 
 document.app._leader_tim_init = false;
 
-function initLeaderTim(){
+function initMemberTim(){
     if(!document.app._leader_tim_init){
         document.app._leader_tim_init = true;
-        $('#leaderSelect').select2({
+        $('#memberSelect').select2({
             ajax: {
                 url: document.app.module_url.sso+'/user/get',
                 method: 'POST',
@@ -134,38 +102,24 @@ function initLeaderTim(){
     }
 }
 
-function addCSTeam(){
-    $('#csTeamForm')[0].reset();
-    $('#csTeamModal').modal({
+function addMember(){
+    $('#memberForm')[0].reset();
+    formPopulate('#memberForm', {
+        team_cs_id: cs_team.team_cs_id
+    });
+    $('#memberModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-function updCSTeam(id){
-    $('.preloader').fadeIn();
-    $.ajax({
-        method: "POST",
-        url: document.app.site_url+'/cs_team/get/byid/'+id
-    })
-    .done(function( response ) {
-        $('.preloader').fadeOut();
-        formPopulate('#csTeamForm', response)
-    });
-
-    $('#csTeamModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-}
-
-$('#btnSaveCsTeamModal').click(function(e){
-    if(formValidator('#csTeamForm')){
-        var data = serialzeForm('#csTeamForm');
+$('#btnSaveMemberModal').click(function(e){
+    if(formValidator('#memberForm')){
+        var data = serialzeForm('#memberForm');
         $('.preloader').fadeIn();
         $.ajax({
             method: "POST",
-            url: document.app.site_url+'/cs_team/app/save',
+            url: document.app.site_url+'/cs_team/member/add',
             data: data
         })
         .done(function( response ) {
@@ -179,9 +133,9 @@ $('#btnSaveCsTeamModal').click(function(e){
                 title = 'Gagal!';
                 showConfirmButton = true;
             } else {
-                $('#csTeamForm')[0].reset()
-                csTeamTable.ajax.reload()
-                $('#csTeamModal').modal('toggle')
+                $('#memberForm')[0].reset()
+                memberTable.ajax.reload()
+                $('#memberModal').modal('toggle')
             }
 
             swal({
@@ -194,10 +148,10 @@ $('#btnSaveCsTeamModal').click(function(e){
     }
 })
 
-function delCSTeam(id){
+function delMember(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus tim ini!",
+        text: "Anda akan menghapus member ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -211,11 +165,11 @@ function delCSTeam(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/cs_team/del/index/'+id
+                url: document.app.site_url+'/cs_team/member/del/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                csTeamTable.ajax.reload()
+                memberTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 

@@ -31,7 +31,13 @@ class Cs_team_model extends Management_Model {
 
     function get_byid($id)
     {
-        return $this->db->where('team_cs_id', ((int) $id))->get($this->table)->row();
+        $sql = "SELECT
+            a.*, b.name AS franchise_name, c.username
+        FROM management_team_cs a
+        LEFT JOIN franchise b ON a.franchise_id = b.franchise_id
+        LEFT JOIN sso_user c ON a.leader_id = c.user_id
+        WHERE a.team_cs_id = ?";
+        return $this->db->query($sql, [$id])->row();
     }
 
     function del($id)

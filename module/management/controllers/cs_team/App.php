@@ -16,7 +16,7 @@ class App extends Management_Controller {
     public function save()
     {
         $team_cs_id = (int) $this->input->post('team_cs_id');
-        if($user_id) $this->_restrict_access('management_cs_team_upd', 'rest');
+        if($team_cs_id) $this->_restrict_access('management_cs_team_upd', 'rest');
         else $this->_restrict_access('management_cs_team_add', 'rest');
 
         $data = [

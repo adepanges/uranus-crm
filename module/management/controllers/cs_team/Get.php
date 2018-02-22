@@ -5,7 +5,7 @@ class Get extends Management_Controller {
 
 	public function index()
 	{
-        $this->_restrict_access('management_cs_team', 'rest');
+        $this->_restrict_access('management_cs_team_list', 'rest');
         $this->load->model('cs_team_model');
 
         $this->cs_team_model->set_datatable_param($this->_datatable_param());

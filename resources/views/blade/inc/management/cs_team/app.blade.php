@@ -9,7 +9,6 @@
         <link href="{{ base_url('plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
         <link href="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/css/select2.min.css') }}" rel="stylesheet" />
-        <link href="{{ base_url('plugins/bower_components/custom-select/custom-select.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('load_js')
