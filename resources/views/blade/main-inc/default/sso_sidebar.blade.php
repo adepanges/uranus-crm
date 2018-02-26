@@ -6,7 +6,7 @@
                     <ul class="nav" id="side-menu">
                         <li>
                             <a href="{{ site_url('user') }}">
-                                <i class="sticon ti-user"></i>
+                                <i class="fa fa-users"></i>
                                 <span class="hide-menu">User</span>
                             </a>
                         </li>
