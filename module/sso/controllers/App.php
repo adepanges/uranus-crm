@@ -5,6 +5,10 @@ class App extends SSO_Controller {
 
 	public function index()
 	{
+        if(!$this->_is_sso_signed())
+        {
+            redirect($this->config->item('sso_link').'/auth/log/out');
+        }
         redirect('user');
 	}
 }
