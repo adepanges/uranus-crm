@@ -84,7 +84,7 @@ $(document).ready(function(){
                         if(document.app.access_list.management_cs_team_member)
                         {
                             // set access
-                            button.push('<a href="'+document.app.site_url+'/cs_team/member/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
+                            button.push('<a href="'+document.app.site_url+'/cs_team/member/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-users"></i></a>');
                         }
 
                         return button.join('');
