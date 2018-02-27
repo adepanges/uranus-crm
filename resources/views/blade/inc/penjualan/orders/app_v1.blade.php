@@ -66,7 +66,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">User</h4> </div>
+                            <h4 class="modal-title" id="exampleModalLabel1">Detail Pesanan</h4> </div>
                         <div class="modal-body">
                             <form id="ordersForm" class="form-horizontal" data-toggle="validator" data-delay="100">
                                 <input type="hidden" name="user_id">

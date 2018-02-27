@@ -5,7 +5,7 @@ class Init extends SSO_Controller {
     public function index($q = '')
     {
         if(!$this->_is_sso_signed()) redirect('auth/log/in');
-        $this->load->model('auth_model');
+        $this->load->model(['auth_model','orders_model']);
 
         $profile = $this->session->userdata('profile');
 
@@ -55,6 +55,16 @@ class Init extends SSO_Controller {
             'module' => $module,
             'menu' => $menu
         ]);
+
+
+        $orders = $this->orders_model->get_follow_up_by_userid($profile['user_id']);
+
+        if($orders->num_rows())
+        {
+            $this->session->set_userdata('orders_follow_up', (array) $orders->first_row());
+            redirect($this->config->item('penjualan_link'));
+            exit;
+        }
 
         redirect($this->config->item('portal_link'));
     }

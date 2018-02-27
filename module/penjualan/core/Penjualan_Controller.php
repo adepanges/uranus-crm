@@ -11,5 +11,20 @@ class Penjualan_Controller extends Dermeva_Controller {
         {
             redirect($this->config->item('sso_link').'/auth/log/out');
         }
+
+        $follow_up = $this->session->userdata('orders_follow_up');
+        $check_condition = TRUE;
+        if(
+            ($this->uri->segment(2) != 'follow_up' && $this->uri->segment(3) != 'index') ||
+            ($this->uri->segment(2) != 'app' && $this->uri->segment(3) != 'confirm_buy')
+            )
+        {
+            $check_condition = FALSE;
+        }
+
+        if(!empty($follow_up) && $check_condition)
+        {
+            redirect('orders_v1/follow_up/index/'.$follow_up['order_id']);
+        }
     }
 }

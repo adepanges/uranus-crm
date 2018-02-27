@@ -7,7 +7,13 @@
                         <li>
                             <a href="{{ site_url('orders_v1') }}">
                                 <i class="ti-shopping-cart"></i>
-                                <span class="hide-menu">Pesanan</span>
+                                <span class="hide-menu">Pesanan Baru</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ site_url('orders_v1/pending_cancel') }}">
+                                <i class="ti-shopping-cart"></i>
+                                <span class="hide-menu">Pesanan Pending/Cancel</span>
                             </a>
                         </li>
                     </ul>

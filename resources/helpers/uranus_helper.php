@@ -47,3 +47,11 @@ if (!function_exists('random_string')) {
         return $string;
     }
 }
+
+
+if (!function_exists('rupiah')) {
+    function rupiah($number)
+    {
+        return "Rp. ".number_format( $number, 0 , '' , '.' ).",-";
+    }
+}

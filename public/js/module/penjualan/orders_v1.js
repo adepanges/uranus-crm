@@ -26,7 +26,6 @@ $(document).ready(function(){
                 url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
             },
             serverSide: true,
-            bInfo: false,
             ajax: {
                 url: document.app.site_url + '/orders_v1/get',
                 type: 'POST'
@@ -77,9 +76,12 @@ $(document).ready(function(){
                         //
                         if(document.app.access_list.penjualan_orders_detail)
                         {
-                            // edit
-                            data = btoa(JSON.stringify(full));
-                            button.push('<button onclick=detailOrders("'+data+'") type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></button>');
+                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
+                        }
+
+                        if(1)
+                        {
+                            button.push(`<a href="${document.app.site_url}/orders_v1/app/follow_up/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="mdi mdi-briefcase-upload"></i></a>`);
                         }
 
                         return button.join('');
