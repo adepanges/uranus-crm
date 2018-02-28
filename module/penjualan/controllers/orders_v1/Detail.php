@@ -5,7 +5,7 @@ class Detail extends Penjualan_Controller {
 
     public function index($id = 0)
     {
-        $this->_restrict_access('penjualan_orders');
+        $this->_restrict_access('penjualan_orders_detail');
         $id = (int) $id;
         $this->load->model(['orders_model','master_model','orders_process_model']);
 

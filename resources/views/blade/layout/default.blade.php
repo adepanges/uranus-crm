@@ -98,7 +98,7 @@
             function formPopulate(selector, data) {
                 console.log(`form ${selector} populate this data > `);
                 console.log(data);
-                
+
                 var form = $(selector);
                 $.each(data, function(key, value) {
                     var ctrl = $('[name='+key+']', form);

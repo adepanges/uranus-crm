@@ -1,8 +1,8 @@
 // generate hak akses
 INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
-SELECT
+    SELECT
     5, a.module_id, b.menu_id, c.feature_id, c.name,
-    WHEN b.module_menu = 5 THEN 1 ELSE 0 END
+    CASE WHEN b.module_id = 2 THEN 1 ELSE 0 END
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
 LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
@@ -18,22 +18,21 @@ SET @customer_id = LAST_INSERT_ID();
 
 INSERT INTO customer_address (`customer_id`, `address`,`desa_kelurahan`,`kecamatan`,`kabupaten`,`provinsi`,`postal_code`,`created_at`,`status`)
 VALUES (
-	@customer_id,
-	CONCAT('Batik Giri Alam RT 01 / 04, Blok ', @rand),
-	'Gumelem Wetan',
-	'Susukan',
-	'Banjarnegara',
-	'Jawa Tengah',
-	'53475',
-	NOW(),
-	1
+  @customer_id,
+  CONCAT('Batik Giri Alam RT 01 / 04, Blok ', @rand),
+  'Gumelem Wetan',
+  'Susukan',
+  'Banjarnegara',
+  'Jawa Tengah',
+  '53475',
+  NOW(),
+  1
 );
 
 SET @id_address_customer = LAST_INSERT_ID();
 
-
 INSERT INTO orders (
-	`customer_id`,
+  `customer_id`,
     `customer_address_id`,
     `payment_method_id`,
     `logistic_id`,
@@ -64,7 +63,7 @@ values
     'none',
     '',
     'Telepon',
-    concat(@customer_id,@id_address_customer,@rand,'-',NOW()),
+    concat(@rand,'-',NOW()),
     JSON_OBJECT(
         'full_name', CONCAT('Ade Pangestu ',@rand),
         'telephone', CONCAT('6282322254', @rand)

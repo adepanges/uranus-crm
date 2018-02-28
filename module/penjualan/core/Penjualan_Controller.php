@@ -6,6 +6,9 @@ class Penjualan_Controller extends Dermeva_Controller {
     function __construct()
     {
         parent::__construct();
+        $this->_set_data([
+            'orders_state' => $this->session->userdata('orders_state')
+        ]);
 
         if(!$this->_is_sso_signed())
         {
@@ -16,7 +19,9 @@ class Penjualan_Controller extends Dermeva_Controller {
         $check_condition = TRUE;
         if(
             ($this->uri->segment(2) == 'follow_up' && $this->uri->segment(3) == 'index') ||
-            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'confirm_buy')
+            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'confirm_buy') ||
+            ($this->uri->segment(2) == 'follow_up' && $this->uri->segment(3) == 'cancel') ||
+            ($this->uri->segment(2) == 'follow_up' && $this->uri->segment(3) == 'pending')
             )
         {
             $check_condition = FALSE;

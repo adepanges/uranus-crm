@@ -27,7 +27,7 @@ $(document).ready(function(){
             },
             serverSide: true,
             ajax: {
-                url: document.app.site_url + '/orders_v1/get',
+                url: document.app.site_url + '/orders_v1/get/index/pending',
                 type: 'POST'
             },
             columns: [
@@ -64,8 +64,8 @@ $(document).ready(function(){
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var info = [];
-                        if(full.order_status_id == 1) info.push(`<span class="label label-info">${data}</span>`);
-                        return info.join('<br>');
+                        info.push(`<span class="label label-info">${data}</span>`);
+                        return info.join('');
                     }
                 },
                 {

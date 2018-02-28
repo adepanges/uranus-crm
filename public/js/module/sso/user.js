@@ -57,7 +57,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: 'order_id',
+                    data: 'user_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {

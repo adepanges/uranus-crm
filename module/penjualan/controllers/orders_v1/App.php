@@ -5,9 +5,10 @@ class App extends Penjualan_Controller {
 
     public function index()
     {
-        $this->_restrict_access('penjualan_orders');
+        $this->_restrict_access('penjualan_orders_new');
+        $this->session->set_userdata('orders_state', 'orders_v1/app');
         $this->_set_data([
-            'title' => 'Pesanan'
+            'title' => 'Orders New'
         ]);
 
         $this->blade->view('inc/penjualan/orders/app_v1', $this->data);
@@ -15,6 +16,7 @@ class App extends Penjualan_Controller {
 
     public function follow_up($id)
     {
+        $this->_restrict_access('penjualan_orders_action_follow_up');
         $id = (int) $id;
         $this->load->model(['orders_model','orders_process_model','master_model']);
         $res = $this->orders_model->get_byid_v1($id);
@@ -48,11 +50,12 @@ class App extends Penjualan_Controller {
             $this->session->set_userdata('orders_follow_up', ['order_id' => $id, 'created_at' => $order_process['created_at']]);
             redirect('orders_v1/follow_up/index/'.$id);
         }
-        else redirect('orders_v1');
+        else redirect($this->session->userdata('orders_state'));
     }
 
     function confirm_buy($id)
     {
+        $this->_restrict_access('penjualan_orders_action_confirm_buy');
         $id = (int) $id;
         $this->load->model(['orders_model','orders_process_model','master_model']);
         $res = $this->orders_model->get_byid_v1($id);
@@ -84,8 +87,8 @@ class App extends Penjualan_Controller {
         if($res1 && $res2)
         {
             $this->session->set_userdata('orders_follow_up', '');
-            redirect('orders_v1');
+            redirect($this->session->userdata('orders_state'));
         }
-        else redirect('orders_v1');
+        else redirect('orders_v1/detail/index/'.$id);
     }
 }

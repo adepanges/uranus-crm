@@ -23,7 +23,7 @@
         <script src="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/js/select2.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
-        <script src="{{ base_url('js/module/penjualan/orders_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/detail_v1.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')
@@ -44,35 +44,41 @@
 
 @if($orders->order_status_id != 2)
                 <div class="col-md-2 pull-right">
-                    <button onclick="window.location = '{{ site_url('orders_v1') }}'" class="btn btn-success btn-rounded form-control">
+                    <button onclick="window.location = '{{ site_url($orders_state) }}'" class="btn btn-success btn-rounded form-control">
                         <i class="ti-arrow-left m-l-5"></i>
                         <span>Kembali</span>
                     </button>
                 </div>
 @else
+    @if($access_list->penjualan_orders_action_pending)
                 <div class="col-md-2 pull-right">
-                    <button class="btn btn-primary btn-rounded form-control">
+                    <button onclick="pendingOrders({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
                         <i class="mdi mdi-briefcase-download"></i>
                         <span>Pending</span>
                     </button>
                 </div>
+    @endif
+    @if($access_list->penjualan_orders_action_cancel)
                 <div class="col-md-2 pull-right">
-                    <button class="btn btn-danger btn-rounded form-control">
+                    <button onclick="cancelOrders({{ $orders->order_id }})" class="btn btn-danger btn-rounded form-control">
                         <i class="mdi mdi-cart-off"></i>
                         <span>Cancel</span>
                     </button>
                 </div>
+    @endif
+    @if($access_list->penjualan_orders_action_confirm_buy)
                 <div class="col-md-2 pull-right">
-                    <button onclick="window.location = '{{ site_url('orders_v1/app/confirm_buy/'.$orders->order_id) }}'" class="btn btn-success btn-rounded form-control">
+                    <button onclick="confirmBuy({{ $orders->order_id }})" class="btn btn-success btn-rounded form-control">
                         <i class="mdi mdi-cart-outline"></i>
                         <span>Confirm Buy</span>
                     </button>
                 </div>
+    @endif
 @endif
 
-@if($orders->order_status_id == 1)
+@if($orders->order_status_id == 1 && $access_list->penjualan_orders_action_follow_up)
                 <div class="col-md-2 pull-right">
-                    <button onclick="window.location = '{{ site_url('orders_v1/app/follow_up/'.$orders->order_id) }}'" class="btn btn-primary btn-rounded form-control">
+                    <button onclick="followUp({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
                         <i class="mdi mdi-briefcase-upload"></i>
                         <span>Follow Up</span>
                     </button>
@@ -174,24 +180,60 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Alasan Dibatalkan</h4> </div>
+                            <h4 class="modal-title" id="exampleModalLabel1">Alasan dibatalkan</h4> </div>
                         <div class="modal-body">
-                            <form id="userForm" data-toggle="validator" data-delay="100">
-                                <input type="hidden" name="user_id">
+                            <form id="cancelForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Alasan</label>
                                     <select class="form-control" name="notes">
-                                        <option value="Tidak Jadi Beli">Tidak jadi beli</option>
-                                        <option value="Tidak Merasa Pesan">Tidak merasa pesan</option>
-                                        <option value="Double Order">Double Order</option>
+@foreach ($reason_cancel as $key => $value)
+                                        <option value="{{ $value }}">{{ $value }}</option>
+@endforeach
                                         <option value="dll">Lainnya</option>
                                     </select>
+                                </div>
+                                <div class="form-group" id="notes_etc">
+                                    <label for="recipient-name" class="control-label">Alasan Lainya</label>
+                                    <textarea class="form-control" name="notes_value"></textarea>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button id="btnSaveUserModal" type="button" class="btn btn-primary">Simpan</button>
+                            <button id="btnSaveCancelModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="pendingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Alasan dipending</h4> </div>
+                        <div class="modal-body">
+                            <form id="pendingForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Alasan</label>
+                                    <select class="form-control" name="notes">
+@foreach ($reason_pending as $key => $value)
+                                        <option value="{{ $value }}">{{ $value }}</option>
+@endforeach
+                                        <option value="dll">Lainnya</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="pending_notes_etc">
+                                    <label for="recipient-name" class="control-label">Alasan Lainya</label>
+                                    <textarea class="form-control" name="notes_value"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSavePendingModal" type="button" class="btn btn-primary">Lanjutkan</button>
                         </div>
                     </div>
                 </div>

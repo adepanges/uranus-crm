@@ -9,6 +9,6 @@ class App extends Penjualan_Controller {
         {
             redirect($this->config->item('sso_link').'/auth/log/out');
         }
-        redirect('orders_v1');
+        redirect('orders_v1/app');
 	}
 }
