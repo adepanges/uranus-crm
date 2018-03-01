@@ -22,9 +22,6 @@ $(document).ready(function(){
             }
             document.datatable_search_change_event = true;
         }).DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
-            },
             serverSide: true,
             ajax: {
                 url: document.app.site_url + '/orders_v1/get/index/confirm_buy',
@@ -60,15 +57,6 @@ $(document).ready(function(){
                 { data: "package_name", orderable: false },
                 { data: "total_price", orderable: false },
                 {
-                    data: 'payment_method',
-                    orderable: false,
-                    render: function ( data, type, full, meta ) {
-                        var info = [];
-                        info.push(`<span class="label label-info">${data}</span>`);
-                        return info.join('');
-                    }
-                },
-                {
                     data: 'order_id',
                     orderable: false,
                     render: function ( data, type, full, meta ) {
@@ -79,9 +67,34 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
+                        if(document.app.access_list.penjualan_orders_action_follow_up)
+                        {
+                            button.push(`<button onclick="verifyPayment(${data})" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-credit-card"></i></button>`);
+                        }
+
                         return button.join('');
                     }
                 }
             ]
         });
 });
+
+
+function verifyPayment(id){
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Custemer telah membayar tagihan, verifikasi pembayaran ke Finance!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            window.location = document.app.site_url+'/orders_v1/confirm_buy/verify_payment/'+id;
+        }
+    });
+}

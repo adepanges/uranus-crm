@@ -24,7 +24,7 @@ $(document).ready(function(){
         }).DataTable({
             serverSide: true,
             ajax: {
-                url: document.app.site_url + '/orders_v1/get/index/pending',
+                url: document.app.site_url + '/orders_v1/get/index/sale',
                 type: 'POST'
             },
             columns: [
@@ -64,36 +64,11 @@ $(document).ready(function(){
                         //
                         if(document.app.access_list.penjualan_orders_detail)
                         {
-                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
+                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
-
-                        if(document.app.access_list.penjualan_orders_action_follow_up)
-                        {
-                            button.push(`<button onclick="followUp(${data})" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="mdi mdi-briefcase-upload"></i></button>`);
-                        }
-
                         return button.join('');
                     }
                 }
             ]
         });
 });
-
-function followUp(id){
-    swal({
-        title: "Apakah anda yakin?",
-        text: "Anda akan memfollow up pesanan!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Follow Up",
-        cancelButtonText: "Batal",
-        closeOnConfirm: false,
-        closeOnCancel: true
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/app/follow_up/'+id;
-        }
-    });
-}

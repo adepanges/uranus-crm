@@ -1,8 +1,48 @@
-// generate hak akses
+------- generate hak akses
+-- admin
 INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
     SELECT
+    1, a.module_id, b.menu_id, c.feature_id, c.name, 1
+FROM modules a
+LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
+LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
+WHERE a.status = 1;
+-- manager
+INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
+    SELECT
+    2, a.module_id, b.menu_id, c.feature_id, c.name,
+    CASE WHEN b.module_id = 2 THEN 0 ELSE 1 END
+FROM modules a
+LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
+LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
+WHERE a.status = 1;
+-- cs
+INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
+SELECT
     5, a.module_id, b.menu_id, c.feature_id, c.name,
-    CASE WHEN b.module_id = 2 THEN 1 ELSE 0 END
+    CASE WHEN
+        b.module_id = 2 AND
+        c.name NOT IN (
+            'penjualan_orders_action_sale'
+        )
+    THEN 1 ELSE 0 END AS flag
+FROM modules a
+LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
+LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
+WHERE a.status = 1;
+-- finannce
+INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
+SELECT
+    3, a.module_id, b.menu_id, c.feature_id, c.name,
+    CASE WHEN
+    c.name IN (
+        'penjualan_orders_new',
+        'penjualan_orders_detail',
+        'penjualan_orders_list',
+        'penjualan_orders_sale',
+        'penjualan_orders_verify_payment',
+        'penjualan_orders_action_sale'
+    ) THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
 LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1

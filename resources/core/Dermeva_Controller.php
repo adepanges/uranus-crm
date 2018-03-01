@@ -20,6 +20,9 @@ class Dermeva_Controller extends CI_Controller {
             'logout_link' => $this->config->item('sso_link').'/auth/log/out'
         ];
 
+        $this->profile = $this->session->userdata('profile');
+        $this->role_active = $this->session->userdata('role_active');
+
         // $this->load->library('encryption');
         // $this->encryption->initialize([
         //     'driver' => 'openssl',

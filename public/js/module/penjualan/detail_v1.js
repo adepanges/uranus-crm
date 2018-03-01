@@ -12,7 +12,7 @@ function confirmBuy(id){
     },
     function(isConfirm) {
         if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/app/confirm_buy/'+id;
+            window.location = document.app.site_url+'/orders_v1/follow_up/confirm_buy/'+id;
         }
     });
 }
@@ -32,6 +32,25 @@ function followUp(id){
     function(isConfirm) {
         if (isConfirm) {
             window.location = document.app.site_url+'/orders_v1/app/follow_up/'+id;
+        }
+    });
+}
+
+function saleOrders(id){
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Ok",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            window.location = document.app.site_url+'/orders_v1/verify/sale/'+id;
         }
     });
 }
@@ -57,6 +76,25 @@ function pendingOrders(id){
     $('#pendingModal').modal({
         backdrop: 'static',
         keyboard: false
+    });
+}
+
+function verifyPayment(id){
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Custemer telah membayar tagihan, verifikasi pembayaran ke Finance!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            window.location = document.app.site_url+'/orders_v1/confirm_buy/verify_payment/'+id;
+        }
     });
 }
 

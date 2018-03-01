@@ -22,9 +22,6 @@ $(document).ready(function(){
             }
             document.datatable_search_change_event = true;
         }).DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
-            },
             serverSide: true,
             ajax: {
                 url: document.app.site_url + '/orders_v1/get',
@@ -57,17 +54,18 @@ $(document).ready(function(){
                         return `<i class="${full.call_method_icon}"> ${row.telephone}</i>`;
                     }
                 },
-                { data: "package_name", orderable: false },
-                { data: "total_price", orderable: false },
                 {
-                    data: 'payment_method',
+                    data: 'customer_address',
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        var info = [];
-                        if(full.order_status_id == 1) info.push(`<span class="label label-info">${data}</span>`);
-                        return info.join('<br>');
+                        var customer_address = JSON.parse(data);
+                        return `<span style="font-size: 9px;">
+                        ${customer_address.address}<br>Ds./Kel. ${customer_address.desa_kelurahan}<br>Kec. ${customer_address.kecamatan}<br>Kab. ${customer_address.kabupaten}<br>Prov. ${customer_address.provinsi}<br>${customer_address.postal_code}
+                        </span>`;
                     }
                 },
+                { data: "package_name", orderable: false },
+                { data: "total_price", orderable: false },
                 {
                     data: 'order_id',
                     orderable: false,

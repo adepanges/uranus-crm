@@ -52,62 +52,10 @@
                                     <th>Contact</th>
                                     <th>Product Package</th>
                                     <th>Total Price</th>
-                                    <th>Info</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="ordersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Detail Pesanan</h4> </div>
-                        <div class="modal-body">
-                            <form id="ordersForm" class="form-horizontal" data-toggle="validator" data-delay="100">
-                                <input type="hidden" name="user_id">
-                                <div class="row">
-                                    <div class="col-md-6 col-xs-12">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-3">Full Name</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm" name="full_name" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-3">Telephone</label>
-                                            <div class="col-sm-1"></div>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control input-sm" name="telephone" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-3">Alamat</label>
-                                            <div class="col-sm-8">
-                                                <textarea rows="4" class="form-control input-sm" name="address" readonly></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-3">Payment Method</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm" name="payment_method" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-xs-12">
-                                        List Orders
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button id="btnSaveUserModal" type="button" class="btn btn-primary">Simpan</button>
-                        </div>
                     </div>
                 </div>
             </div>

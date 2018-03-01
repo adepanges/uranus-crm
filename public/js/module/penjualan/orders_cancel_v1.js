@@ -22,9 +22,6 @@ $(document).ready(function(){
             }
             document.datatable_search_change_event = true;
         }).DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
-            },
             serverSide: true,
             ajax: {
                 url: document.app.site_url + '/orders_v1/get/index/cancel',
@@ -59,15 +56,6 @@ $(document).ready(function(){
                 },
                 { data: "package_name", orderable: false },
                 { data: "total_price", orderable: false },
-                {
-                    data: 'payment_method',
-                    orderable: false,
-                    render: function ( data, type, full, meta ) {
-                        var info = [];
-                        info.push(`<span class="label label-info">${data}</span>`);
-                        return info.join('');
-                    }
-                },
                 {
                     data: 'order_id',
                     orderable: false,

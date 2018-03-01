@@ -24,7 +24,7 @@ $(document).ready(function(){
         }).DataTable({
             serverSide: true,
             ajax: {
-                url: document.app.site_url + '/orders_v1/get/index/pending',
+                url: document.app.site_url + '/orders_v1/get/index/verify',
                 type: 'POST'
             },
             columns: [
@@ -67,9 +67,9 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        if(document.app.access_list.penjualan_orders_action_follow_up)
+                        if(document.app.access_list.penjualan_orders_action_sale)
                         {
-                            button.push(`<button onclick="followUp(${data})" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="mdi mdi-briefcase-upload"></i></button>`);
+                            button.push(`<button onclick="saleOrders(${data})" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-money"></i></button>`);
                         }
 
                         return button.join('');
@@ -79,21 +79,21 @@ $(document).ready(function(){
         });
 });
 
-function followUp(id){
+function saleOrders(id){
     swal({
         title: "Apakah anda yakin?",
-        text: "Anda akan memfollow up pesanan!",
+        text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
-        confirmButtonText: "Follow Up",
+        confirmButtonText: "Ok",
         cancelButtonText: "Batal",
         closeOnConfirm: false,
         closeOnCancel: true
     },
     function(isConfirm) {
         if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/app/follow_up/'+id;
+            window.location = document.app.site_url+'/orders_v1/verify/sale/'+id;
         }
     });
 }

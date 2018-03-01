@@ -23,7 +23,7 @@
         <script src="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/js/select2.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
-        <script src="{{ base_url('js/module/penjualan/orders_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/orders_sale_v1.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')
@@ -35,7 +35,7 @@
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">Orders New</h4> </div>
+                    <h4 class="page-title">Sale Orders</h4> </div>
                 <!-- /.page title -->
             </div>
 
@@ -50,7 +50,6 @@
                                     <th>Order ID</th>
                                     <th>Customer Name</th>
                                     <th>Contact</th>
-                                    <th>Alamat</th>
                                     <th>Product Package</th>
                                     <th>Total Price</th>
                                     <th>Action</th>
