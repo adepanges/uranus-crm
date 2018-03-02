@@ -14,6 +14,66 @@ class App extends Penjualan_Controller {
         $this->blade->view('inc/penjualan/orders/app_v1', $this->data);
     }
 
+    function get_byid($id = 0)
+    {
+        $id = (int) $id;
+        $this->load->model('orders_model');
+        $res = $this->orders_model->get_byid_v1($id);
+        $data = $res->first_row();
+        $this->_response_json([
+            'data' => $data
+        ]);
+    }
+
+    function update()
+    {
+        $this->load->model(['orders_model', 'customer_model']);
+        $order_id = (int) $this->input->post('order_id');
+        $customer_id = (int) $this->input->post('customer_id');
+        $customer_address_id = (int) $this->input->post('customer_address_id');
+
+        $customer_info = [
+            'full_name' => $this->input->post('full_name'),
+            'telephone' => $this->input->post('telephone')
+        ];
+        $customer_address = [
+            'address' => $this->input->post('address'),
+            'provinsi' => $this->input->post('provinsi'),
+            'provinsi_id' => $this->input->post('provinsi_id'),
+            'kabupaten' => $this->input->post('kabupaten'),
+            'kabupaten_id' => $this->input->post('kabupaten_id'),
+            'kecamatan' => $this->input->post('kecamatan'),
+            'kecamatan_id' => $this->input->post('kecamatan_id'),
+            'desa_kelurahan' => $this->input->post('desa_kelurahan'),
+            'desa_id' => $this->input->post('desa_id'),
+            'postal_code' => $this->input->post('postal_code')
+        ];
+        $orders = [
+            'logistic_id' => (int) $this->input->post('logistic_id'),
+            'call_method_id' => (int) $this->input->post('call_method_id'),
+            'customer_info' => json_encode($customer_info),
+            'customer_address' => json_encode($customer_address)
+        ];
+        $res1 = $this->orders_model->upd($order_id, $orders);
+        $res2 = $this->customer_model->upd($customer_id, $customer_info);
+        $res3 = $this->customer_model->upd_address($customer_address_id, $customer_address);
+
+        if($res1 && $res2 && $res3)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil mengubah data'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah data'
+            ]);
+        }
+    }
+
     public function follow_up($id)
     {
         $this->_restrict_access('penjualan_orders_action_follow_up');

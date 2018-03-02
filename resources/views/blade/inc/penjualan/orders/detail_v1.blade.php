@@ -34,8 +34,8 @@
 @section('content')
             <div class="row bg-title">
                 <!-- .page title -->
-                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">Detail Pesanan</h4>
+                <div class="col-md-12">
+                    <h1>Orders Code: {{ $orders->order_code }}</h1>
                 </div>
                 <!-- /.page title -->
             </div>
@@ -108,7 +108,15 @@
 
             <div class="row white-box">
                 <div class="col-md-6 col-xs-12">
-                    <h1>Info Customer</h1>
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h1>Info Customer</h1>
+                        </div>
+                        <div class="col-sm-2">
+                            <span class="circle circle-sm bg-danger di" onclick="updateCustomerInfo({{ $orders->order_id }})" style="cursor: pointer;"><i class="ti-pencil-alt"></i></span>
+                        </div>
+                    </div>
+                    <br>
 
                     <form id="ordersForm" class="form-horizontal" data-toggle="validator" data-delay="100">
                         <div class="form-group">
@@ -127,30 +135,44 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Alamat</label>
                             <div class="col-sm-8">
-                                <textarea rows="4" class="form-control input-sm" name="address" {{ $attr_readonly }}>{{ "{$orders->customer_address->address} Ds./Kel. {$orders->customer_address->desa_kelurahan} Kec. {$orders->customer_address->kecamatan} Kab. {$orders->customer_address->kabupaten} Prov. {$orders->customer_address->provinsi},  {$orders->customer_address->postal_code}" }}</textarea>
+                                <textarea rows="4" class="form-control input-sm" name="address" {{ $attr_readonly }}>{{ "{$orders->customer_address->address} Ds./Kel. {$orders->customer_address->desa_kelurahan} Kec. {$orders->customer_address->kecamatan} {$orders->customer_address->kabupaten} Prov. {$orders->customer_address->provinsi},  {$orders->customer_address->postal_code}" }}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Payment Method</label>
+                            <label class="control-label col-sm-3">Logistik</label>
                             <div class="col-sm-8">
-                                <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
-@foreach ($master_payment_method as $key => $value)
-                                    <option value="{{ $value->payment_method_id }}">{{ $value->name }}</option>
+                                <select class="form-control" name="logistic_id">
+                                    <option>Pilih</option>
+@foreach ($master_logistics as $key => $value)
+                                    <option value="{{ $value->logistic_id }}" {{ ($orders->logistic_id==$value->logistic_id)?'selected':'' }}>{{ ucwords(strtolower($value->name)) }}</option>
 @endforeach
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Orders Code</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control input-sm" name="full_name" value="{{ $orders->order_code }}" {{ $attr_readonly }}>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="col-md-6 col-xs-12">
-                    <h1>List Orders</h1>
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h1>List Orders</h1>
+                        </div>
+                        <div class="col-sm-2">
+                            <span class="circle circle-sm bg-danger di"><i class="ti-pencil-alt"></i></span>
+                        </div>
+                    </div>
                     <br>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Payment Method</label>
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
+@foreach ($master_payment_method as $key => $value)
+                                    <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+@endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 @foreach ($orders_cart_package as $key => $value)
                     <div class="row" style="margin-top: 7px;">
                         <div class="col-md-8">
@@ -198,7 +220,6 @@
                     <h1>History Logistik</h1>
                 </div>
             </div>
-@endsection
 
             <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
                 <div class="modal-dialog" role="document">
@@ -227,6 +248,103 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                             <button id="btnSaveCancelModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="updateCustomerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Update Customer Info</h4> </div>
+                        <div class="modal-body">
+                            <form id="updateCustomerInfoForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id">
+                                <input type="hidden" name="customer_id">
+                                <input type="hidden" name="customer_address_id">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Orders Code</label>
+                                    <input type="text" class="form-control" name="order_code" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Full Name</label>
+                                    <input type="text" class="form-control" name="full_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Telephone</label>
+                                    <input type="text" class="form-control" name="telephone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Metode Follow Up</label>
+                                    <select class="form-control" name="call_method_id">
+@foreach ($master_call_method as $key => $value)
+                                        <option value="{{ $value->call_method_id }}">{{ $value->name }}</option>
+@endforeach
+                                    </select>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Alamat Pengiriman:</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Alamat</label>
+                                    <textarea class="form-control" name="address"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Provinsi</label>
+                                    <input type="hidden" name="provinsi" value="">
+                                    <input type="hidden" name="provinsi_id" value="">
+                                    <select class="form-control" id="provinsi_id_select">
+                                        <option>Pilih</option>
+@foreach ($master_wilayah_provinsi as $key => $value)
+                                        <option value="{{ $value->id }}">{{ ucwords(strtolower($value->name)) }}</option>
+@endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Kabupaten</label>
+                                    <input type="hidden" name="kabupaten" value="">
+                                    <input type="hidden" name="kabupaten_id" value="">
+                                    <select class="form-control" id="kabupaten_id_select">
+                                        <option>Pilih</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Kecamatan</label>
+                                    <input type="hidden" name="kecamatan" value="">
+                                    <input type="hidden" name="kecamatan_id" value="">
+                                    <select class="form-control" id="kecamatan_id_select">
+                                        <option>Pilih</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Desa / Kelurahan</label>
+                                    <input type="hidden" name="desa_kelurahan" value="">
+                                    <input type="hidden" name="desa_id" value="">
+                                    <select class="form-control" id="desa_id_select">
+                                        <option>Pilih</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Kode Pos</label>
+                                    <input type="text" class="form-control" name="postal_code">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Logistik</label>
+                                    <select class="form-control" name="logistic_id">
+                                        <option>Pilih</option>
+@foreach ($master_logistics as $key => $value)
+                                        <option value="{{ $value->logistic_id }}">{{ ucwords(strtolower($value->name)) }}</option>
+@endforeach
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSaveCustomerModal" type="button" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>
@@ -263,3 +381,8 @@
                     </div>
                 </div>
             </div>
+
+            <script type="text/javascript">
+                document.app.penjualan.orders = {!! json_encode($orders) !!};
+            </script>
+@endsection

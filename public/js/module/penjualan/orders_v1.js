@@ -60,7 +60,7 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var customer_address = JSON.parse(data);
                         return `<span style="font-size: 9px;">
-                        ${customer_address.address}<br>Ds./Kel. ${customer_address.desa_kelurahan}<br>Kec. ${customer_address.kecamatan}<br>Kab. ${customer_address.kabupaten}<br>Prov. ${customer_address.provinsi}<br>${customer_address.postal_code}
+                        ${customer_address.address}<br>Ds./Kel. ${customer_address.desa_kelurahan}<br>Kec. ${customer_address.kecamatan}<br>${customer_address.kabupaten}<br>Prov. ${customer_address.provinsi}<br>${customer_address.postal_code}
                         </span>`;
                     }
                 },

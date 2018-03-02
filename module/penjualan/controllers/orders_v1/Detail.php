@@ -24,6 +24,7 @@ class Detail extends Penjualan_Controller {
             'orders' => $orders,
             'attr_readonly' => 'readonly',
             'master_payment_method' => $this->master_model->payment_method()->result(),
+            'master_call_method' => $this->master_model->call_method()->result(),
             'orders_cart_package' => $orders_cart_package,
             'orders_process' => $this->orders_process_model->get($id)->result()
         ]);
