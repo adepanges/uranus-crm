@@ -260,7 +260,9 @@ $(document).ready(function(){
                     var name = ucwords(val.name);
                     $('#kabupaten_id_select').append(`<option value="${val.id}">${name}</option>`)
                 });
-                formPopulate('#updateCustomerInfoForm', document.app.penjualan.orders.customer_address);
+                formPopulate('#updateCustomerInfoForm', {
+                    'kabupaten_id': document.app.penjualan.orders.customer_address.kabupaten_id
+                });
                 $('#kabupaten_id_select').change()
             }
         });
@@ -288,7 +290,9 @@ $(document).ready(function(){
                     var name = ucwords(val.name);
                     $('#kecamatan_id_select').append(`<option value="${val.id}">${name}</option>`)
                 });
-                formPopulate('#updateCustomerInfoForm', document.app.penjualan.orders.customer_address);
+                formPopulate('#updateCustomerInfoForm', {
+                    'kecamatan_id': document.app.penjualan.orders.customer_address.kecamatan_id
+                });
                 $('#kecamatan_id_select').change()
             }
         });
@@ -316,7 +320,9 @@ $(document).ready(function(){
                     var name = ucwords(val.name);
                     $('#desa_id_select').append(`<option value="${val.id}">${name}</option>`)
                 });
-                formPopulate('#updateCustomerInfoForm', document.app.penjualan.orders.customer_address);
+                formPopulate('#updateCustomerInfoForm', {
+                    'desa_id': document.app.penjualan.orders.customer_address.desa_id
+                });
                 $('#desa_id_select').change()
             }
         });
