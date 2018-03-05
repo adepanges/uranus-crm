@@ -19,7 +19,18 @@ class Init extends SSO_Controller {
         $menu = [];
 
         $role = $this->auth_model->get_role_by_userid($profile['user_id'])->result_array();
+
+        if(empty($role))
+        {
+            $this->session->set_userdata([
+                'profile' => '',
+                'sso' => ''
+            ]);
+            $this->session->set_userdata('error_message', 'Anda tidak memiliki hak akses apapun');
+            redirect('auth/log/in');
+        }
         $role_active = isset($role[0])?$role[0]:[];
+
 
         foreach ($role as $key => $value) {
             $role_access[$value['role_name']] = $this->auth_model->get_all_access_by_roleid($value['role_id'])->result_array();

@@ -70,7 +70,7 @@ class Log extends SSO_Controller {
             }
             else
             {
-                $this->session->set_userdata('error_message', 'Akun anda tidak dapat diakses');
+                $this->session->set_userdata('error_message', 'Akun Anda diblokir, silahkan hubungi atasan Anda');
                 redirect('auth/log/in');
             }
 
