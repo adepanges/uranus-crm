@@ -49,7 +49,7 @@ class Init extends SSO_Controller {
                     'module_name' => $value['module_name'],
                 ];
 
-                $menu[$value['module_link']] = [
+                $menu[$value['module_link']][] = [
                     'menu_id' => $value['menu_id'],
                     'menu_name' => $value['menu_name'],
                     'menu_link' => $value['menu_link']

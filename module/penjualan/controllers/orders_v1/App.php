@@ -112,4 +112,33 @@ class App extends Penjualan_Controller {
         }
         else redirect($this->session->userdata('orders_state'));
     }
+
+    function update_shooping_info()
+    {
+        $this->load->model(['orders_model']);
+        $order_id = (int) $this->input->post('order_id');
+        $product_package_id = (int) $this->input->post('product_package_id');
+
+        $orders = [
+            'payment_method_id' => (int) $this->input->post('payment_method_id')
+        ];
+        $res1 = $this->orders_model->upd($order_id, $orders);
+        $res2 = $this->orders_model->clear_cart_package($order_id);
+        $res3 = $this->orders_model->upd_cart_package($order_id, $product_package_id);
+
+        if($res1 && $res2 && $res3)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil mengubah data'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah data'
+            ]);
+        }
+    }
 }

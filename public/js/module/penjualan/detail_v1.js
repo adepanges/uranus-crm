@@ -111,6 +111,62 @@ function updateCustomerInfo(id){
     });
 }
 
+function updateShoopingCart(id){
+    $('#shopingCartModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    initShoopingCart();
+}
+
+$('#shopingCartForm select[name=product_package_id]').on('change', function(){
+    initShoopingCart();
+});
+
+$('#btnSaveShopingCartModal').click(function(){
+    var data = serialzeForm('#shopingCartForm');
+    console.log(data);
+});
+
+function initShoopingCart(){
+    var data = serialzeForm('#shopingCartForm');
+    $('#shopingCartForm select[name=product_package_id] option').each(function(key, el){
+        if($(el).val() == data.product_package_id){
+            var cart = atob($(el).attr('data')),
+                detail = '', package_ = JSON.parse(cart), cart = [];
+
+            if(package_){
+                if(Array.isArray(package_.product_list)){
+                    package_.product_list.forEach(function(val, key){
+                        cart.push(`<div class="row" style="padding-left: 40px;">
+                            <div class="col-md-6" style="border-bottom: 1px dotted #000;">
+                                <h5>${val.name}</h5>
+                            </div>
+                            <div class="col-md-3" style="border-bottom: 1px dotted #000;">
+                                <h5>Qty. ${val.qty}</h5>
+                            </div>
+                            <div class="col-md-3">
+                            </div>
+                        </div>`);
+                    });
+                }
+
+                detail = `<div class="row" style="margin-left: 7px;">
+                    <div class="col-md-8">
+                        <h3>${package_.name}</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>${package_.price}</h3>
+                    </div>
+                    ${cart.join('')}
+                </div>`;
+                $('#detailCart').html(detail);
+
+            }
+        }
+    });
+}
+
 $(document).ready(function(){
     $('#cancelForm [name=notes]').change(function(e){
         if($(this).val() == 'dll'){
@@ -390,6 +446,52 @@ $(document).ready(function(){
                     } else {
                         $('#updateCustomerInfoForm')[0].reset()
                         $('#updateCustomerModal').modal('toggle')
+                    }
+
+                    swal({
+                        title: title,
+                        text: response.message,
+                        timer: timer
+                    },function(){
+                        document.location.reload()
+                    });
+                });
+            }
+        });
+    });
+
+    $('#btnSaveShopingCartModal').click(function(){
+        var data = serialzeForm('#shopingCartForm');
+
+        swal({
+            title: "Apakah anda yakin?",
+            text: "Anda akan mengubah data produk ini!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $('.preloader').fadeIn();
+                $.ajax({
+                    method: "POST",
+                    url: document.app.site_url+'/orders_v1/app/update_shooping_info',
+                    data: data
+                })
+                .done(function( response ) {
+                    $('.preloader').fadeOut();
+                    var title = 'Berhasil!',
+                        timer = 1000;
+
+                    if(!response.status) {
+                        var timer = 3000;
+                        title = 'Gagal!';
+                    } else {
+                        $('#shopingCartModal').modal('toggle')
                     }
 
                     swal({

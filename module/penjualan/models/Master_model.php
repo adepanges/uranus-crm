@@ -46,4 +46,15 @@ class Master_model extends Penjualan_Model {
         }
         return $this->db->get_where('master_order_status');
     }
+
+    function product_package()
+    {
+        return $this->db->get_where('product_package', ['status' => 1]);
+    }
+
+    function product_package_list($where = [])
+    {
+        if(!empty($where)) $this->db->where($where);
+        return $this->db->get_where('product_package_list', ['status' => 1]);
+    }
 }

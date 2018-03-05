@@ -113,7 +113,12 @@
                             <h1>Info Customer</h1>
                         </div>
                         <div class="col-sm-2">
-                            <span class="circle circle-sm bg-danger di" onclick="updateCustomerInfo({{ $orders->order_id }})" style="cursor: pointer;"><i class="ti-pencil-alt"></i></span>
+
+@if(in_array($orders->order_status_id,[2,3,4,5]) && $access_list->penjualan_orders_update_customer_info)
+                            <span class="circle circle-sm bg-danger di" onclick="updateCustomerInfo({{ $orders->order_id }})" style="cursor: pointer;">
+                                <i class="ti-pencil-alt"></i>
+                            </span>
+@endif
                         </div>
                     </div>
                     <br>
@@ -157,7 +162,11 @@
                             <h1>List Orders</h1>
                         </div>
                         <div class="col-sm-2">
-                            <span class="circle circle-sm bg-danger di"><i class="ti-pencil-alt"></i></span>
+@if(in_array($orders->order_status_id,[2,3,4,5,6]) && $access_list->penjualan_orders_update_shopping_info)
+                            <span class="circle circle-sm bg-danger di" onclick="updateShoopingCart({{ $orders->order_id }})" style="cursor: pointer;">
+                                <i class="ti-pencil-alt"></i>
+                            </span>
+@endif
                         </div>
                     </div>
                     <br>
@@ -350,17 +359,63 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="shopingCartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Update Shooping Info</h4> </div>
+                        <div class="modal-body">
+                            <form id="shopingCartForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Payment Method</label>
+                                    <select class="form-control input-sm" name="payment_method_id">
+                                        <option>Pilih</option>
+@foreach ($master_payment_method as $key => $value)
+                                        <option
+                                            value="{{ $value->payment_method_id }}"
+                                            {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}
+                                            >
+                                            {{ $value->name }}
+                                        </option>
+@endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Product Package</label>
+                                    <select class="form-control input-sm" name="product_package_id">
+                                        <option>Pilih</option>
+    @foreach ($master_product_package as $key => $value)
+                                        <option data="{{ base64_encode(json_encode($value)) }}" value="{{ $value->product_package_id }}" {{ ($value->product_package_id == $orders_cart_package_id)?'selected':'' }}>{{ $value->name }}</option>
+    @endforeach
+                                    </select>
+                                </div>
+                                <hr>
+                                <div class="form-group row" id="detailCart">
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSaveShopingCartModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal fade" id="pendingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Alasan dipending</h4> </div>
+                            <h4 class="modal-title" id="exampleModalLabel1">Update</h4> </div>
                         <div class="modal-body">
                             <form id="pendingForm" data-toggle="validator" data-delay="100">
                                 <input type="hidden" name="order_id">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Alasan</label>
+                                    <label for="recipient-name" class="control-label">Payment Method</label>
                                     <select class="form-control" name="notes">
 @foreach ($reason_pending as $key => $value)
                                         <option value="{{ $value }}">{{ $value }}</option>

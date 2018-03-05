@@ -22,7 +22,8 @@ class Penjualan_Controller extends Dermeva_Controller {
             ($this->uri->segment(2) == 'follow_up' && $this->uri->segment(3) == 'confirm_buy') ||
             ($this->uri->segment(2) == 'follow_up' && $this->uri->segment(3) == 'cancel') ||
             ($this->uri->segment(2) == 'follow_up' && $this->uri->segment(3) == 'pending') ||
-            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'update')
+            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'update') ||
+            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'update_shooping_info')
             )
         {
             $check_condition = FALSE;

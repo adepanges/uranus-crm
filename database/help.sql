@@ -40,12 +40,12 @@ SELECT
     3, a.module_id, b.menu_id, c.feature_id, c.name,
     CASE WHEN
     c.name IN (
-        'penjualan_orders_new',
         'penjualan_orders_detail',
         'penjualan_orders_list',
         'penjualan_orders_sale',
         'penjualan_orders_verify_payment',
-        'penjualan_orders_action_sale'
+        'penjualan_orders_action_sale',
+        'penjualan_orders_update_shopping_info'
     ) THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
