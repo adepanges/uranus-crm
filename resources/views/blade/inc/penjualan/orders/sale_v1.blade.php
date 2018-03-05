@@ -52,6 +52,7 @@
                                     <th>Contact</th>
                                     <th>Product Package</th>
                                     <th>Total Price</th>
+                                    <th>Info</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

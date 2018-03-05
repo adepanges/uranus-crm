@@ -62,6 +62,19 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
+                        if(document.app.access_list.penjualan_orders_view_modifier)
+                        {
+                            button.push(`<span class="label label-warning label-rouded">${full.username}</span>`)
+                        }
+                        return button.join('');
+                    }
+                },
+                {
+                    data: 'order_id',
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        var button = [];
+                        //
                         if(document.app.access_list.penjualan_orders_detail)
                         {
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);

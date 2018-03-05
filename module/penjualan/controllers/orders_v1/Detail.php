@@ -25,10 +25,11 @@ class Detail extends Penjualan_Controller {
             'attr_readonly' => 'readonly',
             'master_payment_method' => $this->master_model->payment_method()->result(),
             'master_call_method' => $this->master_model->call_method()->result(),
+            'master_wilayah_provinsi' => $this->master_model->wilayah_provinsi()->result(),
+            'master_logistics' => $this->master_model->logistics()->result(),
             'orders_cart_package' => $orders_cart_package,
             'orders_process' => $this->orders_process_model->get($id)->result()
         ]);
-
 
         $this->blade->view('inc/penjualan/orders/detail_v1', $this->data);
     }

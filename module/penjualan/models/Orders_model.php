@@ -11,18 +11,29 @@ class Orders_model extends Penjualan_Model {
 
     function get_datatable_v1($params = [], $only_self = TRUE)
     {
+        $select = [];
         $join = [];
         $where = [];
         $ordering = 'ORDER BY created_at ASC';
 
         if($params['order_status_id'] == 4) $ordering = 'ORDER BY created_at DESC';
+
+        if(isset($params['order_status_id']) && $params['order_status_id'] != 1)
+        {
+            $join[] = "LEFT JOIN (SELECT
+                z.order_id, z.order_status_id, z.user_id, zo.username
+                FROM orders_process z
+                LEFT JOIN sso_user zo ON z.user_id = zo.user_id
+                WHERE z.order_status_id = 2
+                GROUP BY z.order_id, z.order_status_id, z.user_id, zo.username) d ON a.order_id = d.order_id";
+            $select[] = 'd.username';
+        }
         if(
             $only_self && isset($params['user_id']) &&
             !in_array($params['order_status_id'], [1,4]))
         {
             $user_id = (int) $params['user_id'];
-            $join[] = "LEFT JOIN (SELECT order_id, user_id as user_id_action FROM orders_process a WHERE user_id = {$user_id} GROUP BY order_id) d ON a.order_id = d.order_id";
-            $where[] = "d.user_id_action IS NOT NULL";
+            $where[] = "d.user_id = $user_id";
         }
 
         if($params['order_status_id'] < 7)
@@ -35,15 +46,15 @@ class Orders_model extends Penjualan_Model {
             $where[] = "a.order_status_id >= {$params['order_status_id']}";
         }
 
+        if(empty($select)) $select = ''; else $select = ", ".implode(", ",$select);
         if(empty($join)) $join = ''; else $join = implode(" \n",$join);
         if(empty($where)) $where = ''; else $where = " AND ".implode(" AND ",$where);
 
         if(!isset($params['order_status_id'])) $params['order_status_id'] = 1;
 
         $sql = "SELECT
-                a.*, b.icon AS call_method_icon,
-                (SELECT package_name FROM orders_cart WHERE order_id = a.order_id LIMIT 1) AS package_name,
-                c.name AS payment_method
+                a.*, b.icon AS call_method_icon, c.name AS payment_method,
+                (SELECT package_name FROM orders_cart WHERE order_id = a.order_id LIMIT 1) AS package_name $select
             FROM orders a
             LEFT JOIN master_call_method b ON a.call_method_id = b.call_method_id
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id
