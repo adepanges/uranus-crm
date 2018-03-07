@@ -77,6 +77,15 @@ class Init extends SSO_Controller {
             exit;
         }
 
-        redirect($this->config->item('portal_link'));
+        if (count($module) == 1) {
+            foreach ($module as  $key => $value) {
+                redirect(base_url($key));
+                exit;
+            }
+        }
+        else
+        {
+            redirect($this->config->item('portal_link'));
+        }
     }
 }

@@ -123,11 +123,6 @@ $('#shopingCartForm select[name=product_package_id]').on('change', function(){
     initShoopingCart();
 });
 
-$('#btnSaveShopingCartModal').click(function(){
-    var data = serialzeForm('#shopingCartForm');
-    console.log(data);
-});
-
 function initShoopingCart(){
     var data = serialzeForm('#shopingCartForm');
     $('#shopingCartForm select[name=product_package_id] option').each(function(key, el){

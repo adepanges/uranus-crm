@@ -24,7 +24,7 @@ $(document).ready(function(){
         }).DataTable({
             serverSide: true,
             ajax: {
-                url: document.app.site_url + '/orders_v1/get/index/sale',
+                url: document.app.site_url + '/packing_v1/get/index/shipping',
                 type: 'POST'
             },
             columns: [
@@ -39,37 +39,21 @@ $(document).ready(function(){
                 { data: "created_at", orderable: false},
                 { data: "order_code", orderable: false},
                 {
-                    data: "customer_info",
+                    data: 'customer_info',
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        var row = JSON.parse(data);
-                        return row.full_name;
-                    }
-                },
-                {
-                    data: "customer_info",
-                    orderable: false,
-                    render: function ( data, type, full, meta ) {
-                        var row = JSON.parse(data);
-                        return `<i class="${full.call_method_icon}"> ${row.telephone}</i>`;
+                        var data = JSON.parse(data);
+                        return data.full_name;
                     }
                 },
                 { data: "package_name", orderable: false },
-                { data: "total_price", orderable: false },
                 {
                     data: 'order_id',
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
-
-                        if(document.app.access_list.penjualan_orders_view_modifier)
-                        {
-                            button.push(`<span class="label label-warning label-rouded">${full.username}</span>`)
-                        }
-
-                        button.push(`<span class="label label-info label-rouded">${full.order_status}</span>`)
-
-                        return button.join(' ');
+                        button.push(`<span class="label label-warning label-rouded">${full.logistic_name}</span>`)
+                        return button.join('');
                     }
                 },
                 {
@@ -78,9 +62,9 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        if(document.app.access_list.penjualan_orders_detail)
+                        if(document.app.access_list.logistik_orders_detail)
                         {
-                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
+                            button.push(`<a href="${document.app.site_url}/packing_v1/detail/index/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
                         return button.join('');
                     }
