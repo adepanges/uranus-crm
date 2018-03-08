@@ -18,7 +18,7 @@ class Verify extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_action_sale');
         $id = (int) $id;
-        $this->load->model(['orders_model','orders_process_model','master_model']);
+        $this->load->model(['orders_model','orders_process_model','master_model','invoice_model']);
         $res = $this->orders_model->get_byid_v1($id);
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
@@ -47,6 +47,7 @@ class Verify extends Penjualan_Controller {
 
         if($res1 && $res2)
         {
+            $this->invoice_model->publish_v1($id, $order_process['created_at']);
             $this->session->set_userdata('orders_follow_up', '');
             redirect($this->session->userdata('orders_state'));
         }
