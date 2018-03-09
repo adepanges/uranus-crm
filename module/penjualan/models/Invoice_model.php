@@ -26,6 +26,7 @@ class Invoice_model extends Penjualan_Model {
             'customer_address' => json_encode($customer_address),
             'order_cart' => json_encode($orders_cart),
             'total_price' => $orders->total_price,
+            'payment_method' => $orders->payment_method,
             'billed_date' => $time,
             'paid_date' => $time,
             'version' => 1
@@ -59,9 +60,12 @@ class Invoice_model extends Penjualan_Model {
 
     protected function get_orders_info($order_id = 0)
     {
-        return $this->db->limit(1)->get_where('orders', [
-            'order_id' => (int) $order_id,
-            'version' => 1,
+        $sql = "SELECT a.*, b.name as payment_method
+        FROM orders a
+        LEFT JOIN master_payment_method b ON a.payment_method_id = b.payment_method_id
+        WHERE a.order_id = ? AND a.version = 1 LIMIT 1";
+        return $this->db->query($sql, [
+            'order_id' => (int) $order_id
         ])->first_row();
     }
 

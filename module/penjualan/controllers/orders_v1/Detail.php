@@ -7,7 +7,7 @@ class Detail extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_detail');
         $id = (int) $id;
-        $this->load->model(['orders_model','master_model','orders_process_model']);
+        $this->load->model(['orders_model','master_model','orders_process_model','logistics_process_model']);
 
         $res = $this->orders_model->get_byid_v1($id);
 
@@ -42,7 +42,8 @@ class Detail extends Penjualan_Controller {
             'orders_cart_package_id' => $orders_cart_package_id,
             'master_product_package' => $product_package,
             'orders_cart_package' => $orders_cart_package,
-            'orders_process' => $this->orders_process_model->get($id)->result()
+            'orders_process' => $this->orders_process_model->get($id)->result(),
+            'logistics_process' => $this->logistics_process_model->get($id)->result()
         ]);
 
         $this->blade->view('inc/penjualan/orders/detail_v1', $this->data);

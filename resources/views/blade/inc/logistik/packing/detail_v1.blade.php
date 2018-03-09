@@ -49,6 +49,13 @@
                     </button>
                 </div>
 
+                <div class="col-md-2 pull-right">
+                    <a target="_blank" href="{{ site_url('packing_v1/cetak/label/'.base64_encode($orders->order_id)) }}" class="btn btn-primary btn-rounded form-control">
+                        <i class="fa fa-print"></i>
+                        <span>Label Pengiriman</span>
+                    </a>
+                </div>
+
 @if($access_list->logistik_packing_action_alredy && $orders->logistics_status_id == 1)
                 <div class="col-md-2 pull-right">
                     <button onclick="donePacking({{ $orders->order_id }})" class="btn btn-warning btn-rounded form-control">
@@ -145,16 +152,27 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Payment Method</label>
-                            <div class="col-sm-8">
-                                <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
-@foreach ($master_payment_method as $key => $value)
-                                    <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
-@endforeach
-                                </select>
+
+                        <form class="form-horizontal" >
+@if(!empty($orders->order_invoice_id) && !empty($orders->invoice_number))
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Invoice</label>
+                                <div class="col-sm-8">
+                                    <span class="btn btn-info form-control input-sm" style="cursor: pointer;"><b>{{ $orders->invoice_number }}</b></span>
+                                </div>
                             </div>
-                        </div>
+@endif
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Payment Method</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
+@foreach ($master_payment_method as $key => $value)
+                                        <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+@endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 @foreach ($orders_cart_package as $key => $value)
                     <div class="row" style="margin-top: 7px;">

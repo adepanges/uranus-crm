@@ -3,39 +3,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Invoice_model extends Logistik_Model {
 
-    function publish_v1($order_id = 0)
+    function get_available_print($id = [])
     {
-        $invoice_data = [
-            'order_id' => '',
-            'customer_id' => '',
-            'order_code' => '',
-            'customer' => '',
-            'customer_address_id' => '',
-            'customer_address' => '',
-            'order_cart' => '',
-            'billed_date' => '',
-            'paid_date' => '',
-            'version' => '',
-        ]
+        $id_clean = [];
+        foreach ($id as $key => $value) {
+            if((int) $value != 0) $id_clean[] = (int) $value;
+        }
+
+        $this->db->where_in('order_id', $id_clean);
+        $res = $this->db->get('orders_invoices');
+        $this->set_printed($id_clean);
+        return $res;
     }
 
-    protected function create_invoice_number_v1()
+    protected function set_printed($id)
     {
-
-    }
-
-    protected function get_customer_info()
-    {
-
-    }
-
-    protected function get_customer_address()
-    {
-
-    }
-
-    protected function get_cart()
-    {
-
+        $this->db->set('printed', 1);
+        $this->db->where_in('order_id', $id);
+        return $res = $this->db->update('orders_invoices');
     }
 }

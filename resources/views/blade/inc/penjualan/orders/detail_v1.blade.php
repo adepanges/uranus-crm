@@ -171,16 +171,27 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Payment Method</label>
-                            <div class="col-sm-8">
-                                <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
-@foreach ($master_payment_method as $key => $value)
-                                    <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
-@endforeach
-                                </select>
+                        <form class="form-horizontal" >
+
+@if(!empty($orders->order_invoice_id) && !empty($orders->invoice_number))
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Invoice</label>
+                                <div class="col-sm-8">
+                                    <span class="btn btn-info form-control input-sm" style="cursor: pointer;"><b>{{ $orders->invoice_number }}</b></span>
+                                </div>
                             </div>
-                        </div>
+@endempty
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Payment Method</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
+    @foreach ($master_payment_method as $key => $value)
+                                        <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 @foreach ($orders_cart_package as $key => $value)
                     <div class="row" style="margin-top: 7px;">
@@ -227,6 +238,17 @@
                 </div>
                 <div class="col-md-6 col-xs-12">
                     <h1>History Logistik</h1>
+@foreach ($logistics_process as $key => $value)
+                    <div class="row">
+                        <div class="col-md-3">
+                            <b>{{ $value->created_at }}</b>
+                        </div>
+                        <div class="col-md-9" style="border-bottom: 1px dotted #000;">
+                            <h6><b>{{ $value->status }}</b> oleh {{ $value->full_name }}</h6>
+                            {!! $value->notes !!}
+                        </div>
+                    </div>
+@endforeach
                 </div>
             </div>
 

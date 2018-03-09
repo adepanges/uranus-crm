@@ -108,10 +108,12 @@ class Orders_model extends Penjualan_Model {
     function get_byid_v1($id)
     {
         $sql = "SELECT
-                a.*, b.icon AS call_method_icon,c.name AS payment_method
+                a.*, b.icon AS call_method_icon, c.name AS payment_method,
+                d.order_invoice_id, d.invoice_number
             FROM orders a
             LEFT JOIN master_call_method b ON a.call_method_id = b.call_method_id
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id
+            LEFT JOIN orders_invoices d ON a.order_id = d.order_id
             WHERE a.version = 1 AND a.order_id = ? LIMIT 1";
         return $this->db->query($sql, [$id]);
     }
