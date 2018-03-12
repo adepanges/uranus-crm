@@ -62,10 +62,10 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        if(document.app.access_list.penjualan_orders_view_modifier)
-                        {
+                        // if(document.app.access_list.penjualan_orders_view_modifier)
+                        // {
                             button.push(`<span class="label label-warning label-rouded">${full.username}</span>`)
-                        }
+                        // }
                         return button.join('');
                     }
                 },
