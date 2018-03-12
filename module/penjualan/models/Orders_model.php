@@ -31,7 +31,7 @@ class Orders_model extends Penjualan_Model {
         }
         if(
             $only_self && isset($params['user_id']) &&
-            !in_array($params['order_status_id'], [1,4]))
+            !in_array($params['order_status_id'], [1]))
         {
             $user_id = (int) $params['user_id'];
             $where[] = "d.user_id = $user_id";

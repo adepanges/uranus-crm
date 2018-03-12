@@ -29,7 +29,7 @@ class Get extends Penjualan_Controller {
                 (
                     // CS
                     $this->role_active['role_id'] == 5 &&
-                    in_array($params['order_status_id'], [2,3,5,6,7])
+                    in_array($params['order_status_id'], [2,3,4,5,6,7])
                 )
                 ||
                 (
