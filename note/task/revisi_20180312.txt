@@ -1,27 +1,18 @@
-Administrator
-    Single Sign On
+--------------------------------------------------------------------------------------
+TASK REVISI
+--------------------------------------------------------------------------------------
+
+**Administrator
+    Single Sign On**
         1. Tambahkan fitur filter role : http://prntscr.com/ipy6ys
 
-Manajer
-    Single Sign On
+**Manajer
+    Single Sign On**
         1. Tambahkan fitur filter role & delete account : http://prntscr.com/ipy8bz (Hanya saja jika accountnya memiliki Role Administrator dan/atau Manajer, level Manajer tidak bisa menghapus account tersebut)
 
-CS
-    Penjualan
-        1. [NOT ERROR] History Logistik Error : http://prntscr.com/ipy9td
-        2. Saat Edit data customer, dari Provinsi sampai Desa dia ngeblank : http://prntscr.com/ipyh17
-        3. Cancel Orders role CS yg bagian Info ditampilkan saja nama CS nya, atau kolom Info dihilangkan saja kalau memang tidak dipakai untuk Role CS : http://prntscr.com/ipyalq (Info sebenarnya di pakai di Role Administrator, Manajer, TeamLeader untuk melihat siapa CS yg follow up)
-        4. Di Bagian Pending Orders, detail order langsung ada pilihan Confirm Buy, Cancel, Pending saja tanpa harus kembali trus klik Follow Up lagi : http://prntscr.com/ipyc8t (lebih efisien, termasuk di Role Administrator, Manajer, TeamLeader, Finance juga, tetapi di Role CS kalau sudah status Verify Payments Role CS sudah tidak bisa ganti2 data lagi harus ijin minimal ke TeamLeader)
-        5. Beda User CS masih bisa lihat cancel orderan CS lain : http://prntscr.com/ipycym harusnya tidak bisa liat cancel orders CS lain
-
-Finance
-    Penjualan
-        1. Nama CS di tampilkan di Info : http://prntscr.com/ipyejq
-        2. Sales Orders tidak muncul : http://prntscr.com/ipyfbn
-
-Logistics
-    1. Tampilan menunya dibikin berderet aja, jgn dropdown : http://prntscr.com/ipyfr4
+**Logistics**
     2. Ada fitur checklist agar dapat bulk update status : http://prntscr.com/ipyhvo Nantinya bisa dipakai untuk bulk update label pengiriman juga
+    --------------------------------------------------------------------------------------
     3. Di status Pengiriman, Logistik tetap bisa edit nomor resi : http://prntscr.com/ipyiys Agar saat terjadi human error, Logistik masih bisa update nomor resi dengan yang benar
 
 
@@ -30,19 +21,36 @@ Logistics
 DONE
 --------------------------------------------------------------------------------------
 
-Administrator
-    Single Sign On
+**Administrator
+    Single Sign On**
 
-Manajer
-    Single Sign On
+
+**Manajer
+    Single Sign On**
         2. [DONE] Manajer tidak dapat menambahkan role Administrator dan Manajer ke user
+        --------------------------------------------------------------------------------------
 
-CS
-    Penjualan
+**CS
+    Penjualan**
+        1. [DONE] History Logistik Error : http://prntscr.com/ipy9td
+        --------------------------------------------------------------------------------------
+        2. [NOT ERROR] Saat Edit data customer, dari Provinsi sampai Desa dia ngeblank : http://prntscr.com/ipyh17
+            reason: __karena proses insert order nya belum sesuai format yg ada, nanti kalau sudah menggunakan api ngga akan kejadian seperti ini__
+        --------------------------------------------------------------------------------------
+        3. [DONE] Cancel Orders role CS yg bagian Info ditampilkan saja nama CS nya, atau kolom Info dihilangkan saja kalau memang tidak dipakai untuk Role CS : http://prntscr.com/ipyalq (Info sebenarnya di pakai di Role Administrator, Manajer, TeamLeader untuk melihat siapa CS yg follow up)
+        --------------------------------------------------------------------------------------
+        4. [DONE] Di Bagian Pending Orders, detail order langsung ada pilihan Confirm Buy, Cancel, Pending saja tanpa harus kembali trus klik Follow Up lagi : http://prntscr.com/ipyc8t (lebih efisien, termasuk di Role Administrator, Manajer, TeamLeader, Finance juga, tetapi di Role CS kalau sudah status Verify Payments Role CS sudah tidak bisa ganti2 data lagi harus ijin minimal ke TeamLeader)
+        --------------------------------------------------------------------------------------
+        5. Beda User CS masih bisa lihat cancel orderan CS lain : http://prntscr.com/ipycym harusnya tidak bisa liat cancel orders CS lain
 
-Finance
-    Penjualan
+**Finance
+    Penjualan**
+        1. [DONE] Nama CS di tampilkan di Info : http://prntscr.com/ipyejq
+        --------------------------------------------------------------------------------------
+        2. [DONE] Sales Orders tidak muncul : http://prntscr.com/ipyfbn
 
-
-Logistics
+**Logistics**
+    1. [DONE] Tampilan menunya dibikin berderet aja, jgn dropdown : http://prntscr.com/ipyfr4
+    --------------------------------------------------------------------------------------
     4. [DUMMY] No. Resi sudah ada isinya, padahal baru mau di ganti statusnya ke Pengiriman : http://prntscr.com/ipykms
+        reason: __karena di database udah ada data dummy nya, karena data sudah diulang berkali2 jadi udah ada isinya__
