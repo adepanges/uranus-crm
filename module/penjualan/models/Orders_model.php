@@ -20,7 +20,16 @@ class Orders_model extends Penjualan_Model {
 
         if(isset($params['order_status_id']) && $params['order_status_id'] != 1)
         {
-            $history_order_status_id = ($params['order_status_id']<7)?$params['order_status_id']:6;
+            $history_order_status_id = $params['order_status_id'];
+            if($params['order_status_id']>=7 && $params['role_id'] == 5)
+            {
+                $history_order_status_id = 6;
+            }
+            else if($params['order_status_id']>=7 && $params['role_id'] == 3)
+            {
+                $history_order_status_id = 7;
+            }
+
             $join[] = "LEFT JOIN (SELECT
                 z.order_id, z.order_status_id, z.user_id, zo.username
                 FROM orders_process z
