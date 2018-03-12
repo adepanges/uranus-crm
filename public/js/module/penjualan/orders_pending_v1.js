@@ -82,7 +82,7 @@ $(document).ready(function(){
 
                         if(document.app.access_list.penjualan_orders_action_follow_up)
                         {
-                            button.push(`<button onclick="followUp(${data})" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="mdi mdi-briefcase-upload"></i></button>`);
+                            // button.push(`<button onclick="followUp(${data})" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="mdi mdi-briefcase-upload"></i></button>`);
                         }
 
                         return button.join('');

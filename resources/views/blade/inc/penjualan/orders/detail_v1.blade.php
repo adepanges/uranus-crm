@@ -49,7 +49,8 @@
                         <span>Kembali</span>
                     </button>
                 </div>
-@else
+@endif
+@if(in_array($orders->order_status_id, [2,3]))
     @if($access_list->penjualan_orders_action_pending)
                 <div class="col-md-2 pull-right">
                     <button onclick="pendingOrders({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
@@ -162,7 +163,7 @@
                             <h1>List Orders</h1>
                         </div>
                         <div class="col-sm-2">
-@if(in_array($orders->order_status_id,[2,3,4,5,6]) && $access_list->penjualan_orders_update_shopping_info)
+@if(in_array($orders->order_status_id,[2,3,4,5]) && $access_list->penjualan_orders_update_shopping_info)
                             <span class="circle circle-sm bg-danger di" onclick="updateShoopingCart({{ $orders->order_id }})" style="cursor: pointer;">
                                 <i class="ti-pencil-alt"></i>
                             </span>
