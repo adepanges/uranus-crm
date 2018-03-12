@@ -12,7 +12,9 @@ class Role extends SSO_Controller {
         $data = $this->user_model->get_byid($user_id);
         if(empty($data)) redirect('user');
 
-        $role_active = $this->role_model->get_active()->result();
+        $is_admin = ($this->data['role_active']->role_id == 1);
+
+        $role_active = $this->role_model->get_active($is_admin)->result();
 
         $this->_set_data([
             'title' => 'Set Role User',
