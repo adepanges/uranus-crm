@@ -266,6 +266,6 @@
             </div>
 
             <script type="text/javascript">
-                document.app.penjualan.orders = {!! json_encode($orders) !!};
+                document.app.logistics.orders = {!! json_encode($orders) !!};
             </script>
 @endsection
