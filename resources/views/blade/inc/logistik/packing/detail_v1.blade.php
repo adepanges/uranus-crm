@@ -157,7 +157,7 @@
 @if(!empty($orders->order_invoice_id) && !empty($orders->invoice_number))
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Invoice</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-8" onclick="window.open('{{ base_url('penjualan.php/orders_v1/cetak/invoice/'.$orders->order_id) }}')">
                                     <span class="btn btn-info form-control input-sm" style="cursor: pointer;"><b>{{ $orders->invoice_number }}</b></span>
                                 </div>
                             </div>
