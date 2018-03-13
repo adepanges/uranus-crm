@@ -7,12 +7,15 @@ $(document).ready(function(){
     var numberer_user = 1;
     userTable = $('#UserTable').on('preXhr.dt', function ( e, settings, data ){
             numberer_user = data.start + 1;
+            data.role_id = $('#filterSection [name=role_id]').val();
+
             $('.row .white-box').block({
                 message: '<h3>Please Wait...</h3>',
                 css: {
                     border: '1px solid #fff'
                 }
             });
+            return data;
         }).on('xhr.dt', function ( e, settings, json, xhr ){
             $('.row .white-box').unblock();
             if(!document.datatable_search_change_event)
@@ -26,9 +29,6 @@ $(document).ready(function(){
             }
             document.datatable_search_change_event = true;
         }).DataTable({
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
-            },
             serverSide: true,
             bInfo: false,
             ajax: {
@@ -81,7 +81,8 @@ $(document).ready(function(){
                             button.push('<a href="'+document.app.site_url+'/user/role/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
                         }
 
-                        return button.join('');
+                        if(full.is_admin_manajer) return '';
+                        else return button.join('');
                     }
                 }
             ]

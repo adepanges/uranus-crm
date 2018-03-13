@@ -40,6 +40,24 @@
 
             <!-- .row -->
             <div class="row">
+                <div class="col-md-12 white-box" id="filterSection">
+                    <div class="col-md-2 pull-right">
+                        <button class="btn btn-info form-control" onclick="userTable.ajax.reload()">Filter</button>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <select name="role_id" class="form-control input-md">
+                            <option value="0" selected>All</option>
+@foreach ($active_role as $key => $value)
+                            <option value="{{ $value->role_id }}">{{ $value->label }}</option>
+@endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- .row -->
+
+            <!-- .row -->
+            <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
                         <table id="UserTable" class="table">

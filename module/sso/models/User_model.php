@@ -9,10 +9,24 @@ class User_model extends SSO_Model {
         $fillable_field = ['username','password','email','first_name','last_name','created_at','updated_at','status'],
         $searchable_field = ['username','email','first_name','last_name'];
 
-    function get_datatable()
+    function get_datatable($params = [])
     {
-        $sql = $this->_combine_datatable_param("SELECT * FROM {$this->table}");
-        $sql_count = $this->_combine_datatable_param("SELECT * FROM {$this->table}", TRUE);
+        $where = [];
+
+        if(isset($params['role_id']) && $params['role_id'] != 0)
+        {
+            $params['role_id'] = (int) $params['role_id'];
+            $where[] = "a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id = {$params['role_id']})";
+        }
+        if(!empty($where)) $where = "WHERE ".implode(" AND ", $where);
+        else $where = '';
+
+        $sql = "SELECT a.*, (SELECT 1 FROM `sso_user_role` WHERE user_id = a.user_id AND role_id IN (1,2) ORDER BY role_id ASC LIMIT 1) as is_admin_manajer
+            FROM {$this->table} a
+            $where";
+
+        $sql = $this->_combine_datatable_param($sql);
+        $sql_count = $this->_combine_datatable_param($sql, TRUE);
         return [
             'row' => $this->db->query($sql)->result(),
             'total' => $this->db->query($sql_count)->row()->count

@@ -8,8 +8,12 @@ class Get extends SSO_Controller {
         $this->_restrict_access('sso_users_list', 'rest');
         $this->load->model('user_model');
 
+        $params = [
+            'role_id' => (int) $this->input->post('role_id')
+        ];
+        
         $this->user_model->set_datatable_param($this->_datatable_param());
-        $user_data = $this->user_model->get_datatable();
+        $user_data = $this->user_model->get_datatable($params);
 
         $this->_response_json([
             'recordsFiltered' => $user_data['total'],
