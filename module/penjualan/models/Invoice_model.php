@@ -90,4 +90,11 @@ class Invoice_model extends Penjualan_Model {
             'order_id' => (int) $order_id
         ])->result();
     }
+
+    function get_invoice($id = 0)
+    {
+        $this->db->where_in('order_id', $id);
+        $res = $this->db->limit(1)->get('orders_invoices');
+        return $res;
+    }
 }

@@ -19,17 +19,25 @@
     @page { size: 8.27in 11.69in;  margin: 0mm; }
 
     .side {
-        margin: 5mm;
-        padding: 5mm;
+        margin: 0mm;
+        padding: 10mm;
         width: 82mm;
         height: 125.5mm;
-        border: 0.01mm dotted #000;
         float: left;
         font-size: 1em;
     }
 
     .side.label-pengiriman {
-        font-size: 1em;
+        font-size: 12px;
+        border-right: 1mm dotted #000;
+    }
+
+    .side.botl {
+        border-top: 1mm dotted #000;
+        border-right: 1mm dotted #000;
+    }
+    .side.botr {
+        border-top: 1mm dotted #000;
     }
 
     .side img {
@@ -60,7 +68,6 @@
     <body>
 @foreach ($invoices as $key => $value)
         <div class="side label-pengiriman">
-            <img src="{{ base_url('images/logo/dermeva_logo_205x41.png') }}">
             <hr>
             <h3>Label Pengiriman:</h3>
             {{ $value->customer->full_name }}<br>
@@ -75,8 +82,14 @@
 
         </div>
 
-@for ($i=0; $i <= 2; $i++)
-        <div class="side invoice">
+    @for ($i=0; $i <= 2; $i++)
+@if ($i==0)
+    <div class="side invoice">
+@elseif ($i == 1)
+    <div class="side botl">
+@elseif ($i == 2)
+    <div class="side botr">
+@endif
         <img src="{{ base_url('images/logo/dermeva_logo_205x41.png') }}">
         <hr>
         <h3>INVOICE</h3>
@@ -90,23 +103,23 @@
     $price = '';
     ?>
 
-    @foreach ($value->order_cart as $key_cart => $value_cart)
+        @foreach ($value->order_cart as $key_cart => $value_cart)
         <?php
         $package_name = $value_cart->package_name;
         $package_price = $value_cart->package_price;
         ?>
-    @endforeach
+        @endforeach
         <div class="product-list">
             <div style="flex-grow: 8">{{ $package_name }}</div>
             <div style="flex-grow: 2">{{ rupiah($package_price) }}</div>
         </div>
 
-    @foreach ($value->order_cart as $key_cart => $value_cart)
+        @foreach ($value->order_cart as $key_cart => $value_cart)
         <div class="product-list detail">
             <div style="flex-grow: 8">{{ $value_cart->product_name }}</div>
             <div style="flex-grow: 2">Qty. {{ $value_cart->qty }}</div>
         </div>
-    @endforeach
+        @endforeach
         <hr>
         <div class="label-pengiriman">
             Tujuan Pengiriman:<br>
@@ -118,8 +131,8 @@
             {{ $value->customer_address->postal_code }}<br>
         </div>
     </div>
-@endfor
-        <div class="pagebreak"></div>
+        @endfor
+    <div class="pagebreak"></div>
 @endforeach
     </body>
 </div>
