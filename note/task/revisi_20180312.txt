@@ -2,31 +2,24 @@
 TASK REVISI
 --------------------------------------------------------------------------------------
 
-**Administrator
-    Single Sign On**
-        1. Tambahkan fitur filter role : http://prntscr.com/ipy6ys
-
-**Manajer
-    Single Sign On**
-        1. Tambahkan fitur filter role & delete account : http://prntscr.com/ipy8bz (Hanya saja jika accountnya memiliki Role Administrator dan/atau Manajer, level Manajer tidak bisa menghapus account tersebut)
-
 **Logistics**
     2. Ada fitur checklist agar dapat bulk update status : http://prntscr.com/ipyhvo Nantinya bisa dipakai untuk bulk update label pengiriman juga
     --------------------------------------------------------------------------------------
     3. Di status Pengiriman, Logistik tetap bisa edit nomor resi : http://prntscr.com/ipyiys Agar saat terjadi human error, Logistik masih bisa update nomor resi dengan yang benar
 
-
-
 --------------------------------------------------------------------------------------
 DONE
 --------------------------------------------------------------------------------------
 
+
 **Administrator
     Single Sign On**
-
+        1. [DONE] Tambahkan fitur filter role : http://prntscr.com/ipy6ys
 
 **Manajer
     Single Sign On**
+        1. [DONE] Tambahkan fitur filter role & delete account : http://prntscr.com/ipy8bz (Hanya saja jika accountnya memiliki Role Administrator dan/atau Manajer, level Manajer tidak bisa menghapus account tersebut)
+        --------------------------------------------------------------------------------------
         2. [DONE] Manajer tidak dapat menambahkan role Administrator dan Manajer ke user
         --------------------------------------------------------------------------------------
 
