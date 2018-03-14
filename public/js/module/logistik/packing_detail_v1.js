@@ -12,7 +12,7 @@ function donePacking(id){
     },
     function(isConfirm) {
         if (isConfirm) {
-            window.location = document.app.site_url+'/packing_v1/app/alredy/'+id;
+            window.location = document.app.site_url+'/packing_v1/app/alredy/'+btoa(id);
         }
     });
 }
@@ -31,7 +31,7 @@ function pickUp(id){
     },
     function(isConfirm) {
         if (isConfirm) {
-            window.location = document.app.site_url+'/packing_v1/alredy_pack/pickup/'+id;
+            window.location = document.app.site_url+'/packing_v1/alredy_pack/pickup/'+btoa(id);
         }
     });
 }

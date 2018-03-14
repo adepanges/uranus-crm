@@ -39,12 +39,28 @@
                 <!-- /.page title -->
             </div>
 
+            <div class="row white-box">
+                <div class="col-md-2 pull-right">
+                    <button class="btn btn-primary btn-rounded form-control" onclick="cetakLabelPengiriman()">
+                        <i class="fa fa-print"></i>
+                        <span>Label Pengiriman</span>
+                    </button>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <button onclick="donePackingBulk()" class="btn btn-warning btn-rounded form-control">
+                        <i class="mdi mdi-package-variant-closed"></i>
+                        <span>Sudah Packing</span>
+                    </button>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
                         <table id="ordersTable" class="table">
                             <thead>
                                 <tr>
+                                    <th><input id="logistics_checklist_bulk" type="checkbox"></th>
                                     <th>No</th>
                                     <th>Tanggal Order</th>
                                     <th>Order ID</th>

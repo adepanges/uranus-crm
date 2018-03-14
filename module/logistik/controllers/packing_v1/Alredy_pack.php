@@ -17,13 +17,29 @@ class Alredy_pack extends Logistik_Controller {
     public function pickup($id)
     {
         $this->_restrict_access('logistik_packing_action_pickup');
+        if(empty($id)) redirect($this->session->userdata('packing_state'));
+        $id = explode(",",base64_decode($id));
+
+        foreach ($id as $key => $value) {
+            $value = (int) $value;
+            $this->_pickup($value);
+        }
+
+        redirect($this->session->userdata('packing_state'));
+    }
+
+    protected function _pickup($id)
+    {
         $id = (int) $id;
         $this->load->model(['orders_model','master_model','logistics_process_model']);
         $res = $this->orders_model->get_byid_v1($id);
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
-        if(!$res->num_rows() || $data->order_status_id != 8 || $data->logistics_status_id != 3) redirect('packing_v1/app');
+        if(!$res->num_rows() || $data->order_status_id != 8 || $data->logistics_status_id != 3)
+        {
+            return false;
+        }
         $logistics_status = $this->master_model->logistics_status(4)->first_row();
 
         $label_logistics_status = isset($logistics_status->label)?$logistics_status->label:'Sudah di Pickup';
@@ -43,10 +59,6 @@ class Alredy_pack extends Logistik_Controller {
         $res1 = $this->orders_model->upd($id, $order_status);
         $res2 = $this->logistics_process_model->add($logistik_process);
 
-        if($res1 && $res2)
-        {
-            redirect($this->session->userdata('packing_state'));
-        }
-        else redirect('packing_v1/detail/index/'.$id);
+        return true;
     }
 }

@@ -39,12 +39,22 @@
                 <!-- /.page title -->
             </div>
 
+            <div class="row white-box">
+                <div class="col-md-2 pull-right">
+                    <button onclick="pickUpBulk()" class="btn btn-info btn-rounded form-control">
+                        <i class="mdi mdi-package-up"></i>
+                        <span>Sudah Pickup</span>
+                    </button>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
                         <table id="ordersTable" class="table">
                             <thead>
                                 <tr>
+                                    <th><input id="logistics_checklist_bulk" type="checkbox"></th>
                                     <th>No</th>
                                     <th>Tanggal Order</th>
                                     <th>Order ID</th>
