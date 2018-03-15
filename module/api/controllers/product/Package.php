@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class App extends API_Controller {
+class Package extends API_Controller {
 
-	public function index()
+	public function list()
 	{
         $this->_response_json([
             'status' => 1,

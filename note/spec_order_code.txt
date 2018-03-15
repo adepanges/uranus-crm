@@ -1,4 +1,4 @@
-oke, biasanya sih saya formatnya gini KK-YYYYMMDD00001
+KK-YYYYMMDD00001
 
 KK = Kode Produk
 YYYY = Year
