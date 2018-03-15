@@ -43,6 +43,21 @@ class V1 extends API_Controller {
             ];
 
             $res = $this->orders_model->add($orders);
+            $res_cart = $this->orders_model->cart_add($this->db->insert_id(), $product_package_id);
+            if($res && $res_cart)
+            {
+                $this->_response_json([
+                    'status' => 1,
+                    'message' => 'success'
+                ]);
+            }
+            else
+            {
+                $this->_response_json([
+                    'status' => 0,
+                    'message' => 'failed'
+                ]);
+            }
         }
         else
         {

@@ -68,6 +68,44 @@ class Orders_model extends API_Model {
         ]);
     }
 
+    function cart_add($order_id, $product_package_id)
+    {
+        $sql = "INSERT INTO orders_cart (
+            order_id,
+            product_id,
+            product_package_id,
+            product_merk,
+            product_name,
+            package_name,
+            price,
+            qty,
+            weight,
+            is_package,
+            price_type,
+            package_price
+        )
+        SELECT
+            ?,
+            a.product_id,
+            a.product_package_id,
+            a.merk,
+            a.name,
+            b.name,
+            a.price,
+            a.qty,
+            a.weight,
+            1,
+            b.price_type,
+            b.price
+        FROM product_package b
+        LEFT JOIN product_package_list a ON b.product_package_id = a.product_package_id
+        WHERE b.product_package_id = ?";
+        return $this->db->query($sql, [
+            'order_id' => (int) $order_id,
+            'product_package_id' => (int) $product_package_id
+        ]);
+    }
+
     function customer_add($data = [])
     {
         $data = (array) $data;
