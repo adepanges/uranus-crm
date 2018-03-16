@@ -98,7 +98,8 @@ $(document).ready(function(){
 function addPostback(){
     $('#postbackForm')[0].reset();
     formPopulate('#postbackForm', {
-        'network_id': network.network_id
+        'network_id': network.network_id,
+        'network_postback_id': 0
     });
     $('#postbackModal').modal({
         backdrop: 'static',

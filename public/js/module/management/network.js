@@ -91,6 +91,9 @@ $(document).ready(function(){
 function addNetwork(){
     $('#networkForm [name=catch]').tagsinput('removeAll');
     $('#networkForm')[0].reset();
+    formPopulate('#networkForm', {
+        network_id: 0
+    })
     $('#networkModal').modal({
         backdrop: 'static',
         keyboard: false
