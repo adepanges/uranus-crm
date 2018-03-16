@@ -114,8 +114,8 @@
                         case "radio": case "checkbox":
                             var check_val = (ctrl.prop('value') == value);
 
-                            console.log(check_val);
-                            console.log(ctrl.is(':checked'));
+                            // console.log(check_val);
+                            // console.log(ctrl.is(':checked'));
 
                             if(ctrl.prop("class") == 'js-switch' && check_val != ctrl.is(':checked')){
                                 $(ctrl).parent().find('.switchery').trigger('click');
@@ -124,6 +124,18 @@
                                 // ctrl.each(function() {
                                 //     if($(this).attr('value') == value) $(this).attr("checked",value);
                                 // });
+                            }
+                            break;
+
+                        case 'text':
+                            if(ctrl.attr('data-role') == 'tagsinput'){
+                                ctrl.tagsinput('removeAll');
+                                var str = value.split(',');
+                                str.forEach(function(val, key){
+                                    ctrl.tagsinput('add', val);
+                                });
+                            } else {
+                                ctrl.val(value);
                             }
                             break;
                         default:

@@ -6,8 +6,14 @@
                     <ul class="nav" id="side-menu">
                         <li>
                             <a href="{{ site_url('cs_team') }}">
-                                <i class="mdi mdi-account-switch"></i>
+                                <i class="mdi mdi-account-switch" style="font-size: 13px;"></i>
                                 <span class="hide-menu">CS Team</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ site_url('network') }}">
+                                <i class="fa fa-exchange"></i>
+                                <span class="hide-menu">Network</span>
                             </a>
                         </li>
                     </ul>

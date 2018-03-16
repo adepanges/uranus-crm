@@ -6,3 +6,11 @@ table.dataTable tbody td {
     background-color: #FFFFFF;
     opacity: 1;
 }
+
+code.catch {
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
