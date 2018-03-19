@@ -98,7 +98,7 @@ class App extends Penjualan_Controller {
             'order_status_id' => 2,
             'status' => $label_status,
             'notes' => "Pesanan sedang di $label_status oleh <b>{$profile['first_name']} {$profile['last_name']}</b>",
-            'event_status' => 0,
+            'event_postback_status' => 0,
             'created_at' => date('Y-m-d H:i:s')
         ];
 

@@ -38,7 +38,7 @@ class Confirm_buy extends Penjualan_Controller {
             'order_status_id' => 6,
             'status' => $label_status,
             'notes' => "Customer telah membayar, pesanan dalam proses $label_status, informasi oleh <b>{$profile['first_name']} {$profile['last_name']}</b>",
-            'event_status' => 0,
+            'event_postback_status' => 0,
             'created_at' => date('Y-m-d H:i:s')
         ];
 

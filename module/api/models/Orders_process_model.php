@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Orders_process_model extends Penjualan_Model {
+class Orders_process_model extends API_Model {
     protected
         $datatable_param = NULL,
         $table = 'orders_process',

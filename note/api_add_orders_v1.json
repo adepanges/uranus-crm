@@ -1,17 +1,19 @@
 {
-    "logistic_id": 1,
+    "logistic_id": 2,
     "call_method_id": 1,
-    "payment_method_id": 1,
-    "product_package_id": 1,
+    "payment_method_id": 3,
+    "product_package_id": 2,
     "customer_info": {
         "full_name": "Ida Rofika Sari",
         "telephone": "082322254063"
     },
     "network": {
     	"id": 1,
-        "cid": 1,
-        "tid": 1,
-        "gclid": 1
+        "catch": {
+            "cid": 1,
+            "tid": 1,
+            "gclid": 1
+        }
     },
     "customer_address": {
         "address": "Batik Giri Alam RT 01/04 Blok 27",

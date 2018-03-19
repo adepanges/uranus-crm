@@ -8,7 +8,7 @@ class V1 extends API_Controller {
         $json_data = json_decode($this->input->raw_input_stream);
         if(!empty($json_data))
         {
-            $this->load->model('orders_model');
+            $this->load->model(['orders_model','network_model','orders_process_model']);
 
             $customer_info = [];
             $customer_address = [];
@@ -42,8 +42,41 @@ class V1 extends API_Controller {
                 'version' => 1
             ];
 
+
             $res = $this->orders_model->add($orders);
-            $res_cart = $this->orders_model->cart_add($this->db->insert_id(), $product_package_id);
+            $order_id = $this->db->insert_id();
+            $res_cart = $this->orders_model->cart_add($order_id, $product_package_id);
+
+            $order_process = [
+                'order_id' => $order_id,
+                'user_id' => 1,
+                'order_status_id' => 1,
+                'status' => 'New Orders',
+                'notes' => "New Orders",
+                'event_postback_status' => 0,
+                'created_at' => $orders['created_at']
+            ];
+            $this->orders_process_model->add($order_process);
+
+            if(
+                isset($json_data->network) &&
+                isset($json_data->network->id) && !empty($json_data->network->id) &&
+                isset($json_data->network->catch) && !empty($json_data->network->catch)
+            )
+            {
+                $network_id = (int) $json_data->network->id;
+                $network = $this->network_model->get_byid($network_id)->first_row();
+                if(!empty($network))
+                {
+                    $data_catch = (array) $json_data->network->catch;
+                    $field_catch = explode(",",$network->catch);
+                    $this->network_model->orders_add([
+                        'order_id' => $order_id,
+                        'network_id' => $network_id
+                    ], $data_catch, $field_catch);
+                }
+            }
+
             if($res && $res_cart)
             {
                 $this->_response_json([
