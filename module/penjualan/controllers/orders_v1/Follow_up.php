@@ -128,7 +128,7 @@ class Follow_up extends Penjualan_Controller {
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
-        if(!$res->num_rows() || !in_array($data->order_status_id, [2])) redirect('orders_v1');
+        if(!$res->num_rows() || !in_array($data->order_status_id, [2, 3])) redirect($this->session->userdata('orders_state'));
 
         $follow_up_status = $this->master_model->order_status(5)->first_row();
 
