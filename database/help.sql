@@ -139,3 +139,13 @@ SELECT @id_orders, a.product_id, a.product_package_id, a.merk, a.name, b.name, a
 FROM `product_package` b
 LEFT JOIN `product_package_list` a ON b.product_package_id = a.product_package_id
 WHERE b.product_package_id = 1;
+
+-- clear orders
+truncate `orders_network`;
+truncate `orders_process`;
+truncate `orders_logistics`;
+truncate `orders_invoices`;
+truncate `orders_cart`;
+truncate `orders`;
+truncate `customer_address`;
+truncate `customer`;
