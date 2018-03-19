@@ -125,6 +125,9 @@ class App extends Penjualan_Controller {
         $res1 = $this->orders_model->upd($order_id, $orders);
         $res2 = $this->orders_model->clear_cart_package($order_id);
         $res3 = $this->orders_model->upd_cart_package($order_id, $product_package_id);
+        $res4 = $this->orders_model->upd($order_id, [
+            'total_price' => $this->orders_model->get_latest_price_cart($order_id)
+        ]);
 
         if($res1 && $res2 && $res3)
         {

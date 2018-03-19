@@ -6,7 +6,7 @@ class Orders_model extends Penjualan_Model {
         $datatable_param = NULL,
         $table = 'orders',
         $orderable_field = ['name','franchise_name','franchise_name','jumlah_cs','status'],
-        $fillable_field = ['payment_method_id','logistic_id','order_status_id','logistics_status_id','order_status','logistics_status','call_method_id','customer_info','customer_address'],
+        $fillable_field = ['payment_method_id','logistic_id','order_status_id','logistics_status_id','order_status','logistics_status','call_method_id','customer_info','customer_address','total_price'],
         $searchable_field = ['payment_method_id','logistic_id','order_status_id','logistics_status_id','call_method_id','order_status','logistics_status','shipping_code','call_method','order_code','customer_info','customer_address'];
 
     function get_datatable_v1($params = [], $only_self = TRUE)
@@ -147,5 +147,30 @@ class Orders_model extends Penjualan_Model {
         LEFT JOIN product_package_list a ON b.product_package_id = a.product_package_id
         WHERE b.product_package_id = ?";
         return $this->db->query($sql, [$order_id, $product_package_id]);
+    }
+
+    function get_order_cart($orders_id = 0)
+    {
+        return $this->db->where('order_id', $orders_id)->get('orders_cart');
+    }
+
+    function get_latest_price_cart($id)
+    {
+        $price = [
+            'PACKAGE' => [],
+            'RETAIL' => []
+        ];
+        $cart = $this->get_order_cart($id)->result();
+        foreach ($cart as $key => $value) {
+            if($value->price_type == 'PACKAGE' && !isset($price['PACKAGE'][$value->product_package_id]))
+            {
+                $price['PACKAGE'][$value->product_package_id] = $value->package_price;
+            }
+            else if($value->price_type == 'RETAIL' && !isset($price['RETAIL'][$value->product_id]))
+            {
+                $price['RETAIL'][$value->product_id] = $value->price;
+            }
+        }
+        return $total_price = array_sum($price['PACKAGE']) + array_sum($price['RETAIL']);
     }
 }
