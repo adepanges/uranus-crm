@@ -76,3 +76,13 @@ if (!function_exists('tanggal_indonesia')) {
     	return $split[2] . ' ' . $bulan[ (int)$split[1] ] . ' ' . $split[0];
     }
 }
+
+if (!function_exists('bind_string')) {
+    function bind_string($str, $vars)
+    {
+        foreach ($vars as $key => $value) {
+            $str = str_replace("@$key", $value, $str);
+        }
+        return $str;
+    }
+}

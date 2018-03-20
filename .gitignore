@@ -36,3 +36,5 @@ module/*/third_party/
 module/*/views/
 
 package-lock\.json
+
+resources/logs/

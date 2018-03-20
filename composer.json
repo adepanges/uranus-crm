@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=7.0.0",
-		"xiaoler/blade": "^5.4"
+		"xiaoler/blade": "^5.4",
+        "mashape/unirest-php": "^3.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 7.x"
