@@ -5,7 +5,7 @@ $(document).ready(function(){
     });
 
     var numberer = 1;
-    networkTable = $('#networkTable').on('preXhr.dt', function ( e, settings, data ){
+    productTable = $('#productTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;
             $('.row .white-box').block({
                 message: '<h3>Please Wait...</h3>',
@@ -20,7 +20,7 @@ $(document).ready(function(){
                 $("div.dataTables_filter input").unbind();
                 $("div.dataTables_filter input").keyup( function (e) {
                     if (e.keyCode == 13) {
-                        networkTable.search( this.value ).draw();
+                        productTable.search( this.value ).draw();
                     }
                 });
             }
@@ -32,7 +32,7 @@ $(document).ready(function(){
             serverSide: true,
             bInfo: false,
             ajax: {
-                url: document.app.site_url + '/network/get',
+                url: document.app.site_url + '/product/get',
                 type: 'POST'
             },
             columns: [
@@ -44,7 +44,21 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
+                { data: "code" },
+                { data: "merk" },
                 { data: "name" },
+                {
+                    data: "weight",
+                    render: function ( data, type, full, meta ) {
+                        return data+' g';
+                    }
+                },
+                {
+                    data: "price",
+                    render: function ( data, type, full, meta ) {
+                        return data;
+                    }
+                },
                 {
                     data: "status",
                     render: function ( data, type, full, meta ) {
@@ -54,7 +68,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: 'network_id',
+                    data: 'product_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
@@ -64,21 +78,14 @@ $(document).ready(function(){
                         if(true)
                         {
                             // edit
-                            button.push('<button onclick="updNetwork('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
+                            button.push('<button onclick="updProduct('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                         }
 
                         // if(document.app.access_list.management_cs_team_del)
                         if(true)
                         {
                             // hapus
-                            button.push('<button onclick="delNetwork('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
-                        }
-
-                        // if(document.app.access_list.management_cs_team_member)
-                        if(true)
-                        {
-                            // set access
-                            button.push('<a href="'+document.app.site_url+'/network/postback/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-exchange"></i></a>');
+                            button.push('<button onclick="delProduct('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
                         }
 
                         return button.join('');
@@ -88,43 +95,44 @@ $(document).ready(function(){
         });
 });
 
-function addNetwork(){
-    $('#networkForm [name=catch]').tagsinput('removeAll');
-    $('#networkForm')[0].reset();
-    formPopulate('#networkForm', {
+function addProduct(){
+    $('#productForm')[0].reset();
+    formPopulate('#productForm', {
         network_id: 0
     })
-    $('#networkModal').modal({
+    $('#productModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-function updNetwork(id){
+function updProduct(id){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/network/get/byid/'+id
+        url: document.app.site_url+'/product/get/byid/'+id
     })
     .done(function( response ) {
         $('.preloader').fadeOut();
-        formPopulate('#networkForm', response)
+        formPopulate('#productForm', response)
     });
 
-    $('#networkModal').modal({
+    $('#productModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-$('#btnSaveNetwork').click(function(e){
-    if(formValidator('#networkForm')){
-        var data = serialzeForm('#networkForm');
+$('#btnSaveProduct').click(function(e){
+    if(formValidator('#productForm')){
+        var data = serialzeForm('#productForm');
+
+        console.log(data);
 
         $('.preloader').fadeIn();
         $.ajax({
             method: "POST",
-            url: document.app.site_url+'/network/app/save',
+            url: document.app.site_url+'/product/app/save',
             data: data
         })
         .done(function( response ) {
@@ -138,9 +146,9 @@ $('#btnSaveNetwork').click(function(e){
                 title = 'Gagal!';
                 showConfirmButton = true;
             } else {
-                $('#networkForm')[0].reset()
-                networkTable.ajax.reload()
-                $('#networkModal').modal('toggle')
+                $('#productForm')[0].reset()
+                productTable.ajax.reload()
+                $('#productModal').modal('toggle')
             }
 
             swal({
@@ -153,10 +161,10 @@ $('#btnSaveNetwork').click(function(e){
     }
 })
 
-function delNetwork(id){
+function delProduct(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus network ini!",
+        text: "Anda akan menghapus product ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -174,7 +182,7 @@ function delNetwork(id){
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                networkTable.ajax.reload()
+                productTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 
