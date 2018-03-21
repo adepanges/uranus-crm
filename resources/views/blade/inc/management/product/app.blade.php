@@ -53,7 +53,7 @@
                                     <th>Status</th>
                                     <th>
                                         Action
-                                        @if($access_list->management_cs_team_add)
+                                        @if($access_list->management_product_add)
                                             <button onclick="addProduct()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
                                         @endif
                                     </th>

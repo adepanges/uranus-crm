@@ -74,15 +74,13 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        // if(document.app.access_list.management_cs_team_upd)
-                        if(true)
+                        if(document.app.access_list.management_product_upd)
                         {
                             // edit
                             button.push('<button onclick="updProduct('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                         }
 
-                        // if(document.app.access_list.management_cs_team_del)
-                        if(true)
+                        if(document.app.access_list.management_product_del)
                         {
                             // hapus
                             button.push('<button onclick="delProduct('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
