@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Del extends Management_Controller {
     public function index($id = 0)
     {
-        // $this->_restrict_access('management_cs_team_del', 'rest');
+        $this->_restrict_access('management_network_del', 'rest');
 
         $network_id = (int) $id;
         if(!$network_id) $this->_response_json([

@@ -5,7 +5,7 @@ class App extends Management_Controller {
 
 	public function index()
 	{
-        // $this->_restrict_access('management_cs_team');
+        $this->_restrict_access('management_network');
         $this->_set_data([
             'title' => 'Network'
         ]);
@@ -16,8 +16,8 @@ class App extends Management_Controller {
     public function save()
     {
         $network_id = (int) $this->input->post('network_id');
-        // if($network_id) $this->_restrict_access('management_cs_team_upd', 'rest');
-        // else $this->_restrict_access('management_cs_team_add', 'rest');
+        if($network_id) $this->_restrict_access('management_network_upd', 'rest');
+        else $this->_restrict_access('management_network_add', 'rest');
 
         $data = [
             'name' => $this->input->post('name'),

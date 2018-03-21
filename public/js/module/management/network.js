@@ -4,20 +4,8 @@ $(document).ready(function(){
         new Switchery($(this)[0], $(this).data());
     });
 
-    $('#postbackForm [name=event_id]').on('change', function(){
-        var trigger = $('#postbackForm [name=event_id] option:selected').attr('data');
-        if(trigger=='') trigger = 'none';
-        $('#event-trigger').html(trigger)
-    })
-
-    $('#postbackForm code.catch').dblclick(function(){
-        var parameter = $(this).html(),
-            el = $('#postbackForm [name=link]');
-        el.val(el.val()+parameter);
-    });
-
     var numberer = 1;
-    postbackTable = $('#postbackTable').on('preXhr.dt', function ( e, settings, data ){
+    networkTable = $('#networkTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;
             $('.row .white-box').block({
                 message: '<h3>Please Wait...</h3>',
@@ -32,7 +20,7 @@ $(document).ready(function(){
                 $("div.dataTables_filter input").unbind();
                 $("div.dataTables_filter input").keyup( function (e) {
                     if (e.keyCode == 13) {
-                        postbackTable.search( this.value ).draw();
+                        networkTable.search( this.value ).draw();
                     }
                 });
             }
@@ -44,7 +32,7 @@ $(document).ready(function(){
             serverSide: true,
             bInfo: false,
             ajax: {
-                url: document.app.site_url + '/network/postback/get/'+network.network_id,
+                url: document.app.site_url + '/network/get',
                 type: 'POST'
             },
             columns: [
@@ -56,9 +44,7 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
-                { data: "link", orderable: false },
-                { data: "event_name", orderable: false },
-                { data: "trigger", orderable: false },
+                { data: "name" },
                 {
                     data: "status",
                     render: function ( data, type, full, meta ) {
@@ -68,22 +54,27 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: 'network_postback_id',
+                    data: 'network_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        if(document.app.access_list.management_network_postback_upd)
+                        if(document.app.access_list.management_network_upd)
                         {
                             // edit
                             button.push('<button onclick="updNetwork('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                         }
 
-                        if(document.app.access_list.management_network_postback_del)
+                        if(document.app.access_list.management_network_del)
                         {
                             // hapus
-                            button.push('<button onclick="delPostback('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
+                            button.push('<button onclick="delNetwork('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
+                        }
+
+                        if(document.app.access_list.management_network_postback)
+                        {
+                            button.push('<a href="'+document.app.site_url+'/network/postback/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-exchange"></i></a>');
                         }
 
                         return button.join('');
@@ -93,13 +84,13 @@ $(document).ready(function(){
         });
 });
 
-function addPostback(){
-    $('#postbackForm')[0].reset();
-    formPopulate('#postbackForm', {
-        'network_id': network.network_id,
-        'network_postback_id': 0
-    });
-    $('#postbackModal').modal({
+function addNetwork(){
+    $('#networkForm [name=catch]').tagsinput('removeAll');
+    $('#networkForm')[0].reset();
+    formPopulate('#networkForm', {
+        network_id: 0
+    })
+    $('#networkModal').modal({
         backdrop: 'static',
         keyboard: false
     });
@@ -109,27 +100,27 @@ function updNetwork(id){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/network/postback/get_byid/'+id
+        url: document.app.site_url+'/network/get/byid/'+id
     })
     .done(function( response ) {
         $('.preloader').fadeOut();
-        formPopulate('#postbackForm', response)
+        formPopulate('#networkForm', response)
     });
 
-    $('#postbackModal').modal({
+    $('#networkModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-$('#btnSavePostbackModal').click(function(e){
-    if(formValidator('#postbackForm')){
-        var data = serialzeForm('#postbackForm');
+$('#btnSaveNetwork').click(function(e){
+    if(formValidator('#networkForm')){
+        var data = serialzeForm('#networkForm');
 
         $('.preloader').fadeIn();
         $.ajax({
             method: "POST",
-            url: document.app.site_url+'/network/postback/save/',
+            url: document.app.site_url+'/network/app/save',
             data: data
         })
         .done(function( response ) {
@@ -143,9 +134,9 @@ $('#btnSavePostbackModal').click(function(e){
                 title = 'Gagal!';
                 showConfirmButton = true;
             } else {
-                $('#postbackForm')[0].reset()
-                postbackTable.ajax.reload()
-                $('#postbackModal').modal('toggle')
+                $('#networkForm')[0].reset()
+                networkTable.ajax.reload()
+                $('#networkModal').modal('toggle')
             }
 
             swal({
@@ -158,10 +149,10 @@ $('#btnSavePostbackModal').click(function(e){
     }
 })
 
-function delPostback(id){
+function delNetwork(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus postback ini!",
+        text: "Anda akan menghapus network ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -175,11 +166,11 @@ function delPostback(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/network/postback/del/'+id
+                url: document.app.site_url+'/network/del/index/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                postbackTable.ajax.reload()
+                networkTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 

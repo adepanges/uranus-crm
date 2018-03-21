@@ -10,7 +10,21 @@ WHERE a.status = 1;
 -- manager
 INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
     SELECT
-    2, a.module_id, b.menu_id, c.feature_id, c.name, 1
+    2, a.module_id, b.menu_id, c.feature_id, c.name,
+    CASE WHEN
+        c.name NOT IN (
+            'management_network',
+            'management_network_list',
+            'management_network_add',
+            'management_network_upd',
+            'management_network_del',
+            'management_network_postback',
+            'management_network_postback_add',
+            'management_network_postback_upd',
+            'management_network_postback_del',
+            'management_network_postback_list'
+        )
+    THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
 LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1

@@ -12,9 +12,9 @@ class Del extends Management_Controller {
             'message' => 'id must be set in uri'
         ]);
 
-        $this->load->model('network_model');
+        $this->load->model('product_model');
 
-        if($this->network_model->del($network_id))
+        if($this->product_model->del($network_id))
         {
             $this->_response_json([
                 'status' => 1,

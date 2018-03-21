@@ -5,7 +5,7 @@ class Get extends Management_Controller {
 
 	public function index()
 	{
-        // $this->_restrict_access('management_cs_team_list', 'rest');
+        $this->_restrict_access('management_network_list', 'rest');
         $this->load->model('network_model');
 
         $this->network_model->set_datatable_param($this->_datatable_param());
@@ -19,6 +19,7 @@ class Get extends Management_Controller {
 
     public function byid($id = 0)
     {
+        $this->_restrict_access('management_network_list', 'rest');
         $data = (object) [];
         $id = (int) $id;
 

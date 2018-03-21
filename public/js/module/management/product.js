@@ -178,7 +178,7 @@ function delProduct(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/network/del/index/'+id
+                url: document.app.site_url+'/product/del/index/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

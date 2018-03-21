@@ -5,7 +5,7 @@ class Postback extends Management_Controller {
 
 	public function index($id = 0)
 	{
-        // $this->_restrict_access('management_cs_team_member');
+        $this->_restrict_access('management_network_postback');
         $id = (int) $id;
 
         $this->load->model(['network_model','master_model']);
@@ -25,7 +25,7 @@ class Postback extends Management_Controller {
 
     function get($id = 0)
     {
-        // $this->_restrict_access('management_cs_team_member_list', 'rest');
+        $this->_restrict_access('management_network_postback_list', 'rest');
         $id = (int) $id;
 
         $this->load->model('network_postback_model');
@@ -40,6 +40,7 @@ class Postback extends Management_Controller {
 
     public function get_byid($id = 0)
     {
+        $this->_restrict_access('management_network_postback_list', 'rest');
         $data = (object) [];
         $id = (int) $id;
 
@@ -54,8 +55,8 @@ class Postback extends Management_Controller {
     public function save()
     {
         $network_postback_id = (int) $this->input->post('network_postback_id');
-        // if($network_postback_id) $this->_restrict_access('management_cs_team_upd', 'rest');
-        // else $this->_restrict_access('management_cs_team_add', 'rest');
+        if($network_postback_id) $this->_restrict_access('management_network_postback_add', 'rest');
+        else $this->_restrict_access('management_network_postback_upd', 'rest');
 
         $data = [
             'network_id' => (int) $this->input->post('network_id'),
