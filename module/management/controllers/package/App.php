@@ -5,39 +5,38 @@ class App extends Management_Controller {
 
 	public function index()
 	{
-        $this->_restrict_access('management_product');
+        // $this->_restrict_access('management_product');
         $this->_set_data([
-            'title' => 'Management Product'
+            'title' => 'Management Package'
         ]);
 
-        $this->blade->view('inc/management/product/app', $this->data);
+        $this->blade->view('inc/management/package/app', $this->data);
 	}
 
     public function save()
     {
-        $product_id = (int) $this->input->post('product_id');
-        if($product_id) $this->_restrict_access('management_product_upd', 'rest');
-        else $this->_restrict_access('management_product_add', 'rest');
+        $product_package_id = (int) $this->input->post('product_package_id');
+        // if($product_package_id) $this->_restrict_access('management_product_upd', 'rest');
+        // else $this->_restrict_access('management_product_add', 'rest');
 
         $data = [
             'code' => $this->input->post('code'),
-            'merk' => $this->input->post('merk'),
             'name' => $this->input->post('name'),
-            'weight' => (int) $this->input->post('weight'),
+            'price_type' => $this->input->post('price_type'),
             'price' => $this->input->post('price'),
             'status' => (int) $this->input->post('status')
         ];
 
-        $this->load->model('product_model');
-        if(!$product_id)
+        $this->load->model('package_model');
+        if(!$product_package_id)
         {
             // tambah
-            $res = $this->product_model->add($data);
+            $res = $this->package_model->add($data);
         }
         else
         {
             // ubah
-            $res = $this->product_model->upd($data, $product_id);
+            $res = $this->package_model->upd($data, $product_package_id);
         }
 
         if($res)

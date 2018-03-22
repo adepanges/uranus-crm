@@ -28,6 +28,12 @@
                             </a>
                         </li>
 @endif
+                        <li>
+                            <a href="{{ site_url('package') }}">
+                                <i class="fa-fw">PK</i>
+                                <span class="hide-menu">Package</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
