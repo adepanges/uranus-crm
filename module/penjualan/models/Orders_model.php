@@ -135,7 +135,7 @@ class Orders_model extends Penjualan_Model {
 
     function clear_cart_package($order_id = 0)
     {
-        return $this->db->delete('orders_cart', ['order_id' => $order_id]);
+        return $this->db->delete('orders_cart', ['order_id' => $order_id, 'is_package' => 1]);
     }
 
     function upd_cart_package($order_id, $product_package_id)

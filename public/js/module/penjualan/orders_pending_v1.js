@@ -55,7 +55,11 @@ $(document).ready(function(){
                     }
                 },
                 { data: "package_name", orderable: false },
-                { data: "total_price", orderable: false },
+                { data: "total_price", orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        return rupiah(data);
+                    }
+                },
                 {
                     data: 'order_id',
                     orderable: false,

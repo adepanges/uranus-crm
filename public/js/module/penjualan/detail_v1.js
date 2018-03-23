@@ -132,27 +132,39 @@ function initShoopingCart(){
 
             if(package_){
                 if(Array.isArray(package_.product_list)){
+                    var total_retail_price = 0;
                     package_.product_list.forEach(function(val, key){
+                        var retail_price = '';
+                        if(package_.price_type == 'RETAIL') {
+                            retail_price = rupiah(val.price);
+                            total_retail_price += (val.price * 1);
+                        }
+
                         cart.push(`<div class="row" style="padding-left: 40px;">
-                            <div class="col-md-6" style="border-bottom: 1px dotted #000;">
+                            <div class="col-md-5" style="border-bottom: 1px dotted #000;">
                                 <h5>${val.name}</h5>
                             </div>
-                            <div class="col-md-3" style="border-bottom: 1px dotted #000;">
+                            <div class="col-md-2" style="border-bottom: 1px dotted #000;">
                                 <h5>Qty. ${val.qty}</h5>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-5">
+                                <h6>${retail_price}</h6>
                             </div>
                         </div>`);
                     });
                 }
 
+                var package_price = '';
+                if(package_.price_type == 'PACKAGE') package_price = rupiah(package_.price);
+                else package_price = `(${package_.price_type}) ` + rupiah(total_retail_price);
+
                 detail = `<div class="row" style="margin-left: 7px;">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <h3>${package_.name}</h3>
                     </div>
-                    <div class="col-md-4">
-                        <h3>${package_.price}</h3>
-                    </div>
+                    <div class="col-md-6">
+                        <h3>${package_price}</h3>
+                    </div><br>
                     ${cart.join('')}
                 </div>`;
                 $('#detailCart').html(detail);

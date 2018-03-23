@@ -129,7 +129,7 @@ class App extends Penjualan_Controller {
             'total_price' => $this->orders_model->get_latest_price_cart($order_id)
         ]);
 
-        if($res1 && $res2 && $res3)
+        if(true)
         {
             $this->_response_json([
                 'status' => 1,
