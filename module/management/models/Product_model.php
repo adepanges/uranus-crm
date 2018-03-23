@@ -34,7 +34,11 @@ class Product_model extends Management_Model {
     function upd($data, $id)
     {
         $this->db->where('product_id', $id);
-        return $this->db->update($this->table, $this->_sanity_field($data));
+        $res1 = $this->db->update($this->table, $this->_sanity_field($data));
+
+        $this->db->where('product_id', $id);
+        $res2 = $this->db->update('product_package_list', $this->_sanity_field($data, ['merk','name','weight']));
+        return $res1;
     }
 
     function add($data)

@@ -7,7 +7,7 @@ class Package_product_list_model extends Management_Model {
         $table = 'product_package_list',
         $orderable_field = ['name','status'],
         $fillable_field = ['product_package_id','product_id','merk','merk','name','qty','weight','price','status'],
-        $searchable_field = ['link','event_name','trigger'];
+        $searchable_field = ['merk','merk','name','qty'];
 
     function get_datatable($product_package_id = 0)
     {

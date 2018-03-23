@@ -66,8 +66,20 @@ class Product_list extends Management_Controller {
         $this->load->model('package_product_list_model');
         if(!$product_package_list_id)
         {
-            // tambah
-            $res = $this->package_product_list_model->add($data);
+            // add
+            if(!empty($this->input->post('bulk')) && is_array($this->input->post('bulk')))
+            {
+                foreach ($this->input->post('bulk') as $key => $value) {
+                    $pdl = (array) json_decode(base64_decode($value));
+                    $pdl['product_package_id'] = $data['product_package_id'];
+                    $pdl['qty'] = 1;
+                    $res = $this->package_product_list_model->add($pdl);
+                }
+            }
+            else
+            {
+                $res = $this->package_product_list_model->add($data);
+            }
         }
         else
         {

@@ -129,7 +129,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-9" style="border-right: 1px solid #000;">
                                     <div class="white-box">
                                         <table id="productTable" class="table">
                                             <thead>
@@ -143,8 +143,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    aa
+                                <div class="col-md-3" id="addProductBulk">
                                 </div>
                             </div>
                         </div>
