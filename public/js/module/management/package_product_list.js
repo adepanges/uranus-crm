@@ -30,7 +30,7 @@ $(document).ready(function(){
             if(package_.price_type == 'RETAIL'){
                 json.data.forEach(function(val, key){
                     if(val.status == 1){
-                        total_price += (val.qty * val.price)
+                        total_price += (val.price * 1)
                     }
                 });
 

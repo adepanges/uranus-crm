@@ -11,7 +11,14 @@ class Package_model extends Management_Model {
 
     function get_datatable()
     {
-        $sql = "SELECT * FROM product_package";
+        $sql = "SELECT a.product_package_id, a.code, a.name, a.status, a.price_type,
+            CASE
+                WHEN a.price_type = 'PACKAGE'
+                    THEN a.price
+                WHEN a.price_type = 'RETAIL'
+                    THEN (SELECT SUM(price) FROM `product_package_list` WHERE product_package_id = a.product_package_id GROUP BY product_package_id)
+            END AS price
+            FROM product_package a";
 
         $sql = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);
