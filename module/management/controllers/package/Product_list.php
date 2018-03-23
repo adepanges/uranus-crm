@@ -52,19 +52,19 @@ class Product_list extends Management_Controller {
 
     public function save()
     {
-        $network_postback_id = (int) $this->input->post('network_postback_id');
-        // if($network_postback_id) $this->_restrict_access('management_network_postback_add', 'rest');
+        $product_package_list_id = (int) $this->input->post('product_package_list_id');
+        // if($product_package_list_id) $this->_restrict_access('management_network_postback_add', 'rest');
         // else $this->_restrict_access('management_network_postback_upd', 'rest');
 
         $data = [
-            'network_id' => (int) $this->input->post('network_id'),
-            'event_id' => (int) $this->input->post('event_id'),
-            'link' => $this->input->post('link'),
+            'product_package_id' => (int) $this->input->post('product_package_id'),
+            'qty' => (int) $this->input->post('qty'),
+            'price' => $this->input->post('price'),
             'status' => (int) $this->input->post('status')
         ];
 
         $this->load->model('package_product_list_model');
-        if(!$network_postback_id)
+        if(!$product_package_list_id)
         {
             // tambah
             $res = $this->package_product_list_model->add($data);
@@ -72,7 +72,7 @@ class Product_list extends Management_Controller {
         else
         {
             // ubah
-            $res = $this->package_product_list_model->upd($data, $network_postback_id);
+            $res = $this->package_product_list_model->upd($data, $product_package_list_id);
         }
 
         if($res)
@@ -91,13 +91,13 @@ class Product_list extends Management_Controller {
         }
     }
 
-    function del($network_postback_id = 0)
+    function del($product_package_list_id = 0)
     {
         // $this->_restrict_access('management_cs_team_member_del', 'rest');
-        $network_postback_id = (int) $network_postback_id;
+        $product_package_list_id = (int) $product_package_list_id;
 
         $this->load->model('package_product_list_model');
-        $res = $this->package_product_list_model->del($network_postback_id);
+        $res = $this->package_product_list_model->del($product_package_list_id);
 
         if($res)
         {

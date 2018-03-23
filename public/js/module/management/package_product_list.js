@@ -25,6 +25,18 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+
+            var total_price = 0;
+            if(package_.price_type == 'RETAIL'){
+                json.data.forEach(function(val, key){
+                    if(val.status == 1){
+                        total_price += (val.qty * val.price)
+                    }
+                });
+
+                $('#totalPrice').html(rupiah(total_price));
+            }
+
         }).DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
@@ -47,7 +59,13 @@ $(document).ready(function(){
                 { data: "merk" },
                 { data: "name" },
                 { data: "qty" },
-                { data: "price" },
+                {
+                    data: "price",
+                    render: function ( data, type, full, meta ) {
+                        if(package_.price_type == 'RETAIL') return rupiah(data);
+                        else return 'Package';
+                    }
+                },
                 {
                     data: "status",
                     render: function ( data, type, full, meta ) {
@@ -57,7 +75,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: 'network_postback_id',
+                    data: 'product_package_list_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
@@ -72,7 +90,7 @@ $(document).ready(function(){
                         if(document.app.access_list.management_network_postback_del)
                         {
                             // hapus
-                            button.push('<button onclick="delPostback('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
+                            button.push('<button onclick="delProductList('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
                         }
 
                         return button.join('');
@@ -98,7 +116,7 @@ function updNetwork(id){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/network/postback/get_byid/'+id
+        url: document.app.site_url+'/package/product_list/get_byid/'+id
     })
     .done(function( response ) {
         $('.preloader').fadeOut();
@@ -115,10 +133,12 @@ $('#btnSaveProductList').click(function(e){
     if(formValidator('#productListForm')){
         var data = serialzeForm('#productListForm');
 
+        console.log(data);
+
         $('.preloader').fadeIn();
         $.ajax({
             method: "POST",
-            url: document.app.site_url+'/network/postback/save/',
+            url: document.app.site_url+'/package/product_list/save/',
             data: data
         })
         .done(function( response ) {
@@ -147,10 +167,10 @@ $('#btnSaveProductList').click(function(e){
     }
 })
 
-function delPostback(id){
+function delProductList(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus postback ini!",
+        text: "Anda akan Product list ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -164,7 +184,7 @@ function delPostback(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/network/postback/del/'+id
+                url: document.app.site_url+'/package/product_list/del/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

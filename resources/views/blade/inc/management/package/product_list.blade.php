@@ -25,9 +25,7 @@
         <script src="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/js/select2.min.js') }}"></script>
 
         <script type="text/javascript">
-            package_ = {
-                product_package_id: {{ $package->product_package_id }}
-            }
+            package_ = {!! json_encode($package) !!}
         </script>
         <script src="{{ base_url('js/module/management/package_product_list.js') }}" type="text/javascript"></script>
 @endsection
@@ -87,7 +85,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="state-success">Total Harga</label>
                                 <div class="col-md-6">
-                                    <span class="form-control">{{ rupiah($package->price) }}</span>
+                                    <span class="form-control" id="totalPrice">{{ rupiah($package->price) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -167,16 +165,24 @@
                         </div>
                         <div class="modal-body">
                             <form id="productListForm" data-toggle="validator" data-delay="100">
-                                <input type="hidden" name="product_package_id">
                                 <input type="hidden" name="product_package_list_id">
+                                <input type="hidden" name="product_package_id">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Name</label>
-                                    <input type="text" class="form-control" name="name" data-error="Hmm, name produt harap diisi" required>
+                                    <label class="control-label">Merk</label>
+                                    <input type="text" class="form-control" name="merk" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" class="form-control" name="name" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Kuantitas</label>
+                                    <input type="number" class="form-control" name="qty" data-error="Hmm, kuantitas harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
 @if($package->price_type == 'RETAIL')
                                 <div class="form-group" id="fieldPrice">
-                                    <label for="recipient-name" class="control-label">Harga Eceran  Paket</label>
+                                    <label class="control-label">Harga Eceran Paket</label>
                                     <div class="input-group m-b-30">
                                         <span class="input-group-addon">Rp.</span>
                                         <input type="number" class="form-control" name="price" data-error="Hmm, harga produt harap diisi" required>

@@ -79,6 +79,10 @@
         <script src="{{ base_url('plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>
 
         <script type="text/javascript">
+            function rupiah(bilangan){
+                return 'Rp. '+bilangan.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")+',-';
+            }
+
             function ucwords(str){
                 str = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
                     return letter.toUpperCase();
