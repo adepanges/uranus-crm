@@ -18,6 +18,9 @@ class User_model extends SSO_Model {
             $params['role_id'] = (int) $params['role_id'];
             $where[] = "a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id = {$params['role_id']})";
         }
+
+        $where[] = "a.user_id <> 1";
+
         if(!empty($where)) $where = "WHERE ".implode(" AND ", $where);
         else $where = '';
 
