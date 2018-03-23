@@ -14,6 +14,7 @@ class Orders_process_model extends Penjualan_Model {
 
     function get($id)
     {
+        $this->db->order_by('created_at', 'DESC');
         return $this->db->get_where($this->table, ['order_id' => $id]);
     }
 }
