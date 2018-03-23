@@ -81,7 +81,7 @@ $(document).ready(function(){
                             button.push('<a href="'+document.app.site_url+'/user/role/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
                         }
 
-                        if(full.is_admin_manajer) return '';
+                        if(full.is_admin_manajer && document.app.role_active.role_id != 1) return '';
                         else return button.join('');
                     }
                 }

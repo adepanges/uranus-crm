@@ -29,7 +29,8 @@
                 base_url: '{{ base_url() }}',
                 site_url: '{{ site_url() }}',
                 module_url: {!! json_encode($module_url) !!},
-                access_list: {!! json_encode($access_list) !!}
+                access_list: {!! json_encode($access_list) !!},
+                role_active: {!! json_encode($role_active) !!}
             }
         </script>
 
