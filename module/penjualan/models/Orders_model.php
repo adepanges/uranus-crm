@@ -45,6 +45,14 @@ class Orders_model extends Penjualan_Model {
             $user_id = (int) $params['user_id'];
             $where[] = "d.user_id = $user_id";
         }
+        else if(
+            $params['role_id'] == 6 &&
+            !empty($params['tim_leader']) &&
+            isset($params['tim_leader']->team_cs_id) &&
+            $params['order_status_id'] != 1)
+        {
+            $where[] = "d.user_id IN (SELECT user_id FROM management_team_cs_member WHERE team_cs_id = {$params['tim_leader']->team_cs_id})";
+        }
 
         if($params['order_status_id'] < 7)
         {
@@ -172,5 +180,10 @@ class Orders_model extends Penjualan_Model {
             }
         }
         return $total_price = array_sum($price['PACKAGE']) + array_sum($price['RETAIL']);
+    }
+
+    function del($id = 0)
+    {
+        return $this->db->delete('orders', ['order_id' => (int) $id]);
     }
 }

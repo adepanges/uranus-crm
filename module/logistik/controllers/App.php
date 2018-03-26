@@ -15,5 +15,9 @@ class App extends Logistik_Controller {
         {
             redirect($menu['logistik.php'][0]['menu_link']);
         }
+        else
+        {
+            redirect('packing_v1');
+        }
 	}
 }

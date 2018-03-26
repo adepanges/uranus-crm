@@ -29,6 +29,20 @@ FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
 LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
 WHERE a.status = 1;
+---- leader tim cs
+INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
+SELECT
+    6, a.module_id, b.menu_id, c.feature_id, c.name,
+    CASE WHEN
+        b.module_id = 2 AND
+        c.name NOT IN (
+            'penjualan_orders_action_sale',
+        )
+    THEN 1 ELSE 0 END AS flag
+FROM modules a
+LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
+LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
+WHERE a.status = 1;
 -- cs
 INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
 SELECT
@@ -37,7 +51,8 @@ SELECT
         b.module_id = 2 AND
         c.name NOT IN (
             'penjualan_orders_action_sale',
-            'penjualan_orders_view_modifier'
+            'penjualan_orders_view_modifier',
+            'penjualan_orders_delete'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a

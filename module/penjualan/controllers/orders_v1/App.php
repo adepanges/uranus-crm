@@ -25,8 +25,32 @@ class App extends Penjualan_Controller {
         ]);
     }
 
+    function del()
+    {
+        $this->_restrict_access('penjualan_orders_delete', 'rest');
+        $this->load->model(['orders_model']);
+        $order_id = (int) $this->input->post('order_id');
+        $res1 = $this->orders_model->del($order_id);
+        if($res1)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil menghapus data'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal menghapus data'
+            ]);
+        }
+    }
+
     function update()
     {
+        $this->_restrict_access('penjualan_orders_update', 'rest');
+
         $this->load->model(['orders_model', 'customer_model']);
         $order_id = (int) $this->input->post('order_id');
         $customer_id = (int) $this->input->post('customer_id');
@@ -115,6 +139,8 @@ class App extends Penjualan_Controller {
 
     function update_shooping_info()
     {
+        $this->_restrict_access('penjualan_orders_update', 'rest');
+
         $this->load->model(['orders_model']);
         $order_id = (int) $this->input->post('order_id');
         $product_package_id = (int) $this->input->post('product_package_id');

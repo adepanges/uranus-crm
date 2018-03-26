@@ -11,7 +11,8 @@ class Get extends Penjualan_Controller {
         $params = [
             'order_status_id' => 1,
             'user_id' => $this->profile['user_id'],
-            'role_id' => $this->data['role_active']->role_id
+            'role_id' => $this->data['role_active']->role_id,
+            'tim_leader' => $this->session->userdata('tim_leader')
         ];
         $status = [
             'new' => 1,

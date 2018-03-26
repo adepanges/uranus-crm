@@ -5,7 +5,7 @@ class Init extends SSO_Controller {
     public function index($q = '')
     {
         if(!$this->_is_sso_signed()) redirect('auth/log/in');
-        $this->load->model(['auth_model','orders_model']);
+        $this->load->model(['auth_model','orders_model','team_cs_model']);
 
         $profile = $this->session->userdata('profile');
 
@@ -14,11 +14,14 @@ class Init extends SSO_Controller {
         $role_active = [];
         $role_active_access = [];
         $access_list = [];
+        $tim_leader = [];
 
         $module = [];
         $menu = [];
 
         $role = $this->auth_model->get_role_by_userid($profile['user_id'])->result_array();
+
+
 
         if(empty($role))
         {
@@ -30,7 +33,20 @@ class Init extends SSO_Controller {
             redirect('auth/log/in');
         }
         $role_active = isset($role[0])?$role[0]:[];
+        $is_tim_leader = FALSE;
+        foreach ($role as $key => $value) {
+            if($value['role_id'] == 6)
+            {
+                $is_tim_leader = TRUE;
+            }
+        }
 
+        $leader_tim = $this->team_cs_model->get_leader_id($profile['user_id']);
+
+        if(!empty($leader_tim->first_row()))
+        {
+            $tim_leader = $leader_tim->first_row();
+        }
 
         foreach ($role as $key => $value) {
             $role_access[$value['role_name']] = $this->auth_model->get_all_access_by_roleid($value['role_id'])->result_array();
@@ -64,7 +80,8 @@ class Init extends SSO_Controller {
             'role_active_access' => $role_active_access,
             'access_list' => $access_list,
             'module' => $module,
-            'menu' => $menu
+            'menu' => $menu,
+            'tim_leader' => $tim_leader
         ]);
 
 

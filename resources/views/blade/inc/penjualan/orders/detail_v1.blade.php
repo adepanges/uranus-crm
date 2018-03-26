@@ -218,7 +218,7 @@
                             <div class="col-md-2" style="border-bottom: 1px dotted #000;">
                                 <h5>Qty. {{ $value_cart->qty }}</h5>
                             </div>
-                                <div class="col-md-5">
+                            <div class="col-md-5">
         @if($value['info']->price_type == 'RETAIL')
                                     <h3>{{ rupiah($value_cart->price) }}</h3>
         @else
@@ -229,6 +229,16 @@
     @endforeach
                     </div>
 @endforeach
+                    <br>
+                    <div class="row" style="margin-top: 7px;">
+                        <div class="col-md-5" style="border-bottom: 1px dotted #000;"><h2>Total</h2></div>
+                        <div class="col-md-2" style="border-bottom: 1px dotted #000;"><h2>&nbsp</h2></div>
+                        <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
+                    </div>
+
+                    <div class="row pull-right">
+                        <button class="btn btn-info">Tambahkan Biaya</button>
+                    </div>
                 </div>
             </div>
 
@@ -367,6 +377,12 @@
                                     <input type="hidden" name="desa_kelurahan" value="">
                                     <input type="hidden" name="desa_id" value="">
                                     <select class="form-control" id="desa_id_select">
+                                        <option>Pilih</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Kode Pos</label>
+                                    <select class="form-control" id="postal_code">
                                         <option>Pilih</option>
                                     </select>
                                 </div>

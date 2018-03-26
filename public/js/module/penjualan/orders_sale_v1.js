@@ -86,9 +86,55 @@ $(document).ready(function(){
                         {
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
+
+                        if(document.app.access_list.penjualan_orders_delete)
+                        {
+                            button.push(`<button onclick="deleteOrders(${data})" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-trash"></i></button>`);
+                        }
+
+
                         return button.join('');
                     }
                 }
             ]
         });
 });
+
+function deleteOrders(id){
+    swal({
+        title: "Are you sure?",
+        text: "Anda akan menghapus network ini!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/orders_v1/app/del',
+                data: {
+                    'order_id': id
+                }
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                ordersTable.ajax.reload()
+                var title = 'Berhasil!';
+                if(!response.status) title = 'Gagal!';
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: 2000,
+                    showConfirmButton: true
+                });
+            });
+        }
+    });
+}
