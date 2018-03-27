@@ -179,7 +179,10 @@ class Orders_model extends Penjualan_Model {
         ];
         $cart = $this->get_order_cart($id)->result();
         foreach ($cart as $key => $value) {
-            if($value->price_type == 'PACKAGE' && !isset($price['PACKAGE'][$value->product_package_id]))
+            if(
+                $value->price_type == 'PACKAGE' &&
+                $value->is_package == 1 &&
+                !isset($price['PACKAGE'][$value->product_package_id]))
             {
                 $price['PACKAGE'][$value->product_package_id] = $value->package_price;
             }
@@ -191,7 +194,7 @@ class Orders_model extends Penjualan_Model {
             {
                 $price['RETAIL'][$value->product_id] = $value->price;
             }
-            else
+            else if($value->is_package != 1)
             {
                 $price['OTHER'][] = $value->price;
             }
