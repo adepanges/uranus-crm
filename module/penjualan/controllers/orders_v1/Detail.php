@@ -18,7 +18,9 @@ class Detail extends Penjualan_Controller {
         $orders_cart_package = $this->orders_model->cart_v1($id);
         $orders_cart_package_id = 0;
         foreach ($orders_cart_package as $key => $value) {
-            $orders_cart_package_id = $value['info']->product_package_id;
+            if(isset($value['info']->product_package_id) && !empty($value['info']->product_package_id)) {
+                $orders_cart_package_id = $value['info']->product_package_id;
+            }
         }
 
         $reason_cancel = ['Tidak jadi beli','Tidak merasa pesan','Double Order','Nomor palsu'];
@@ -31,7 +33,7 @@ class Detail extends Penjualan_Controller {
             ])->result();
             $product_package[$key] = $value;
         }
-
+        
         $this->_set_data([
             'title' => 'Detail Pesanan',
             'orders' => $orders,

@@ -49,7 +49,7 @@ class App extends Penjualan_Controller {
 
     function update()
     {
-        $this->_restrict_access('penjualan_orders_update', 'rest');
+        $this->_restrict_access('penjualan_orders_update_customer_info', 'rest');
 
         $this->load->model(['orders_model', 'customer_model']);
         $order_id = (int) $this->input->post('order_id');
@@ -137,9 +137,65 @@ class App extends Penjualan_Controller {
         else redirect($this->session->userdata('orders_state'));
     }
 
+    function del_addon_shopping_info($id = 0, $cart_id = 0)
+    {
+        $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');
+        $this->load->model(['orders_model']);
+        $order_id = (int) $id;
+        $cart_id = (int) $cart_id;
+
+        $res1 = $this->orders_model->del_by_cart_id($cart_id);
+        $res2 = $this->orders_model->upd($order_id, [
+            'total_price' => $this->orders_model->get_latest_price_cart($order_id)
+        ]);
+
+        if($res1 && $res2)
+        {
+            redirect($this->session->userdata('orders_state'));
+        }
+        else redirect('orders_v1/detail/index/'.$id);
+    }
+
+    function addon_shopping_info()
+    {
+        $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');
+        $this->load->model(['orders_model']);
+        $order_id = (int) $this->input->post('order_id');
+
+        $params = [
+            'order_id' => $order_id,
+            'product_name' => $this->input->post('name'),
+            'qty' => 1,
+            'is_package' => 0,
+            'price' => (int) $this->input->post('price'),
+            'price_type' => 'RETAIL',
+            'version' => 1,
+        ];
+
+        $res1 = $this->orders_model->addon_cart($params);
+        $res2 = $this->orders_model->upd($order_id, [
+            'total_price' => $this->orders_model->get_latest_price_cart($order_id)
+        ]);
+
+        if($res1 && $res2)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil mengubah data'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah data'
+            ]);
+        }
+    }
+
     function update_shooping_info()
     {
-        $this->_restrict_access('penjualan_orders_update', 'rest');
+        $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');
 
         $this->load->model(['orders_model']);
         $order_id = (int) $this->input->post('order_id');
@@ -155,7 +211,7 @@ class App extends Penjualan_Controller {
             'total_price' => $this->orders_model->get_latest_price_cart($order_id)
         ]);
 
-        if(true)
+        if($res1 && $res2 && $res3 && $res4)
         {
             $this->_response_json([
                 'status' => 1,

@@ -14,3 +14,9 @@ code.catch {
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
+
+.delete_cart {
+    color: #F00;
+    cursor: pointer;
+    margin-right: 10px;
+}

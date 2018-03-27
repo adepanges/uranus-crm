@@ -21,8 +21,6 @@ class Init extends SSO_Controller {
 
         $role = $this->auth_model->get_role_by_userid($profile['user_id'])->result_array();
 
-
-
         if(empty($role))
         {
             $this->session->set_userdata([

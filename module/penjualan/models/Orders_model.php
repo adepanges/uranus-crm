@@ -100,14 +100,21 @@ class Orders_model extends Penjualan_Model {
         $orders_cart = $this->db->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
         $orders_cart_package = [];
         foreach ($orders_cart as $key => $value) {
+            $key = 'RETAIL';
+            $package_name = "Lain-lain";
             if($value->is_package)
-            $orders_cart_package[$value->product_package_id]['info'] = (object) [
+            {
+                $key = $value->product_package_id;
+                $package_name = "Paket: ".$value->package_name;
+            }
+
+            $orders_cart_package[$key]['info'] = (object) [
                 'product_package_id' => $value->product_package_id,
-                'package_name' => $value->package_name,
+                'package_name' => $package_name,
                 'price_type' => $value->price_type,
                 'package_price' => $value->package_price
             ];
-            $orders_cart_package[$value->product_package_id]['cart'][] = (object) [
+            $orders_cart_package[$key]['cart'][] = (object) [
                 'cart_id' => $value->cart_id,
                 'order_id' => $value->order_id,
                 'product_id' => $value->product_id,
@@ -116,7 +123,8 @@ class Orders_model extends Penjualan_Model {
                 'price' => $value->price,
                 'qty' => $value->qty,
                 'weight' => $value->weight,
-                'price_type' => $value->price_type
+                'price_type' => $value->price_type,
+                'is_package' => $value->is_package
             ];
         }
         return $orders_cart_package;
@@ -166,7 +174,8 @@ class Orders_model extends Penjualan_Model {
     {
         $price = [
             'PACKAGE' => [],
-            'RETAIL' => []
+            'RETAIL' => [],
+            'OTHER' => []
         ];
         $cart = $this->get_order_cart($id)->result();
         foreach ($cart as $key => $value) {
@@ -174,16 +183,36 @@ class Orders_model extends Penjualan_Model {
             {
                 $price['PACKAGE'][$value->product_package_id] = $value->package_price;
             }
-            else if($value->price_type == 'RETAIL' && !isset($price['RETAIL'][$value->product_id]))
+            else if(
+                $value->price_type == 'RETAIL' &&
+                !isset($price['RETAIL'][$value->product_id]) &&
+                !empty($value->product_id)
+            )
             {
                 $price['RETAIL'][$value->product_id] = $value->price;
             }
+            else
+            {
+                $price['OTHER'][] = $value->price;
+            }
         }
-        return $total_price = array_sum($price['PACKAGE']) + array_sum($price['RETAIL']);
+        
+        $retail_price = 0;
+        return $total_price = array_sum($price['PACKAGE']) +  array_sum($price['RETAIL']) + array_sum($price['OTHER']);
     }
 
     function del($id = 0)
     {
         return $this->db->delete('orders', ['order_id' => (int) $id]);
+    }
+
+    function addon_cart($params)
+    {
+        return $this->db->insert('orders_cart', $this->_sanity_field($params, ['order_id','product_name','qty','is_package','price','price_type','version']));
+    }
+
+    function del_by_cart_id($id = 0)
+    {
+        return $this->db->delete('orders_cart', ['cart_id' => (int) $id]);
     }
 }

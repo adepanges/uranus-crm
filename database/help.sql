@@ -36,7 +36,7 @@ SELECT
     CASE WHEN
         b.module_id = 2 AND
         c.name NOT IN (
-            'penjualan_orders_action_sale',
+            'penjualan_orders_action_sale'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a

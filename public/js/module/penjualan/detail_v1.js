@@ -43,6 +43,32 @@ function saleOrders(id){
     });
 }
 
+function addonShoopingCart(){
+    $('#addonShoopingCartModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function deleteCart(id){
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Anda akan menghapus product/biaya tersebut!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            window.location = document.app.site_url+'/orders_v1/app/del_addon_shopping_info/'+document.app.penjualan.orders.order_id+'/'+id;
+        }
+    });
+}
+
 function cancelOrders(id){
     $('#cancelForm')[0].reset();
     formPopulate('#cancelForm', {
@@ -184,6 +210,38 @@ $(document).ready(function(){
             $('#pending_notes_etc [name=notes_value]').val('');
         } else {
             $('#pending_notes_etc').hide();
+        }
+    });
+
+    $('#btnSaveaddonShoopingCartModal').click(function(){
+        if(formValidator('#addonShoopingCartForm')){
+            var data = serialzeForm('#addonShoopingCartForm');
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/orders_v1/app/addon_shopping_info',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                } else {
+                    document.location.reload();
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer
+                },function(){
+
+                });
+            });
         }
     });
 

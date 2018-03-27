@@ -208,17 +208,26 @@
     @if($value['info']->price_type == 'PACKAGE')
                             <h3>{{ rupiah($value['info']->package_price) }}</h3>
     @else
-                            <h3>-</h3>
+                            <h3>&nbsp;</h3>
     @endif
                         </div>
                         <br>
     @foreach ($value['cart'] as $key_cart => $value_cart)
+        <?php
+            $btn_del = '';
+            if(!$value_cart->is_package) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';;
+        ?>
+
                         <div class="row" style="padding-left: 40px;">
                             <div class="col-md-5" style="border-bottom: 1px dotted #000;">
-                                <h5>{{ $value_cart->product_name }}</h5>
+                                <h5>{!! $btn_del !!}{{ $value_cart->product_name }}</h5>
                             </div>
                             <div class="col-md-2" style="border-bottom: 1px dotted #000;">
+        @if(!empty($value_cart->product_id))
                                 <h5>Qty. {{ $value_cart->qty }}</h5>
+        @else
+                                <h5>&nbsp;</h5>
+        @endif
                             </div>
                             <div class="col-md-5">
         @if($value['info']->price_type == 'RETAIL')
@@ -239,7 +248,7 @@
                     </div>
 
                     <div class="row pull-right">
-                        <button class="btn btn-info">Tambahkan Biaya</button>
+                        <button class="btn btn-info" onclick="addonShoopingCart()">Tambahkan Biaya</button>
                     </div>
                 </div>
             </div>
@@ -521,6 +530,40 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                             <button id="btnSaveSaleModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addonShoopingCartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Tambahkan Biaya</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addonShoopingCartForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
+                                <div class="form-group">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" class="form-control" name="name"  data-error="Hmm, name harap diisi" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group" id="fieldPrice">
+                                    <label for="recipient-name" class="control-label">Harga</label>
+                                    <div class="input-group m-b-30">
+                                        <span class="input-group-addon">Rp.</span>
+                                        <input type="number" class="form-control" name="price" data-error="Hmm, harga produt harap diisi" required>
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSaveaddonShoopingCartModal" type="button" class="btn btn-primary">Lanjutkan</button>
                         </div>
                     </div>
                 </div>
