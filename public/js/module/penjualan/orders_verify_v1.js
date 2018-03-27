@@ -135,6 +135,7 @@ $(document).ready(function(){
                         var timer = 4000;
                         title = 'Gagal!';
                     } else {
+                        ordersTable.ajax.reload()
                         $('#saleModal').modal('toggle')
                     }
 
@@ -142,8 +143,8 @@ $(document).ready(function(){
                         title: title,
                         text: response.message,
                         timer: timer
-                    },function(){
-                        ordersTable.ajax.reload()
+                    }, function(){
+
                     });
                 });
             }
