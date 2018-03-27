@@ -105,7 +105,7 @@ class Orders_model extends Penjualan_Model {
             if($value->is_package)
             {
                 $key = $value->product_package_id;
-                $package_name = "Paket: ".$value->package_name;
+                $package_name = $value->package_name;
             }
 
             $orders_cart_package[$key]['info'] = (object) [
@@ -196,7 +196,7 @@ class Orders_model extends Penjualan_Model {
                 $price['OTHER'][] = $value->price;
             }
         }
-        
+
         $retail_price = 0;
         return $total_price = array_sum($price['PACKAGE']) +  array_sum($price['RETAIL']) + array_sum($price['OTHER']);
     }
