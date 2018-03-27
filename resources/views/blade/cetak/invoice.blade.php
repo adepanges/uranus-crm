@@ -73,7 +73,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td style="width: 80px; font-weight: 600; padding: 3px 20px 3px 0;" width="80">Tanggal</td>
-                                                        <td style="padding: 3px 0;">{{ tanggal_indonesia(date('Y-m-d', strtotime($invoice->paid_date))) }}</td>
+                                                        <td style="padding: 3px 0;">{{ tanggal_indonesia(date('Y-m-d', strtotime($invoice->publish_date))) }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

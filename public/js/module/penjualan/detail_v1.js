@@ -37,21 +37,9 @@ function followUp(id){
 }
 
 function saleOrders(id){
-    swal({
-        title: "Apakah anda yakin?",
-        text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Ok",
-        cancelButtonText: "Batal",
-        closeOnConfirm: false,
-        closeOnCancel: true
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/verify/sale/'+id;
-        }
+    $('#saleModal').modal({
+        backdrop: 'static',
+        keyboard: false
     });
 }
 
@@ -175,6 +163,12 @@ function initShoopingCart(){
 }
 
 $(document).ready(function(){
+    jQuery('#datepicker-autoclose').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd'
+    });
+
     $('#cancelForm [name=notes]').change(function(e){
         if($(this).val() == 'dll'){
             $('#notes_etc').show()
@@ -191,6 +185,49 @@ $(document).ready(function(){
         } else {
             $('#pending_notes_etc').hide();
         }
+    });
+
+    $('#btnSaveSaleModal').click(function(){
+        var data = serialzeForm('#saleForm');
+        swal({
+            title: "Apakah anda yakin?",
+            text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $('.preloader').fadeIn();
+                $.ajax({
+                    method: "POST",
+                    url: document.app.site_url+'/orders_v1/verify/sale',
+                    data: data
+                })
+                .done(function( response ) {
+                    $('.preloader').fadeOut();
+                    var title = 'Berhasil!',
+                        timer = 1000;
+
+                    if(!response.status) {
+                        var timer = 3000;
+                        title = 'Gagal!';
+                    }
+
+                    swal({
+                        title: title,
+                        text: response.message,
+                        timer: timer
+                    },function(){
+                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
+                    });
+                });
+            }
+        });
     });
 
     $('#btnSaveCancelModal').click(function(){

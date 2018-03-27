@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    jQuery('#datepicker-autoclose').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd'
+    });
 
     var numberer = 1;
     ordersTable = $('#ordersTable').on('preXhr.dt', function ( e, settings, data ){
@@ -86,7 +91,7 @@ $(document).ready(function(){
 
                         if(document.app.access_list.penjualan_orders_action_sale)
                         {
-                            button.push(`<button onclick="saleOrders(${data})" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-money"></i></button>`);
+                            button.push(`<button onclick=saleOrders("`+btoa(JSON.stringify(full))+`") type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-money"></i></button>`);
                         }
 
                         if(document.app.access_list.penjualan_orders_delete)
@@ -99,24 +104,59 @@ $(document).ready(function(){
                 }
             ]
         });
+
+    $('#btnSaveSaleModal').click(function(){
+        var data = serialzeForm('#saleForm');
+        swal({
+            title: "Apakah anda yakin?",
+            text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $('.preloader').fadeIn();
+                $.ajax({
+                    method: "POST",
+                    url: document.app.site_url+'/orders_v1/verify/sale',
+                    data: data
+                })
+                .done(function( response ) {
+                    $('.preloader').fadeOut();
+                    var title = 'Berhasil!',
+                        timer = 2000;
+
+                    if(!response.status) {
+                        var timer = 4000;
+                        title = 'Gagal!';
+                    } else {
+                        $('#saleModal').modal('toggle')
+                    }
+
+                    swal({
+                        title: title,
+                        text: response.message,
+                        timer: timer
+                    },function(){
+                        ordersTable.ajax.reload()
+                    });
+                });
+            }
+        });
+    });
 });
 
-function saleOrders(id){
-    swal({
-        title: "Apakah anda yakin?",
-        text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Ok",
-        cancelButtonText: "Batal",
-        closeOnConfirm: false,
-        closeOnCancel: true
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/verify/sale/'+id;
-        }
+function saleOrders(orders){
+    var orders = JSON.parse(atob(orders));
+    formPopulate('#saleForm', orders)
+    $('#saleModal').modal({
+        backdrop: 'static',
+        keyboard: false
     });
 }
 

@@ -3,18 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Invoice_model extends Penjualan_Model {
 
-    function publish_v1($order_id = 0, $time = '')
+    function publish_v1($order_id = 0, $paid_time = '')
     {
-        if(empty($time))
+        if(empty($paid_time))
         {
-            $time = date('Y-m-d H:i:s');
+            $paid_time = date('Y-m-d H:i:s');
         }
 
         $orders = $this->get_orders_info($order_id);
         $customer = $this->get_customer_info($orders->customer_id);
         $customer_address = $this->get_customer_address($orders->customer_id, $orders->customer_address_id);
         $orders_cart = $this->get_cart($orders->order_id);
-        $invoice_number = $this->create_invoice_number_v1($time);
+        $invoice_number = $this->create_invoice_number_v1(date('Y-m-d H:i:s'));
 
         $invoice_data = [
             'order_id' => $orders->order_id,
@@ -27,24 +27,25 @@ class Invoice_model extends Penjualan_Model {
             'order_cart' => json_encode($orders_cart),
             'total_price' => $orders->total_price,
             'payment_method' => $orders->payment_method,
-            'billed_date' => $time,
-            'paid_date' => $time,
+            'billed_date' => $paid_time,
+            'paid_date' => $paid_time,
+            'publish_date' =>  date('Y-m-d H:i:s'),
             'version' => 1
         ];
-
+        
         return $this->db->insert('orders_invoices', $invoice_data);
     }
 
-    protected function create_invoice_number_v1($time_now)
+    protected function create_invoice_number_v1($time)
     {
-        $time = strtotime($time_now);
+        $time = strtotime($time);
         $kode = 'DKI';
         $date_inv = date('Ymd', $time);
         $inv_number = 1;
 
         $last_inv = $this->db->query('SELECT invoice_number
             FROM orders_invoices
-            WHERE YEAR(paid_date) = ?
+            WHERE YEAR(publish_date) = ?
             ORDER BY order_invoice_id DESC
             LIMIT 1', [date('Y', $time)])->first_row();
 

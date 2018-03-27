@@ -7,17 +7,20 @@ class Verify extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_verify_payment');
         $this->session->set_userdata('orders_state', 'orders_v1/verify');
+        $this->load->model(['master_model']);
+
         $this->_set_data([
-            'title' => 'Verify Payment Orders'
+            'title' => 'Verify Payment Orders',
+            'master_payment_method' => $this->master_model->payment_method()->result(),
         ]);
 
         $this->blade->view('inc/penjualan/orders/verify_v1', $this->data);
     }
 
-    function sale($id)
+    function sale()
     {
         $this->_restrict_access('penjualan_orders_action_sale');
-        $id = (int) $id;
+        $id = (int) $this->input->post('order_id');
         $this->load->model(['orders_model','orders_process_model','master_model','invoice_model']);
         $res = $this->orders_model->get_byid_v1($id);
         $data = $res->first_row();
@@ -30,6 +33,7 @@ class Verify extends Penjualan_Controller {
         $label_status = isset($follow_up_status->label)?$follow_up_status->label:'Sale';
         $order_status = [
             'order_status_id' => 7,
+            'payment_method_id' => (int) $this->input->post('payment_method_id'),
             'order_status' => $label_status
         ];
         $order_process = [
@@ -42,15 +46,26 @@ class Verify extends Penjualan_Controller {
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        $res1 = $this->orders_model->upd($id, $order_status);
-        $res2 = $this->orders_process_model->add($order_process);
+        $paid_date = !empty($this->input->post('paid_date'))?$this->input->post('paid_date'):$order_process['created_at'];
+        $res1 = $this->invoice_model->publish_v1($id, $paid_date);
+        $res2 = $this->orders_model->upd($id, $order_status);
+        $res3 = $this->orders_process_model->add($order_process);
 
-        if($res1 && $res2)
+        if($res1 && $res1 && $res2)
         {
-            $this->invoice_model->publish_v1($id, $order_process['created_at']);
+
             $this->session->set_userdata('orders_follow_up', '');
-            redirect($this->session->userdata('orders_state'));
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Sukses, orders diteruskan ke tim logistik'
+            ]);
         }
-        else redirect('orders_v1/detail/index/'.$id);
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal'
+            ]);
+        }
     }
 }

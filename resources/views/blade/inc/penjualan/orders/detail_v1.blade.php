@@ -9,6 +9,7 @@
         <link href="{{ base_url('plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
         <link href="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/css/select2.min.css') }}" rel="stylesheet" />
+        <link href="{{ base_url('plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('load_js')
@@ -22,6 +23,7 @@
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
         <script src="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/js/select2.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
+        <script src="{{ base_url('plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
         <script src="{{ base_url('js/module/penjualan/detail_v1.js') }}" type="text/javascript"></script>
 @endsection
@@ -465,7 +467,7 @@
                             <form id="pendingForm" data-toggle="validator" data-delay="100">
                                 <input type="hidden" name="order_id">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Payment Method</label>
+                                    <label for="recipient-name" class="control-label">Alasan Pending</label>
                                     <select class="form-control" name="notes">
 @foreach ($reason_pending as $key => $value)
                                         <option value="{{ $value }}">{{ $value }}</option>
@@ -482,6 +484,43 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                             <button id="btnSavePendingModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="saleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Sale Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="saleForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
+                                <div class="form-group">
+                                    <label class="control-label">Payment Method</label>
+                                    <select class="form-control" name="payment_method_id">
+@foreach ($master_payment_method as $key => $value)
+                                        <option
+                                            value="{{ $value->payment_method_id }}"
+                                            {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}
+                                            >
+                                            {{ $value->name }}
+                                        </option>
+@endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Tanggal Bayar</label>
+                                    <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSaveSaleModal" type="button" class="btn btn-primary">Lanjutkan</button>
                         </div>
                     </div>
                 </div>
