@@ -53,7 +53,7 @@ class Alredy_pack extends Logistik_Controller {
             'user_id' => $profile['user_id'],
             'logistics_status_id' => 4,
             'status' => $label_logistics_status,
-            'notes' => "Pesanan sudah sudah di pickup oleh ekspedisi",
+            'notes' => "Pesanan sudah di pickup oleh ekspedisi",
             'created_at' => date('Y-m-d H:i:s')
         ];
         $res1 = $this->orders_model->upd($id, $order_status);
