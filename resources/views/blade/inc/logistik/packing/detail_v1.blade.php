@@ -143,12 +143,14 @@
                                 </select>
                             </div>
                         </div>
+@if(!empty($orders->shipping_code))
                         <div class="form-group">
                             <label class="control-label col-sm-3">Resi</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" name="shipping_code" value="{{ $orders->shipping_code }}" readonly>
                             </div>
                         </div>
+@endif
                     </form>
                 </div>
                 <div class="col-md-6 col-xs-12">
