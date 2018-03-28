@@ -254,10 +254,11 @@
                         <div class="col-md-2" style="border-bottom: 1px dotted #000;"><h2>&nbsp</h2></div>
                         <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
                     </div>
-
+@if(in_array($orders->order_status_id,[2,3,5]) && $access_list->penjualan_orders_update_shopping_info)
                     <div class="row pull-right">
                         <button class="btn btn-info" onclick="addonShoopingCart()">Tambahkan Biaya</button>
                     </div>
+@endif
                 </div>
             </div>
 
