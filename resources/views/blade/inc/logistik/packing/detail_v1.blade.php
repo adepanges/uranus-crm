@@ -174,30 +174,51 @@
                             </div>
                         </form>
                     </div>
+
 @foreach ($orders_cart_package as $key => $value)
                     <div class="row" style="margin-top: 7px;">
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <h3>{{ $value['info']->package_name }}</h3>
                         </div>
-                        <div class="col-md-4">
-@if($value['info']->price_type = 'PACKAGE')
-                            <h3>{{ rupiah($value['info']->package_price) }}</h3>
-@endif
+                        <div class="col-md-2">
                         </div>
-@foreach ($value['cart'] as $key_cart => $value_cart)
+                        <div class="col-md-5">
+    @if($value['info']->price_type == 'PACKAGE')
+                            <h3>{{ rupiah($value['info']->package_price) }}</h3>
+    @else
+                            <h3>&nbsp;</h3>
+    @endif
+                        </div>
+                        <br>
+    @foreach ($value['cart'] as $key_cart => $value_cart)
                         <div class="row" style="padding-left: 40px;">
-                            <div class="col-md-6" style="border-bottom: 1px dotted #000;">
+                            <div class="col-md-5" style="border-bottom: 1px dotted #000;">
                                 <h5>{{ $value_cart->product_name }}</h5>
                             </div>
-                            <div class="col-md-3" style="border-bottom: 1px dotted #000;">
+                            <div class="col-md-2" style="border-bottom: 1px dotted #000;">
+        @if(!empty($value_cart->product_id))
                                 <h5>Qty. {{ $value_cart->qty }}</h5>
+        @else
+                                <h5>&nbsp;</h5>
+        @endif
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-5">
+        @if($value['info']->price_type == 'RETAIL')
+                                    <h3>{{ rupiah($value_cart->price) }}</h3>
+        @else
+                                    <h3></h3>
+        @endif
                             </div>
                         </div>
-@endforeach
+    @endforeach
                     </div>
 @endforeach
+                    <br>
+                    <div class="row" style="margin-top: 7px;">
+                        <div class="col-md-5" style="border-bottom: 1px dotted #000;"><h2>Total</h2></div>
+                        <div class="col-md-2" style="border-bottom: 1px dotted #000;"><h2>&nbsp</h2></div>
+                        <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
+                    </div>
                 </div>
             </div>
 

@@ -98,6 +98,11 @@ class Orders_model extends Penjualan_Model {
     function cart_v1($id)
     {
         $orders_cart = $this->db->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
+        return $this->parse_cart_v1($orders_cart);
+    }
+
+    function parse_cart_v1($orders_cart = [])
+    {
         $orders_cart_package = [];
         foreach ($orders_cart as $key => $value) {
             $key = 'RETAIL';

@@ -111,40 +111,47 @@
                         </tr>
                     </tbody>
                 </table>
-                <?php
-                    $package_name = '';
-                    $package_price = '';
-                ?>
-
-                @foreach ($invoice->order_cart as $key_cart => $value_cart)
-                <?php
-                    $package_name = $value_cart->package_name;
-                    $package_price = $value_cart->package_price;
-                ?>
-                @endforeach
 
                 <table style="width: 100%; text-align: center; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1); padding: 15px 0;" width="100%" cellspacing="0" cellpadding="0">
                     <thead style="font-size: 14px;">
                         <tr><th style="font-weight: 600; text-align: left; padding: 0 5px 15px 15px;">Nama Produk</th>
                         <th style="width: 120px; font-weight: 600; padding: 0 5px 15px;" width="120">Jumlah Barang</th>
-                        <th style="width: 115px; font-weight: 600; padding: 0 5px 15px;" width="115">Harga Barang</th>
                         <th style="width: 115px; font-weight: 600; text-align: right; padding: 0 30px 15px 5px;" width="115">Subtotal</th>
                     </tr></thead>
                     <tbody>
 
-                        @foreach ($invoice->order_cart as $key_cart => $value_cart)
+                    @foreach ($invoice->order_cart as $key => $value)
+                        <tr style="font-size: 13px; background-color: rgba(0,0,0,0.1);" bgcolor="#F1F1F1">
+                            <td colspan="2" style="font-weight: 600; text-align: left; padding: 8px 5px 8px 15px;">{{ $value['info']->package_name }}</td>
+                            <td style="width: 115px; font-weight: 600; text-align: right; padding: 8px 30px 8px 5px;" width="115">
+                        @if($value['info']->price_type == 'PACKAGE')
+                            {{ rupiah($value['info']->package_price) }}
+                        @endif
+                            </td>
+                        </tr>
+
+                        @foreach ($value['cart'] as $key_cart => $value_cart)
                         <tr style="font-size: 13px;">
-                            <td style="text-align: left; padding: 8px 5px 8px 15px;">{{ $value_cart->product_name }}</td>
-                            <td style="width: 120px; padding: 8px 5px;" width="120">{{ $value_cart->qty }}</td>
-                            <td style="width: 115px; padding: 8px 5px;" width="115"></td>
-                            <td style="width: 115px; text-align: right; padding: 8px 30px 8px 5px;" width="115"></td>
+                            <?php
+                            $pad_left = '15px';
+                            if($value_cart->is_package) $pad_left = '30px';
+                            ?>
+                            <td style="text-align: left; padding: 8px 5px 8px {{ $pad_left }};">{{ $value_cart->product_name }}</td>
+                            <td style="width: 120px; padding: 8px 5px;" width="120">
+                            @if(!empty($value_cart->product_id))
+                                {{ $value_cart->qty }}
+                            @endif
+                            </td>
+                            <td style="width: 115px; text-align: right; padding: 8px 30px 8px 5px;" width="115">
+                            @if($value_cart->price_type == 'RETAIL')
+                                {{ rupiah($value_cart->price) }}
+                            @endif
+                            </td>
                         </tr>
                         @endforeach
+                    @endforeach
 
-                        <tr style="font-size: 13px; background-color: rgba(0,0,0,0.1);" bgcolor="#F1F1F1">
-                            <td colspan="3" style="font-weight: 600; text-align: left; padding: 8px 5px 8px 15px;">{{ $package_name }}</td>
-                            <td style="width: 115px; font-weight: 600; text-align: right; padding: 8px 30px 8px 5px;" width="115">{{ rupiah($package_price) }}</td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <table width="100%" cellspacing="0" cellpadding="0" style="width: 100%; padding: 0 0 20px;">
@@ -155,7 +162,7 @@
                                 <table width="100%" cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse;">
                                     <tbody><tr bgcolor="#F1F1F1" style="font-size: 15px; color: #42B549; background-color: rgba(0,0,0,0.1);">
                                         <td style="padding: 15px 0 15px 30px; font-weight: 600;">Total</td>
-                                        <td style="padding: 15px 30px 15px 0; font-weight: 600; text-align: right; ">{{ rupiah($package_price) }}</td>
+                                        <td style="padding: 15px 30px 15px 0; font-weight: 600; text-align: right; ">{{ rupiah($invoice->total_price) }}</td>
                                     </tr>
                                 </tbody></table>
                             </td>

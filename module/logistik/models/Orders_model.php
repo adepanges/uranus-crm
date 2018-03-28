@@ -55,16 +55,28 @@ class Orders_model extends Logistik_Model {
     function cart_v1($id)
     {
         $orders_cart = $this->db->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
+        return $this->parse_cart_v1($orders_cart);
+    }
+
+    function parse_cart_v1($orders_cart = [])
+    {
         $orders_cart_package = [];
         foreach ($orders_cart as $key => $value) {
+            $key = 'RETAIL';
+            $package_name = "Lain-lain";
             if($value->is_package)
-            $orders_cart_package[$value->product_package_id]['info'] = (object) [
+            {
+                $key = $value->product_package_id;
+                $package_name = $value->package_name;
+            }
+
+            $orders_cart_package[$key]['info'] = (object) [
                 'product_package_id' => $value->product_package_id,
-                'package_name' => $value->package_name,
+                'package_name' => $package_name,
                 'price_type' => $value->price_type,
                 'package_price' => $value->package_price
             ];
-            $orders_cart_package[$value->product_package_id]['cart'][] = (object) [
+            $orders_cart_package[$key]['cart'][] = (object) [
                 'cart_id' => $value->cart_id,
                 'order_id' => $value->order_id,
                 'product_id' => $value->product_id,
@@ -73,7 +85,8 @@ class Orders_model extends Logistik_Model {
                 'price' => $value->price,
                 'qty' => $value->qty,
                 'weight' => $value->weight,
-                'price_type' => $value->price_type
+                'price_type' => $value->price_type,
+                'is_package' => $value->is_package
             ];
         }
         return $orders_cart_package;

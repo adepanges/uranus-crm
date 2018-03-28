@@ -20,7 +20,9 @@ class Detail extends Logistik_Controller {
         $orders_cart_package = $this->orders_model->cart_v1($id);
         $orders_cart_package_id = 0;
         foreach ($orders_cart_package as $key => $value) {
-            $orders_cart_package_id = $value['info']->product_package_id;
+            if(isset($value['info']->product_package_id) && !empty($value['info']->product_package_id)) {
+                $orders_cart_package_id = $value['info']->product_package_id;
+            }
         }
 
         $product_package = $this->master_model->product_package()->result();
