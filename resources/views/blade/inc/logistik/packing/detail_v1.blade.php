@@ -317,10 +317,12 @@
 @endforeach
                                     </select>
                                 </div>
+@if(!empty($orders->shipping_code))
                                 <div class="form-group">
                                     <label class="control-label">No. Resi</label>
                                     <input type="text" class="form-control" name="shipping_code" value="{{ $orders->shipping_code }}">
                                 </div>
+@endif
                             </form>
                         </div>
                         <div class="modal-footer">
