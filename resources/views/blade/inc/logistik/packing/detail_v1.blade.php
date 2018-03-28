@@ -85,6 +85,14 @@
                     </button>
                 </div>
 @endif
+@if($orders->logistics_status_id == 5)
+                <div class="col-md-2 pull-right">
+                    <button onclick="onShippingUpdate()" class="btn btn-success btn-rounded form-control">
+                        <i class="fa fa-truck"></i>
+                        <span>Upd Info Pengiriman</span>
+                    </button>
+                </div>
+@endif
             </div>
 
             <div class="row white-box">
@@ -133,6 +141,12 @@
                                     <option value="{{ $value->logistic_id }}" {{ ($orders->logistic_id==$value->logistic_id)?'selected':'' }}>{{ ucwords(strtolower($value->name)) }}</option>
 @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Resi</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="shipping_code" value="{{ $orders->shipping_code }}" readonly>
                             </div>
                         </div>
                     </form>
@@ -281,6 +295,37 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                             <button id="btnSaveShipInfoModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="shippingUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Shipping Information</h4> </div>
+                        <div class="modal-body">
+                            <form id="shippingUpdateForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
+                                <div class="form-group">
+                                    <label class="control-label">Shipping</label>
+                                    <select class="form-control" name="logistic_id">
+@foreach ($master_logistics as $key => $value)
+                                        <option value="{{ $value->logistic_id }}" {{ ($orders->logistic_id==$value->logistic_id)?'selected':'' }}>{{ $value->name }}</option>
+@endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">No. Resi</label>
+                                    <input type="text" class="form-control" name="shipping_code" value="{{ $orders->shipping_code }}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSaveShippingUpdateModal" type="button" class="btn btn-primary">Lanjutkan</button>
                         </div>
                     </div>
                 </div>

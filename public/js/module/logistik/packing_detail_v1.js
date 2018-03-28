@@ -47,6 +47,13 @@ function onShipping(str_json){
     });
 }
 
+function onShippingUpdate(){
+    $('#shippingUpdateModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
 $(document).ready(function(){
     $('#btnSaveShipInfoModal').click(function(){
         var data = serialzeForm('#shippingForm'),
@@ -94,6 +101,58 @@ $(document).ready(function(){
                         timer: timer
                     },function(){
                         document.location = document.app.site_url +'/'+ document.app.logistics.packing_state;
+                    });
+                });
+            }
+        });
+    });
+
+    $('#btnSaveShippingUpdateModal').click(function(){
+        var data = serialzeForm('#shippingUpdateForm'),
+            ship_label = $('#shippingUpdateForm [name=logistic_id] option:selected').html();
+
+        if(!data.shipping_code) {
+            alert('No Resi harap diisi');
+            return;
+        }
+
+        swal({
+            title: "Apakah anda yakin?",
+            text: 'perubahan informasi pengiriman, logistik '+ship_label+' dengan No. Resi '+data.shipping_code,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $('.preloader').fadeIn();
+                $.ajax({
+                    method: "POST",
+                    url: document.app.site_url+'/packing_v1/shipping/update_shipping',
+                    data: data
+                })
+                .done(function( response ) {
+                    $('.preloader').fadeOut();
+                    var title = 'Berhasil!',
+                        timer = 1000;
+
+                    if(!response.status) {
+                        var timer = 3000;
+                        title = 'Gagal!';
+                    } else {
+                        $('#shopingCartModal').modal('toggle')
+                    }
+
+                    swal({
+                        title: title,
+                        text: response.message,
+                        timer: timer
+                    },function(){
+                        document.location.reload();
                     });
                 });
             }

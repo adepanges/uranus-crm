@@ -157,6 +157,12 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Resi</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="shipping_code" value="{{ $orders->shipping_code }}" readonly>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="col-md-6 col-xs-12">
