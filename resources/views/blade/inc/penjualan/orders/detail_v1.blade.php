@@ -173,7 +173,7 @@
                             <h1>List Orders</h1>
                         </div>
                         <div class="col-sm-2">
-@if(in_array($orders->order_status_id,[2,3,5]) && $access_list->penjualan_orders_update_shopping_info)
+@if(in_array($orders->order_status_id,[2,3,5, 6]) && $access_list->penjualan_orders_update_shopping_info)
                             <span class="circle circle-sm bg-danger di" onclick="updateShoopingCart({{ $orders->order_id }})" style="cursor: pointer;">
                                 <i class="ti-pencil-alt"></i>
                             </span>
@@ -223,7 +223,11 @@
     @foreach ($value['cart'] as $key_cart => $value_cart)
         <?php
             $btn_del = '';
-            if(!$value_cart->is_package) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';;
+            if(
+                !$value_cart->is_package &&
+                in_array($orders->order_status_id,[2,3,5,6]) &&
+                $access_list->penjualan_orders_update_shopping_info
+            ) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';;
         ?>
 
                         <div class="row" style="padding-left: 40px;">
@@ -254,7 +258,10 @@
                         <div class="col-md-2" style="border-bottom: 1px dotted #000;"><h2>&nbsp</h2></div>
                         <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
                     </div>
-@if(in_array($orders->order_status_id,[2,3,5]) && $access_list->penjualan_orders_update_shopping_info)
+@if(
+    in_array($orders->order_status_id,[2,3,5,6]) &&
+    $access_list->penjualan_orders_update_shopping_info
+)
                     <div class="row pull-right">
                         <button class="btn btn-info" onclick="addonShoopingCart()">Tambahkan Biaya</button>
                     </div>

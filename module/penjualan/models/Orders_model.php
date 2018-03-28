@@ -72,7 +72,7 @@ class Orders_model extends Penjualan_Model {
 
         $sql = "SELECT
                 a.*, b.icon AS call_method_icon, c.name AS payment_method,
-                (SELECT package_name FROM orders_cart WHERE order_id = a.order_id LIMIT 1) AS package_name $select
+                (SELECT package_name FROM orders_cart WHERE order_id = a.order_id AND is_package = 1 LIMIT 1) AS package_name $select
             FROM orders a
             LEFT JOIN master_call_method b ON a.call_method_id = b.call_method_id
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id

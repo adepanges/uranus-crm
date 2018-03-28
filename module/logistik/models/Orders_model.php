@@ -30,7 +30,7 @@ class Orders_model extends Logistik_Model {
 
         $sql = "SELECT
                 a.*, c.name AS logistic_name,
-                (SELECT package_name FROM orders_cart WHERE order_id = a.order_id LIMIT 1) AS package_name $select
+                (SELECT package_name FROM orders_cart WHERE order_id = a.order_id AND is_package = 1 LIMIT 1) AS package_name $select
             FROM orders a
             LEFT JOIN master_logistics c ON a.logistic_id = c.logistic_id
             $join
