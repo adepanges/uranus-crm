@@ -75,7 +75,6 @@
 </style>
 <div id="noPrintArea">
     <div class="example-print">Dermeva Kosmetik Indonesia</div>
-    <?php dd($invoices) ?>
 </div>
 
 <div id="printArea">
