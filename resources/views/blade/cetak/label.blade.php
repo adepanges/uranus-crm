@@ -49,6 +49,19 @@
 
     .product-list {
         display: flex;
+        font-size: 10px;
+    }
+
+    .product-list .product-name {
+        width: 60%;
+    }
+
+    .product-list .product-qty {
+        width: 10%;
+    }
+
+    .product-list .product-price {
+        width: 40%;
     }
 
     .product-list.detail {
@@ -61,7 +74,8 @@
 }
 </style>
 <div id="noPrintArea">
-        <div class="example-print">Dermeva Kosmetik Indonesia</div>
+    <div class="example-print">Dermeva Kosmetik Indonesia</div>
+    <?php dd($invoices) ?>
 </div>
 
 <div id="printArea">
@@ -98,30 +112,37 @@
         Tanggal: {{ tanggal_indonesia(date('Y-m-d', strtotime($value->paid_date))) }}<br>
         Metode Pembayaran: {{ $value->payment_method }}<br>
         <hr>
-    <?php
-    $package_name = '';
-    $price = '';
-    ?>
 
         @foreach ($value->order_cart as $key_cart => $value_cart)
-        <?php
-        $package_name = $value_cart->package_name;
-        $package_price = $value_cart->package_price;
-        ?>
-        @endforeach
         <div class="product-list">
-            <div style="flex-grow: 8">{{ $package_name }}</div>
-            <div style="flex-grow: 2">{{ rupiah($package_price) }}</div>
+            <div class="product-name">{{ $value_cart['info']->package_name }}</div>
+            <div class="product-qty"></div>
+            @if($value_cart['info']->price_type == 'PACKAGE')
+            <div class="product-price">{{ rupiah($value_cart['info']->package_price) }}</div>
+            @endif
         </div>
-
-        @foreach ($value->order_cart as $key_cart => $value_cart)
+            @foreach ($value_cart['cart'] as $key_detail => $value_cart_detail)
         <div class="product-list detail">
-            <div style="flex-grow: 8">{{ $value_cart->product_name }}</div>
-            <div style="flex-grow: 2">Qty. {{ $value_cart->qty }}</div>
+            <div class="product-name">{{ $value_cart_detail->product_name }}</div>
+            <div class="product-qty">
+                @if(!empty($value_cart_detail->product_id))
+                {{ 'x '.$value_cart_detail->qty }}
+                @endif
+            </div>
+            @if($value_cart_detail->price_type == 'RETAIL')
+            <div class="product-price">{{ rupiah($value_cart_detail->price) }}</div>
+            @endif
         </div>
+            @endforeach
         @endforeach
         <hr>
-        <div class="label-pengiriman">
+        <div class="product-list detail">
+            <div class="product-name">Total</div>
+            <div class="product-qty"></div>
+            <div class="product-price">{{ rupiah($value->total_price) }}</div>
+        </div>
+        <hr>
+        <div class="label-pengiriman" style="font-size: 11px;">
             Tujuan Pengiriman:<br>
             {{ $value->customer->full_name }}<br>
             {{ $value->customer->telephone }}<br><br>
