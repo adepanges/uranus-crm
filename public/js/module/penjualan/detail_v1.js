@@ -475,8 +475,9 @@ $(document).ready(function(){
         .done(function( response ) {
             if(response.data){
                 response.data.forEach(function(val, key){
+                    console.log(val);
                     var name = ucwords(val.name);
-                    $('#desa_id_select').append(`<option value="${val.id}">${name}</option>`)
+                    $('#desa_id_select').append(`<option value="${val.id}" kode-pos="${val.kode_pos}">${name}</option>`)
                 });
                 formPopulate('#updateCustomerInfoForm', {
                     'desa_id': document.app.penjualan.orders.customer_address.desa_id
@@ -488,15 +489,25 @@ $(document).ready(function(){
 
     $('#desa_id_select').on('change',function(){
         var desa_id = $(this).val(),
-            desa_kelurahan = '';
+            desa_kelurahan = '',
+            kode_pos = '';
         $( "#desa_id_select option:selected" ).each(function() {
             desa_kelurahan = $( this ).text();
+            kode_pos = $(this).attr('kode-pos');
         });
+
         formPopulate('#updateCustomerInfoForm', {
-            desa_id,
-            desa_kelurahan
+            'desa_id': desa_id,
+            'desa_kelurahan': desa_kelurahan
         })
-    });;
+
+        if(kode_pos != '')
+        {
+            formPopulate('#updateCustomerInfoForm', {
+                'postal_code': kode_pos
+            })
+        }
+    });
 
     $('#updateCustomerInfoForm [name=provinsi_id]').on('change', function(){
         var sl = $('#provinsi_id_select');

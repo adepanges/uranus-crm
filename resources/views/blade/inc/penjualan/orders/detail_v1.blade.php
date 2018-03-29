@@ -409,12 +409,6 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Kode Pos</label>
-                                    <select class="form-control" id="postal_code">
-                                        <option>Pilih</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Kode Pos</label>
                                     <input type="text" class="form-control" name="postal_code">
                                 </div>
                                 <div class="form-group">
