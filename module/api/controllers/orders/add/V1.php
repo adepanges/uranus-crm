@@ -21,12 +21,10 @@ class V1 extends API_Controller {
 
                 $customer_info = $this->customer_model->get_by_msisdn($json_data->customer_info->telephone);
                 if(empty($customer_info)) {
-                    dd('add');
                     $customer_info = $this->customer_model->add($json_data->customer_info);
                 }
                 else if(isset($customer_info->customer_id))
                 {
-                    dd('update');
                     $this->customer_model->upd($json_data->customer_info, $customer_info->customer_id);
                     $customer_info = $this->customer_model->get_byid($customer_info->customer_id);
                 }
