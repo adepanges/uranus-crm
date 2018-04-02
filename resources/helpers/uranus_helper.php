@@ -86,3 +86,18 @@ if (!function_exists('bind_string')) {
         return $str;
     }
 }
+
+if (!function_exists('normalize_msisdn')) {
+    function normalize_msisdn($numb)
+    {
+        if(substr($numb, 0, 1) == 0)
+        {
+            $numb = '62'.substr($numb, 1);
+        }
+        els if(substr($numb, 0, 1) == '+')
+        {
+            $numb = substr($numb, 1);
+        }
+        return $numb;
+    }
+}
