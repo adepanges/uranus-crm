@@ -1,0 +1,7 @@
+KK-YYYYMMDD00001
+
+KK = Kode Produk
+YYYY = Year
+MM = Month
+DD = Day
+00001 = 5 digit sequence dari 1 dstnya, lalu setiap ganti hari dia kembali lagi ke 1

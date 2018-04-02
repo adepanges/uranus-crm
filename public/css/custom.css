@@ -1,0 +1,22 @@
+table.dataTable tbody td {
+    vertical-align: middle;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #FFFFFF;
+    opacity: 1;
+}
+
+code.catch {
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.delete_cart {
+    color: #F00;
+    cursor: pointer;
+    margin-right: 10px;
+}
