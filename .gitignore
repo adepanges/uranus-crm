@@ -29,11 +29,12 @@ composer.lock
 /tests/results/
 
 # symlink ignore
-module/*/helpers/
-module/*/language/
-module/*/libraries/
-module/*/third_party/
-module/*/views/
+module/*/helpers
+module/*/language
+module/*/libraries
+module/*/third_party
+module/*/views
+module/*/logs
 
 package-lock\.json
 
