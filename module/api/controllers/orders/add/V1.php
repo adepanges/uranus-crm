@@ -8,7 +8,7 @@ class V1 extends API_Controller {
         $json_data = json_decode($this->input->raw_input_stream);
         if(!empty($json_data))
         {
-            $this->load->model(['orders_model','network_model','orders_process_model']);
+            $this->load->model(['orders_model','network_model','orders_process_model','customer_model']);
 
             $customer_info = [];
             $customer_address = [];
@@ -17,13 +17,25 @@ class V1 extends API_Controller {
 
             if(isset($json_data->customer_info))
             {
-                $customer_info = $this->orders_model->customer_add($json_data->customer_info);
+                $json_data->customer_info->telephone = isset($json_data->customer_info->telephone)?normalize_msisdn($json_data->customer_info->telephone):'';
+
+                $customer_info = $this->customer_model->get_by_msisdn($json_data->customer_info->telephone);
+                if(empty($customer_info)) {
+                    dd('add');
+                    $customer_info = $this->customer_model->add($json_data->customer_info);
+                }
+                else if(isset($customer_info->customer_id))
+                {
+                    dd('update');
+                    $this->customer_model->upd($json_data->customer_info, $customer_info->customer_id);
+                    $customer_info = $this->customer_model->get_byid($customer_info->customer_id);
+                }
             }
 
             if(isset($json_data->customer_address))
             {
                 $json_data->customer_address->customer_id = (isset($customer_info->customer_id))?$customer_info->customer_id:0;
-                $customer_address = $this->orders_model->customer_address_add($json_data->customer_address);
+                $customer_address = $this->customer_model->address_add($json_data->customer_address);
             }
 
             $orders = [
@@ -41,7 +53,6 @@ class V1 extends API_Controller {
                 'customer_address' => json_encode($customer_address),
                 'version' => 1
             ];
-
 
             $res = $this->orders_model->add($orders);
             $order_id = $this->db->insert_id();
