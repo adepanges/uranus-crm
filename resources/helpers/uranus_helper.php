@@ -94,7 +94,7 @@ if (!function_exists('normalize_msisdn')) {
         {
             $numb = '62'.substr($numb, 1);
         }
-        els if(substr($numb, 0, 1) == '+')
+        else if(substr($numb, 0, 1) == '+')
         {
             $numb = substr($numb, 1);
         }
