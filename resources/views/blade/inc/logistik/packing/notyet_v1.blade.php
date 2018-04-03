@@ -41,10 +41,13 @@
 
             <div class="row white-box">
                 <div class="col-md-2 pull-right">
-                    <button class="btn btn-primary btn-rounded form-control" onclick="cetakLabelPengiriman()">
-                        <i class="fa fa-print"></i>
-                        <span>Label Pengiriman</span>
-                    </button>
+                    <div class="btn-group m-r-10">
+                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-info dropdown-toggle waves-effect waves-light" type="button"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a onclick="cetakLabelPengiriman()">Shipping Label</a></li>
+                            <li><a onclick="cetakLabelInvoice()">Shipping Label & Invoice</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="col-md-2 pull-right">
                     <button onclick="donePackingBulk()" class="btn btn-warning btn-rounded form-control">
