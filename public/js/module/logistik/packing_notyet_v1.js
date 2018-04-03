@@ -104,6 +104,22 @@ function donePacking(id){
     });
 }
 
+function cetakLabelInvoice(){
+    var el = $('.logistics_checklist:checked'),
+        orders = [],
+        orders_base64 = '';
+
+    if(el.length){
+        el.each(function( index ) {
+          orders.push($(this).val())
+        });
+        orders_base64 = btoa(orders.join(','));
+        window.open(document.app.site_url + '/packing_v1/cetak/label_invoice/' + orders_base64);
+    } else {
+        alert('Check orders terlebih dahulu');
+    }
+}
+
 function cetakLabelPengiriman(){
     var el = $('.logistics_checklist:checked'),
         orders = [],
@@ -118,7 +134,6 @@ function cetakLabelPengiriman(){
     } else {
         alert('Check orders terlebih dahulu');
     }
-
 }
 
 function donePackingBulk(){
