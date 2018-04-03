@@ -1,0 +1,6 @@
+sudo ln -s ../../resources/helpers .
+sudo ln -s ../../resources/language .
+sudo ln -s ../../resources/libraries .
+sudo ln -s ../../resources/logs/ .
+sudo ln -s ../../resources/third_party .
+sudo ln -s ../../resources/views .
