@@ -107,7 +107,7 @@ class App extends Penjualan_Controller {
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
-        if(!$res->num_rows() || !in_array($data->order_status_id, [1,3,4,5])) redirect('orders_v1');
+        if(!$res->num_rows() || !in_array($data->order_status_id, [1,3])) redirect('orders_v1');
 
         $follow_up_status = $this->master_model->order_status(2)->first_row();
 

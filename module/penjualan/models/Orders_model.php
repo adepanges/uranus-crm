@@ -223,4 +223,9 @@ class Orders_model extends Penjualan_Model {
     {
         return $this->db->delete('orders_cart', ['cart_id' => (int) $id]);
     }
+
+    function validate_followup_cs($order_id, $user_id)
+    {
+        return $this->db->get_where('orders_process', ['order_status_id' => 2,'order_id' => (int) $order_id, 'user_id' => (int) $user_id]);
+    }
 }
