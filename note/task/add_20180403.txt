@@ -1,7 +1,8 @@
+- cetak label only
+- double orders mechanism
+- double orders page
 - trash orders
 - delete permanently orders (with checkbox)
-- double orders page
-- double orders mechanism
 - switch role
 - add product in cart
 - add package in cart
