@@ -2,7 +2,7 @@
 counter=1
 until [ $counter -gt 12 ]
 do
-php /mnt/d/www/dermeva/cron.php network postback send
+php /srv/users/serverpilot/apps/admincreathinkernet/cron.php network postback send
 sleep 5
 ((counter++))
 done

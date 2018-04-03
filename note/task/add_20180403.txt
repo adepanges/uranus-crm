@@ -1,0 +1,8 @@
+- trash orders
+- delete permanently orders (with checkbox)
+- double orders page
+- double orders mechanism
+- switch role
+- add product in cart
+- add package in cart
+- support package qty > 1
