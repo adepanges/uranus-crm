@@ -28,10 +28,12 @@ class User_model extends SSO_Model {
             FROM {$this->table} a
             $where";
 
-        $sql = $this->_combine_datatable_param($sql);
+
+        $sql_user = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);
+
         return [
-            'row' => $this->db->query($sql)->result(),
+            'row' => $this->db->query($sql_user)->result(),
             'total' => $this->db->query($sql_count)->row()->count
         ];
     }
