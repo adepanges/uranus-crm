@@ -78,7 +78,8 @@ class Orders_model extends Penjualan_Model {
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id
             $join
             WHERE
-            a.version = 1
+            a.version = 1 AND
+            a.orders_double_id IS NULL
             $where
             $ordering";
 
@@ -87,7 +88,8 @@ class Orders_model extends Penjualan_Model {
             FROM orders a
             $join
             WHERE
-            a.version = 1
+            a.version = 1 AND
+            a.orders_double_id IS NULL
             $where", TRUE);
         return [
             'row' => $this->db->query($sql)->result(),
