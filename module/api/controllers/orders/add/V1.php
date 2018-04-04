@@ -36,7 +36,15 @@ class V1 extends API_Controller {
                 $customer_address = $this->customer_model->address_add($json_data->customer_address);
             }
 
+            // double order mechanism
+            $orders_double_id = NULL;
+            if(isset($customer_info->customer_id))
+            {
+                $orders_double_id = $this->_double_order_mechanism($customer_info);
+            }
+
             $orders = [
+                'orders_double_id' => $orders_double_id,
                 'product_package_id' => $product_package_id,
                 'customer_id' => (int) isset($customer_info->customer_id)?$customer_info->customer_id:0,
                 'customer_address_id' => (int) isset($customer_address->customer_address_id)?$customer_address->customer_address_id:0,
@@ -110,6 +118,30 @@ class V1 extends API_Controller {
         }
 	}
 
+    protected function _double_order_mechanism($customer_info = [])
+    {
+        $this->load->model('double_orders_model');
+        $check_double = $this->double_orders_model->get_existing_orders_not_yet_sale_from_customer($customer_info->customer_id);
+        if($check_double->num_rows()){
+            $double_orders = $this->double_orders_model->init_double_orders([
+                'customer_name' => $customer_info->full_name,
+                'customer_telephone' => $customer_info->telephone,
+                'double_reason' => 'SAME_CUSTOMER_BY_MSISDN'
+            ], $customer_info->customer_id);
+            if(!empty($double_orders))
+            {
+                $orders = $check_double->result();
+                $orders_id = [];
+                foreach ($orders as $key => $value) {
+                    $orders_id[] = $value->order_id;
+                }
+                $this->double_orders_model->set_orders_double($double_orders->orders_double_id,$orders_id);
+                return $double_orders->orders_double_id;
+            }
+        }
+        return 0;
+    }
+
     protected function _generate_order_code_package($product_package_id)
     {
         $this->load->model(['master_model','orders_model']);
@@ -131,22 +163,3 @@ class V1 extends API_Controller {
         return $code.'-'.date('Ymd').$seq_code;
     }
 }
-
-// order_id
-// customer_id
-// customer_address_id
-// payment_method_id
-// logistic_id
-// order_status_id
-// logistics_status_id
-// call_method_id
-// order_status
-// logistics_status
-// shipping_code
-// call_method
-// order_code
-// customer_info
-// customer_address
-// total_price
-// created_at
-// version
