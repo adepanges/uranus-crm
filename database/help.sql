@@ -36,7 +36,8 @@ SELECT
     CASE WHEN
         b.module_id = 2 AND
         c.name NOT IN (
-            'penjualan_orders_action_sale'
+            'penjualan_orders_action_sale',
+            'penjualan_orders_update_shopping_info'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -52,7 +53,8 @@ SELECT
         c.name NOT IN (
             'penjualan_orders_action_sale',
             'penjualan_orders_view_modifier',
-            'penjualan_orders_delete'
+            'penjualan_orders_delete',
+            'penjualan_orders_update_shopping_info'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
