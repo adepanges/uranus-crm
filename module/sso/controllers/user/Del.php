@@ -12,8 +12,14 @@ class Del extends SSO_Controller {
             'message' => 'id must be set in uri'
         ]);
 
-        $this->load->model('user_model');
+        $this->load->model(['user_model','cs_model']);
+        $cs = $this->cs_model->is_leader_cs($user_id);
 
+        if($cs->num_rows())
+        {
+            $this->cs_model->set_leader_cs_role_above($user_id);
+        }
+        
         if($this->user_model->del($user_id))
         {
             $this->_response_json([
