@@ -141,9 +141,12 @@ class Dermeva_Controller extends CI_Controller {
             $res = $this->db->limit(1)->get_where('sso_user', [
                 'user_id' => $this->profile['user_id'],
                 'status' => 1
-                ])->first_row();
+            ])->first_row();
+            if(empty($res))
+            {
                 $this->session->set_userdata('profile', []);
                 redirect($this->data['logout_link']);
+            }
         }
     }
 
