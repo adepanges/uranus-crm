@@ -12,6 +12,8 @@ class Detail extends Penjualan_Controller {
         $res = $this->orders_model->get_byid_v1($id);
         $orders = $res->first_row();
 
+        if(empty($orders)) redirect($this->session->userdata('orders_state'));
+
         if(isset($orders->customer_info)) $orders->customer_info = json_decode($orders->customer_info);
         if(isset($orders->customer_address)) $orders->customer_address = json_decode($orders->customer_address);
 

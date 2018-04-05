@@ -78,7 +78,9 @@ class Orders_model extends Penjualan_Model {
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id
             $join
             WHERE
-            a.version = 1
+            a.version = 1 AND
+            a.orders_double_id IS NULL AND
+            a.is_deleted = 0
             $where
             $ordering";
 
@@ -87,7 +89,9 @@ class Orders_model extends Penjualan_Model {
             FROM orders a
             $join
             WHERE
-            a.version = 1
+            a.version = 1 AND
+            a.orders_double_id IS NULL AND
+            a.is_deleted = 0
             $where", TRUE);
         return [
             'row' => $this->db->query($sql)->result(),
@@ -227,5 +231,28 @@ class Orders_model extends Penjualan_Model {
     function validate_followup_cs($order_id, $user_id)
     {
         return $this->db->get_where('orders_process', ['order_status_id' => 2,'order_id' => (int) $order_id, 'user_id' => (int) $user_id]);
+    }
+
+    function get_active_orders_by_customer_id($customer_id)
+    {
+        $this->db->where('orders_double_id IS NULL', NULL, FALSE);
+        return $this->db->get_where('orders', [
+            'customer_id' => $customer_id,
+            'order_status_id <' => 7,
+            'order_status_id !=' => 4,
+            'is_deleted' => 0
+        ]);
+    }
+
+    function trash($id = 0)
+    {
+        if(!is_array($id))
+        {
+            $id = [$id];
+        }
+        $this->db->where_in('order_id', $id);
+        return $this->db->update('orders', [
+            'is_deleted' => 1
+        ]);
     }
 }
