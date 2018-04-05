@@ -20,3 +20,7 @@ code.catch {
     cursor: pointer;
     margin-right: 10px;
 }
+
+.double_side {
+    line-height: 1.8;
+}

@@ -13,7 +13,7 @@
                             </a>
                         </li>
 @endif
-@if(1==1)
+@if($access_list->penjualan_orders_double)
                         <li>
                             <a href="{{ site_url('orders_v1/double') }}">
                                 <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>

@@ -29,6 +29,7 @@ class Double_orders_model extends API_Model {
         return $this->db->get_where('orders', [
             'order_status_id <' => 7,
             'order_status_id !=' => 4,
+            'is_deleted !=' => 1,
             'customer_id' => $customer_id
         ]);
     }

@@ -44,13 +44,15 @@ $(document).ready(function(){
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
-                        //
-                        // if(document.app.access_list.penjualan_orders_detail)
-                        if(1)
+                        if(document.app.access_list.penjualan_orders_double_detail)
                         {
-                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
+                            button.push(`<a href="${document.app.site_url}/orders_v1/double/detail/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
+                        if(document.app.access_list.penjualan_orders_double_trash_bulk)
+                        {
+                            button.push(`<a onclick="trashDoubleOrders(${data})" class="btn btn-rounded btn-warning"><i class="icon-trash"></i></a>`);
+                        }
                         return button.join('');
                     }
                 }
@@ -58,33 +60,14 @@ $(document).ready(function(){
         });
 });
 
-function followUp(id){
-    swal({
-        title: "Apakah anda yakin?",
-        text: "Anda akan memfollow up pesanan!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Follow Up",
-        cancelButtonText: "Batal",
-        closeOnConfirm: false,
-        closeOnCancel: true
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/app/follow_up/'+id;
-        }
-    });
-}
-
-function deleteOrders(id){
+function trashDoubleOrders(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus network ini!",
+        text: "Anda akan membuang semua double orders didalamnya!",
         type: "warning",
         showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Hapus",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "Buang",
         cancelButtonText: "Batal",
         closeOnConfirm: false,
         closeOnCancel: true
@@ -94,16 +77,16 @@ function deleteOrders(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/orders_v1/app/del',
-                data: {
-                    'order_id': id
-                }
+                url: document.app.site_url+'/orders_v1/double/trash/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                doubleOrdersTable.ajax.reload()
                 var title = 'Berhasil!';
-                if(!response.status) title = 'Gagal!';
+                if(!response.status){
+                    title = 'Gagal!';
+                } else {
+                    doubleOrdersTable.ajax.reload()
+                }
 
                 swal({
                     title: title,

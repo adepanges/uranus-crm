@@ -37,7 +37,8 @@ SELECT
         b.module_id = 2 AND
         c.name NOT IN (
             'penjualan_orders_action_sale',
-            'penjualan_orders_update_shopping_info'
+            'penjualan_orders_update_shopping_info',
+            'penjualan_orders_delete'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -72,7 +73,8 @@ SELECT
         'penjualan_orders_sale',
         'penjualan_orders_verify_payment',
         'penjualan_orders_action_sale',
-        'penjualan_orders_update_shopping_info'
+        'penjualan_orders_update_shopping_info',
+        'penjualan_orders_delete'
     ) THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
