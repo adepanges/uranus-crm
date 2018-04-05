@@ -23,6 +23,8 @@ class Dermeva_Controller extends CI_Controller {
         $this->profile = $this->session->userdata('profile');
         $this->role_active = $this->session->userdata('role_active');
 
+        $this->_check_active_user();
+
         // $this->load->library('encryption');
         // $this->encryption->initialize([
         //     'driver' => 'openssl',
@@ -130,6 +132,22 @@ class Dermeva_Controller extends CI_Controller {
 
         $params['search'] = trim($params['search']['value']);
         return $params;
+    }
+
+    protected function _check_active_user()
+    {
+        if(!empty($this->profile))
+        {
+            $res = $this->db->limit(1)->get_where('sso_user', [
+                'user_id' => $this->profile['user_id'],
+                'status' => 1
+            ])->first_row();
+            if(empty($res))
+            {
+                $this->session->set_userdata('profile', []);
+                redirect($this->data['logout_link']);
+            }
+        }
     }
 
     protected function _response_json($resp)

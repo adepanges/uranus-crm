@@ -6,6 +6,7 @@ class Orders_model extends API_Model {
     function add($orders)
     {
         $sql = "INSERT INTO orders (
+                orders_double_id,
                 version,
                 created_at,
                 shipping_code,
@@ -25,6 +26,7 @@ class Orders_model extends API_Model {
                 total_price
             )
             SELECT
+                ? AS orders_double_id,
                 ? AS version,
                 ? AS created_at,
                 '' AS shipping_code,
@@ -51,7 +53,9 @@ class Orders_model extends API_Model {
             LEFT JOIN product_package d ON d.product_package_id = ?
             WHERE a.order_status_id = ?
             LIMIT 1";
+            
         return $this->db->query($sql, [
+            'orders_double_id' => $orders['orders_double_id'],
             'version' => $orders['version'],
             'created_at' => $orders['created_at'],
             'order_code' => $orders['order_code'],

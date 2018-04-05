@@ -13,6 +13,24 @@
                             </a>
                         </li>
 @endif
+@if($access_list->penjualan_orders_double)
+                        <li>
+                            <a href="{{ site_url('orders_v1/double') }}">
+                                <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>
+                                <span class="hide-menu">Double Orders</span>
+                                <span class="badge badge-warning" id="count_double">?</span>
+                            </a>
+                        </li>
+@endif
+@if($access_list->penjualan_orders_pending)
+                        <li>
+                            <a href="{{ site_url('orders_v1/pending') }}">
+                                <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>
+                                <span class="hide-menu">Pending Orders</span>
+                                <span class="badge badge-warning" id="count_pending">?</span>
+                            </a>
+                        </li>
+@endif
 @if($access_list->penjualan_orders_confirm_buy)
                         <li>
                             <a href="{{ site_url('orders_v1/confirm_buy') }}">
@@ -31,12 +49,12 @@
                             </a>
                         </li>
 @endif
-@if($access_list->penjualan_orders_pending)
+@if($access_list->penjualan_orders_sale)
                         <li>
-                            <a href="{{ site_url('orders_v1/pending') }}">
-                                <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>
-                                <span class="hide-menu">Pending Orders</span>
-                                <span class="badge badge-warning" id="count_pending">?</span>
+                            <a href="{{ site_url('orders_v1/sale') }}">
+                                <i class="fa fa-money" style="font-size: 13px;"></i>
+                                <span class="hide-menu">Sale Orders</span>
+                                <span class="badge badge-info" id="count_cancel">?</span>
                             </a>
                         </li>
 @endif
@@ -45,15 +63,6 @@
                             <a href="{{ site_url('orders_v1/cancel') }}">
                                 <i class="mdi mdi-cart-off" style="font-size: 13px;"></i>
                                 <span class="hide-menu">Cancel Orders</span>
-                                <span class="badge badge-info" id="count_cancel">?</span>
-                            </a>
-                        </li>
-@endif
-@if($access_list->penjualan_orders_sale)
-                        <li>
-                            <a href="{{ site_url('orders_v1/sale') }}">
-                                <i class="fa fa-money" style="font-size: 13px;"></i>
-                                <span class="hide-menu">Sale Orders</span>
                                 <span class="badge badge-info" id="count_cancel">?</span>
                             </a>
                         </li>

@@ -24,19 +24,31 @@ class Shipping extends Logistik_Controller {
         $logistic_id = (int) $this->input->post('logistic_id');
         $shipping_code = $this->input->post('shipping_code');
 
-        $this->load->model('orders_model');
+        $this->load->model(['orders_model','master_model','logistics_process_model']);
         $res = $this->orders_model->get_byid_v1($id);
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
+
+        $logistics_status = $this->master_model->logistics_status(5)->first_row();
+        $label_logistics_status = isset($logistics_status->label)?$logistics_status->label:'Pengiriman';
 
         $order_status = [
             'logistic_id' => $logistic_id,
             'shipping_code' => $shipping_code
         ];
+        $logistik_process = [
+            'order_id' => $id,
+            'user_id' => $profile['user_id'],
+            'logistics_status_id' => 5,
+            'status' => $label_logistics_status,
+            'notes' => "Perubahan No. Resi menjadi <b>$shipping_code</b>",
+            'created_at' => date('Y-m-d H:i:s')
+        ];
 
         $res1 = $this->orders_model->upd($id, $order_status);
+        $res2 = $this->logistics_process_model->add($logistik_process);
 
-        if($res1)
+        if($res1 && $res2)
         {
             $this->_response_json([
                 'status' => 1,
