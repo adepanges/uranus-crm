@@ -94,9 +94,9 @@ if (!function_exists('normalize_msisdn')) {
         {
             $numb = substr($numb, 1);
         }
-        else if(substr($numb, 0, 1) == 0)
+        if(substr($numb, 0, 2) == '62')
         {
-            $numb = '62'.substr($numb, 1);
+            $numb = '0'.substr($numb, 2);
         }
         return $numb;
     }

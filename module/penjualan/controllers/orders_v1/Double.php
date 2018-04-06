@@ -28,16 +28,37 @@ class Double extends Penjualan_Controller {
         ]);
 	}
 
+    public function get_follow_up()
+	{
+        $this->_restrict_access('penjualan_orders_double_list', 'rest');
+        $this->load->model('double_orders_model');
+
+        $this->double_orders_model->set_datatable_param($this->_datatable_param());
+        $double_orders = $this->double_orders_model->get_follow_up_datatable($this->profile['user_id']);
+
+        $this->_response_json([
+            'recordsFiltered' => $double_orders['total'],
+            'data' => $double_orders['row']
+        ]);
+	}
+
     function detail($id)
     {
         $this->_restrict_access('penjualan_orders_double_detail', 'rest');
         $id = (int) $id;
         $this->load->model('double_orders_model');
 
+        $orders = $this->double_orders_model->get_orders($id);
+        if($orders->num_rows() == 0)
+        {
+            $this->double_orders_model->solve($id);
+            redirect($this->session->userdata('orders_state'));
+        }
+
         $this->_set_data([
             'title' => 'Double Orders',
             'orders_double' => $this->double_orders_model->get_byid($id)->first_row(),
-            'orders' => $this->double_orders_model->get_orders($id)->result()
+            'orders' => $orders->result()
         ]);
 
         $this->blade->view('inc/penjualan/orders/double_detail_v1', $this->data);

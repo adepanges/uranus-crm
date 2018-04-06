@@ -9,10 +9,39 @@ class Double_orders_model extends Penjualan_Model {
         $fillable_field = ['customer_id', 'customer_name', 'customer_telephone', 'double_reason', 'created_at', 'status'],
         $searchable_field = ['customer_name','customer_telephone','double_reason'];
 
-    function get_datatable($params = [], $only_self = TRUE)
+    function get_datatable()
     {
+        $sql = "SELECT
+            	a.*
+            FROM orders_double a
+            WHERE a.status = 1 AND (SELECT order_status_id
+            FROM orders
+            WHERE `version` = 1 AND
+            is_deleted = 0 AND orders_double_id = a.orders_double_id
+            ORDER BY order_status_id DESC LIMIT 1) < 2";
 
-        $sql = "SELECT * FROM orders_double WHERE status = 1";
+        $sql = $this->_combine_datatable_param($sql);
+        $sql_count = $this->_combine_datatable_param($sql, TRUE);
+        return [
+            'row' => $this->db->query($sql)->result(),
+            'total' => $this->db->query($sql_count)->row()->count
+        ];
+    }
+
+    function get_follow_up_datatable($user_id = 0)
+    {
+        $user_id = (int) $user_id;
+        $sql = "SELECT
+            	a.*
+            FROM orders_double a
+            WHERE a.status = 1 AND
+            $user_id IN (SELECT w.user_id
+                FROM orders z
+                LEFT JOIN orders_process w ON z.order_id = w.order_id
+                WHERE z.`version` = 1 AND
+                z.is_deleted = 0 AND
+                z.orders_double_id = a.orders_double_id AND
+                z.order_status_id > 1)";
 
         $sql = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);
