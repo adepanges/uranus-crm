@@ -132,6 +132,14 @@ class App extends Penjualan_Controller {
         $profile = $this->session->userdata('profile');
 
         if(!$res->num_rows() || !in_array($data->order_status_id, [1,3])) redirect('orders_v1');
+        if($data->order_status_id > 1)
+        {
+            $check_followup_cs = $this->orders_model->validate_followup_cs($data->order_id, $this->profile['user_id']);
+            if($check_followup_cs->num_rows() == 0)
+            {
+                redirect('orders_v1');
+            }
+        }
 
         $follow_up_status = $this->master_model->order_status(2)->first_row();
 
