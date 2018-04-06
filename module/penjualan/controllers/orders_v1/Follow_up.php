@@ -27,6 +27,15 @@ class Follow_up extends Penjualan_Controller {
             ]);
         }
 
+        if($orders->order_status_id > 1)
+        {
+            $check_followup_cs = $this->orders_model->validate_followup_cs($orders->order_id, $this->profile['user_id']);
+            if($check_followup_cs->num_rows() == 0)
+            {
+                redirect($this->session->userdata('orders_state'));
+            }
+        }
+
         $follow_up_status = $this->master_model->order_status(4)->first_row();
 
         $label_status = isset($follow_up_status->label)?$follow_up_status->label:'Cancel';
@@ -82,6 +91,15 @@ class Follow_up extends Penjualan_Controller {
             ]);
         }
 
+        if($orders->order_status_id > 1)
+        {
+            $check_followup_cs = $this->orders_model->validate_followup_cs($orders->order_id, $this->profile['user_id']);
+            if($check_followup_cs->num_rows() == 0)
+            {
+                redirect($this->session->userdata('orders_state'));
+            }
+        }
+
         $follow_up_status = $this->master_model->order_status(3)->first_row();
 
         $label_status = isset($follow_up_status->label)?$follow_up_status->label:'Pending';
@@ -129,6 +147,15 @@ class Follow_up extends Penjualan_Controller {
         $profile = $this->session->userdata('profile');
 
         if(!$res->num_rows() || !in_array($data->order_status_id, [2, 3])) redirect($this->session->userdata('orders_state'));
+
+        if($data->order_status_id > 1)
+        {
+            $check_followup_cs = $this->orders_model->validate_followup_cs($data->order_id, $this->profile['user_id']);
+            if($check_followup_cs->num_rows() == 0)
+            {
+                redirect($this->session->userdata('orders_state'));
+            }
+        }
 
         $follow_up_status = $this->master_model->order_status(5)->first_row();
 

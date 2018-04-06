@@ -39,9 +39,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h2>Orders Follow Up</h2>
+                        <h2>New Orders</h2>
                         <br>
-                        <table id="doubleOrderFollowsTable" class="table">
+                        <table id="doubleOrdersTable" class="table">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -60,9 +60,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h2>New Orders</h2>
+                        <h2>Orders Follow Up</h2>
                         <br>
-                        <table id="doubleOrdersTable" class="table">
+                        <table id="doubleOrderFollowsTable" class="table">
                             <thead>
                                 <tr>
                                     <th>No</th>
