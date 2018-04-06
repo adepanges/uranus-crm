@@ -103,7 +103,7 @@ $(document).ready(function(){
 function deleteOrders(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus network ini!",
+        text: "Anda akan menghapus orders ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",

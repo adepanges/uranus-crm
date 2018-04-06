@@ -271,7 +271,7 @@
 
             <div class="row white-box">
                 <div class="col-md-6 col-xs-12">
-                    <h1>History Status</h1>
+                    <h1>History Orders</h1>
 
 @foreach ($orders_process as $key => $value)
                     <div class="row">

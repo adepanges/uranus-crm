@@ -17,9 +17,9 @@ class Detail extends Penjualan_Controller {
         if(isset($orders->customer_info)) $orders->customer_info = json_decode($orders->customer_info);
         if(isset($orders->customer_address)) $orders->customer_address = json_decode($orders->customer_address);
 
-        if($orders->order_status_id == 2)
+        if($orders->order_status_id > 1)
         {
-            $check_followup_cs = $this->orders_model->validate_followup_cs($orders->order_id, $this->data['profile']['user_id']);
+            $check_followup_cs = $this->orders_model->validate_followup_cs($orders->order_id, $this->profile['user_id']);
             if($check_followup_cs->num_rows() == 0)
             {
                 redirect($this->session->userdata('orders_state'));

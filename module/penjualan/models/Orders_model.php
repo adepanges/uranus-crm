@@ -230,7 +230,11 @@ class Orders_model extends Penjualan_Model {
 
     function validate_followup_cs($order_id, $user_id)
     {
-        return $this->db->get_where('orders_process', ['order_status_id' => 2,'order_id' => (int) $order_id, 'user_id' => (int) $user_id]);
+        return $this->db->get_where('orders_process', [
+            'order_status_id' => 2,
+            'order_id' => (int) $order_id,
+            'user_id' => (int) $user_id
+        ]);
     }
 
     function get_active_orders_by_customer_id($customer_id)
