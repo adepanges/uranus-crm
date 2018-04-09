@@ -534,8 +534,18 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label">Tanggal Bayar</label>
+                                    <label class="control-label">Tanggal Transfer</label>
                                     <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Nomor Invoice</label>
+                                    <div class="input-group m-b-30">
+                                        <input type="hidden" name="invoice_first" value="DKI/{{ date('Ymd') }}/">
+                                        <span class="input-group-addon" id="basic-addon1">DKI/{{ date('Ymd') }}/</span>
+                                        <input type="text" class="form-control" name="invoice_number" placeholder="000001" aria-describedby="basic-addon1"  data-error="Hmm, nomor invoice harap diisi" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
                                 </div>
                             </form>
                         </div>

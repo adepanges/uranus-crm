@@ -192,7 +192,20 @@ $(document).ready(function(){
     jQuery('#datepicker-autoclose').datepicker({
         autoclose: true,
         todayHighlight: true,
-        format: 'yyyy-mm-dd'
+        format: 'yyyy-mm-dd',
+        onSelect: function(dateText, inst) {
+          alert(dateText);
+        }
+    });
+
+    $('#datepicker-autoclose').change(function(e){
+        var str = $(this).val(),
+            inv_first = '';
+        str = str.replace(/-/g, "");
+        inv_first = `DKI/${str}/`;
+
+        $('#basic-addon1').html(inv_first);
+        $('#saleForm [name=invoice_first]').val(inv_first)
     });
 
     $('#cancelForm [name=notes]').change(function(e){
@@ -246,46 +259,51 @@ $(document).ready(function(){
     });
 
     $('#btnSaveSaleModal').click(function(){
-        var data = serialzeForm('#saleForm');
-        swal({
-            title: "Apakah anda yakin?",
-            text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-warning",
-            confirmButtonText: "Ya",
-            cancelButtonText: "Batal",
-            closeOnConfirm: false,
-            closeOnCancel: true
-        },
-        function(isConfirm) {
-            if (isConfirm) {
-                $('.preloader').fadeIn();
-                $.ajax({
-                    method: "POST",
-                    url: document.app.site_url+'/orders_v1/verify/sale',
-                    data: data
-                })
-                .done(function( response ) {
-                    $('.preloader').fadeOut();
-                    var title = 'Berhasil!',
-                        timer = 1000;
+        if(formValidator('#saleForm')){
+            var data = serialzeForm('#saleForm');
+            swal({
+                title: "Apakah anda yakin?",
+                text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-warning",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    $('.preloader').fadeIn();
+                    $.ajax({
+                        method: "POST",
+                        url: document.app.site_url+'/orders_v1/verify/sale',
+                        data: data
+                    })
+                    .done(function( response ) {
+                        $('.preloader').fadeOut();
+                        var title = 'Berhasil!',
+                            timer = 1000;
 
-                    if(!response.status) {
-                        var timer = 3000;
-                        title = 'Gagal!';
-                    }
+                        if(!response.status) {
+                            var timer = 3000;
+                            title = 'Gagal!';
+                        }
 
-                    swal({
-                        title: title,
-                        text: response.message,
-                        timer: timer
-                    },function(){
-                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
+                        swal({
+                            title: title,
+                            text: response.message,
+                            timer: timer
+                        },function(){
+                            if(response.status)
+                            {
+                                window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
+                            }
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
     });
 
     $('#btnSaveCancelModal').click(function(){

@@ -89,10 +89,10 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        if(document.app.access_list.penjualan_orders_action_sale)
-                        {
-                            button.push(`<button onclick=saleOrders("`+btoa(JSON.stringify(full))+`") type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-money"></i></button>`);
-                        }
+                        // if(document.app.access_list.penjualan_orders_action_sale)
+                        // {
+                        //     button.push(`<button onclick=saleOrders("`+btoa(JSON.stringify(full))+`") type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-money"></i></button>`);
+                        // }
 
                         if(document.app.access_list.penjualan_orders_delete)
                         {
@@ -152,14 +152,14 @@ $(document).ready(function(){
     });
 });
 
-function saleOrders(orders){
-    var orders = JSON.parse(atob(orders));
-    formPopulate('#saleForm', orders)
-    $('#saleModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-}
+// function saleOrders(orders){
+//     var orders = JSON.parse(atob(orders));
+//     formPopulate('#saleForm', orders)
+//     $('#saleModal').modal({
+//         backdrop: 'static',
+//         keyboard: false
+//     });
+// }
 
 function deleteOrders(id){
     swal({

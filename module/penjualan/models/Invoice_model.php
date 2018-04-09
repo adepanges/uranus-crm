@@ -3,18 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Invoice_model extends Penjualan_Model {
 
-    function publish_v1($order_id = 0, $paid_time = '')
+    function publish_v1($order_id = 0, $paid_time = '', $invoice_number = '')
     {
         if(empty($paid_time))
         {
             $paid_time = date('Y-m-d H:i:s');
         }
 
+        if(empty($invoice_number))
+        {
+            $invoice_number = $this->create_invoice_number_v1($paid_time);
+        }
+
         $orders = $this->get_orders_info($order_id);
         $customer = $this->get_customer_info($orders->customer_id);
         $customer_address = $this->get_customer_address($orders->customer_id, $orders->customer_address_id);
         $orders_cart = $this->get_cart($orders->order_id);
-        $invoice_number = $this->create_invoice_number_v1(date('Y-m-d H:i:s'));
 
         $invoice_data = [
             'order_id' => $orders->order_id,
@@ -32,8 +36,15 @@ class Invoice_model extends Penjualan_Model {
             'publish_date' =>  date('Y-m-d H:i:s'),
             'version' => 1
         ];
-        
+
         return $this->db->insert('orders_invoices', $invoice_data);
+    }
+
+    function get_by_inv_numb($invoice_number)
+    {
+        return $this->db->get_where('orders_invoices', [
+            'invoice_number' => $invoice_number
+        ]);
     }
 
     protected function create_invoice_number_v1($time)
