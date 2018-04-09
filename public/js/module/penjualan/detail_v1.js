@@ -226,6 +226,17 @@ $(document).ready(function(){
         }
     });
 
+    $('#addonShoopingCartForm [name=name]').change(function(e){
+        var name_val = $(this).val();
+        if(name_val == '') {
+            $('#addonShoopingCartForm [name=name_other]').val('');
+            $('#otherName').show();
+        } else {
+            $('#otherName').hide();
+        }
+    });
+
+
     $('#btnSaveaddonShoopingCartModal').click(function(){
         if(formValidator('#addonShoopingCartForm')){
             var data = serialzeForm('#addonShoopingCartForm');

@@ -569,8 +569,15 @@
                                 <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
                                 <div class="form-group">
                                     <label class="control-label">Name</label>
-                                    <input type="text" class="form-control" name="name"  data-error="Hmm, name harap diisi" required>
-                                    <div class="help-block with-errors"></div>
+                                    <select name="name" class="form-control">
+                                        <option value="Diskon">Diskon</option>
+                                        <option value="Kode Unik">Kode Unik</option>
+                                        <option value="">Lainnya</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"id="otherName" style="display: none;">
+                                    <label class="control-label">Lainya</label>
+                                    <input type="text" class="form-control" name="name_other">
                                 </div>
                                 <div class="form-group" id="fieldPrice">
                                     <label for="recipient-name" class="control-label">Harga</label>
