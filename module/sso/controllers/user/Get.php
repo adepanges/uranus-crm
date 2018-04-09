@@ -9,9 +9,10 @@ class Get extends SSO_Controller {
         $this->load->model('user_model');
 
         $params = [
-            'role_id' => (int) $this->input->post('role_id')
+            'role_id' => (int) $this->input->post('role_id'),
+            'from' => $this->input->post('from')
         ];
-        
+
         $this->user_model->set_datatable_param($this->_datatable_param());
         $user_data = $this->user_model->get_datatable($params);
 

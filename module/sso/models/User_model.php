@@ -19,6 +19,11 @@ class User_model extends SSO_Model {
             $where[] = "a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id = {$params['role_id']})";
         }
 
+        if(isset($params['from']) && $params['from'] == 'management_cs_team')
+        {
+            $where[] = "a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id IN (1,2,6))";
+        }
+
         $where[] = "a.user_id <> 1";
 
         if(!empty($where)) $where = "WHERE ".implode(" AND ", $where);
@@ -27,7 +32,6 @@ class User_model extends SSO_Model {
         $sql = "SELECT a.*, (SELECT 1 FROM `sso_user_role` WHERE user_id = a.user_id AND role_id IN (1,2) ORDER BY role_id ASC LIMIT 1) as is_admin_manajer
             FROM {$this->table} a
             $where";
-
 
         $sql_user = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);
