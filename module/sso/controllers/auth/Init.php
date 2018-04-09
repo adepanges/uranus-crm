@@ -82,7 +82,6 @@ class Init extends SSO_Controller {
             'tim_leader' => $tim_leader
         ]);
 
-
         $orders = $this->orders_model->get_follow_up_by_userid($profile['user_id']);
 
         if($orders->num_rows())

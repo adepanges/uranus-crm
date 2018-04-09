@@ -183,9 +183,9 @@ class App extends Penjualan_Controller {
 
         if($res1 && $res2)
         {
-            redirect($this->session->userdata('orders_state'));
+            redirect('orders_v1/detail/index/'.$id.'?SUCCESS');
         }
-        else redirect('orders_v1/detail/index/'.$id);
+        else redirect('orders_v1/detail/index/'.$id.'?FAIL');
     }
 
     function addon_shopping_info()
@@ -196,7 +196,7 @@ class App extends Penjualan_Controller {
 
         $params = [
             'order_id' => $order_id,
-            'product_name' => $this->input->post('name'),
+            'product_name' => !empty($this->input->post('name'))?$this->input->post('name'):$this->input->post('name_other'),
             'qty' => 1,
             'is_package' => 0,
             'price' => (int) $this->input->post('price'),

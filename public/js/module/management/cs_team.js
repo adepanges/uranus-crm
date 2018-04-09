@@ -109,6 +109,7 @@ function initLeaderTim(){
                 method: 'POST',
                 data: function (params) {
                     var query = {
+                        from: 'management_cs_team',
                         search: {
                             value: params.term,
                             regex: false
@@ -122,7 +123,7 @@ function initLeaderTim(){
                     data.data.forEach(function(val, key){
                         res.push({
                             id: val.user_id,
-                            text: val.username
+                            text: `${val.first_name} ${val.last_name}`
                         });
                     });
                     return {

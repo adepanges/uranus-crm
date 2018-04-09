@@ -534,8 +534,18 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label">Tanggal Bayar</label>
+                                    <label class="control-label">Tanggal Transfer</label>
                                     <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Nomor Invoice</label>
+                                    <div class="input-group m-b-30">
+                                        <input type="hidden" name="invoice_first" value="DKI/{{ date('Ymd') }}/">
+                                        <span class="input-group-addon" id="basic-addon1">DKI/{{ date('Ymd') }}/</span>
+                                        <input type="text" class="form-control" name="invoice_number" placeholder="000001" aria-describedby="basic-addon1"  data-error="Hmm, nomor invoice harap diisi" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -559,8 +569,15 @@
                                 <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
                                 <div class="form-group">
                                     <label class="control-label">Name</label>
-                                    <input type="text" class="form-control" name="name"  data-error="Hmm, name harap diisi" required>
-                                    <div class="help-block with-errors"></div>
+                                    <select name="name" class="form-control">
+                                        <option value="Diskon">Diskon</option>
+                                        <option value="Kode Unik">Kode Unik</option>
+                                        <option value="">Lainnya</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"id="otherName" style="display: none;">
+                                    <label class="control-label">Lainya</label>
+                                    <input type="text" class="form-control" name="name_other">
                                 </div>
                                 <div class="form-group" id="fieldPrice">
                                     <label for="recipient-name" class="control-label">Harga</label>

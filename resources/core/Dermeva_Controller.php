@@ -130,7 +130,18 @@ class Dermeva_Controller extends CI_Controller {
             'dir' => $dir
         ];
 
-        $params['search'] = trim($params['search']['value']);
+        if(
+            isset($params['search']) &&
+            isset($params['search']['value']) &&
+            !empty($params['search']['value']))
+        {
+            $params['search'] = trim($params['search']['value']);
+        }
+        else
+        {
+            $params['search'] = '';
+        }
+
         return $params;
     }
 

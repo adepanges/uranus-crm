@@ -21,12 +21,23 @@ class Verify extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_action_sale');
         $id = (int) $this->input->post('order_id');
+        $invoice_number = $this->input->post('invoice_first').$this->input->post('invoice_number');
+        $paid_date = !empty($this->input->post('paid_date'))?$this->input->post('paid_date'):$order_process['created_at'];
+
         $this->load->model(['orders_model','orders_process_model','master_model','invoice_model']);
         $res = $this->orders_model->get_byid_v1($id);
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
         if(!$res->num_rows() || !in_array($data->order_status_id, [6])) redirect('orders_v1');
+
+        if(!empty($invoice_number) && $this->invoice_model->get_by_inv_numb($invoice_number)->num_rows() > 0)
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Nomor Invoice sudah digunakan'
+            ]);
+        }
 
         $follow_up_status = $this->master_model->order_status(7)->first_row();
 
@@ -46,8 +57,9 @@ class Verify extends Penjualan_Controller {
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        $paid_date = !empty($this->input->post('paid_date'))?$this->input->post('paid_date'):$order_process['created_at'];
-        $res1 = $this->invoice_model->publish_v1($id, $paid_date);
+        $paid_date = !empty($paid_date)?$paid_date:$order_process['created_at'];
+
+        $res1 = $this->invoice_model->publish_v1($id, $paid_date, $invoice_number);
         $res2 = $this->orders_model->upd($id, $order_status);
         $res3 = $this->orders_process_model->add($order_process);
 

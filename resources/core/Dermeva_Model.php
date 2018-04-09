@@ -57,11 +57,14 @@ class Dermeva_Model extends CI_Model {
                 $limit = (int) $this->datatable_param['length'];
             }
 
-            if(isset($this->datatable_param['search']))
+            if(
+                isset($this->datatable_param['search']) &&
+                !empty($this->datatable_param['search'])
+            )
             {
                 $keyword = $this->db->escape_str($this->datatable_param['search']);
             }
-
+            
             if(
                 isset($this->datatable_param['order']) &&
                 !empty($this->datatable_param['order']))
