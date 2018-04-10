@@ -35,7 +35,7 @@ class Sale extends Penjualan_Controller {
         $res = $this->orders_model->get_byid_v1($order_id);
         $data = $res->first_row();
 
-        if(!$res->num_rows() || !in_array($data->order_status_id, [7]))
+        if(!$res->num_rows() || (isset($data->order_status_id) && $data->order_status_id < 7 ))
         {
             $this->_response_json([
                 'status' => 0,
