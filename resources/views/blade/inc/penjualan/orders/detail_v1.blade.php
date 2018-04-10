@@ -260,8 +260,14 @@
             $btn_del = '';
             if(
                 !$value_cart->is_package &&
-                in_array($orders->order_status_id,[2,3,5,6]) &&
-                $access_list->penjualan_orders_update_shopping_info
+                (
+                    (
+                        in_array($orders->order_status_id,[2,3,5,6]) &&
+                        $access_list->penjualan_orders_update_shopping_info
+                    ) ||
+                    in_array($role_active->role_id, [1,2]
+                )
+            )
             ) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';;
         ?>
 
