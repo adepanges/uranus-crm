@@ -40,8 +40,33 @@ class Invoice_model extends Penjualan_Model {
         return $this->db->insert('orders_invoices', $invoice_data);
     }
 
-    function get_by_inv_numb($invoice_number)
+    function upd($data, $order_invoice_id, $order_id)
     {
+
+        $orders = $this->get_orders_info($order_id);
+        $customer = $this->get_customer_info($orders->customer_id);
+        $customer_address = $this->get_customer_address($orders->customer_id, $orders->customer_address_id);
+        $orders_cart = $this->get_cart($orders->order_id);
+
+        $this->db->where('order_invoice_id', $order_invoice_id);
+        return $this->db->update('orders_invoices', [
+            'invoice_number' => $data['invoice_number'],
+            'customer' => json_encode($customer),
+            'customer_address' => json_encode($customer_address),
+            'order_cart' => json_encode($orders_cart),
+            'total_price' => $orders->total_price,
+            'payment_method' => $orders->payment_method,
+            'paid_date' => $data['paid_date'],
+        ]);
+    }
+
+    function get_by_inv_numb($invoice_number, $order_invoice_id = 0)
+    {
+        if($order_invoice_id != 0)
+        {
+            $this->db->where('order_invoice_id !=', $order_invoice_id);
+        }
+
         return $this->db->get_where('orders_invoices', [
             'invoice_number' => $invoice_number
         ]);

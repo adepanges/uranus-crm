@@ -188,17 +188,27 @@ function initShoopingCart(){
     });
 }
 
+function updInvoice(){
+    $('#updInvoiceModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
 $(document).ready(function(){
-    jQuery('#datepicker-autoclose').datepicker({
+    jQuery('#datepicker-autoclose2').datepicker({
         autoclose: true,
         todayHighlight: true,
-        format: 'yyyy-mm-dd',
-        onSelect: function(dateText, inst) {
-          alert(dateText);
-        }
+        format: 'yyyy-mm-dd'
     });
 
-    $('#datepicker-autoclose').change(function(e){
+    jQuery('#datepicker-autoclose1').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd'
+    });
+
+    $('#datepicker-autoclose1').change(function(e){
         var str = $(this).val(),
             inv_first = '';
         str = str.replace(/-/g, "");
@@ -236,6 +246,37 @@ $(document).ready(function(){
         }
     });
 
+    $('#btnSaveUpdInvoiceModal').click(function(){
+        if(formValidator('#updInvoiceForm')){
+            var data = serialzeForm('#updInvoiceForm');
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/orders_v1/sale/upd_invoice',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                } else {
+                    document.location.reload();
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer
+                },function(){
+
+                });
+            });
+        }
+    });
 
     $('#btnSaveaddonShoopingCartModal').click(function(){
         if(formValidator('#addonShoopingCartForm')){

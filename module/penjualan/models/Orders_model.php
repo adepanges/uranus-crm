@@ -143,7 +143,8 @@ class Orders_model extends Penjualan_Model {
     {
         $sql = "SELECT
                 a.*, b.icon AS call_method_icon, c.name AS payment_method,
-                d.order_invoice_id, d.invoice_number
+                d.order_invoice_id, d.invoice_number, d.paid_date, d.publish_date,
+                d.total_price as invoice_total_price
             FROM orders a
             LEFT JOIN master_call_method b ON a.call_method_id = b.call_method_id
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id
