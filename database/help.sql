@@ -29,7 +29,7 @@ FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
 LEFT JOIN module_feature c ON b.menu_id = c.menu_id AND b.status = 1
 WHERE a.status = 1;
----- leader tim cs
+-- leader tim cs
 INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`feature_name`,`status`)
 SELECT
     6, a.module_id, b.menu_id, c.feature_id, c.name,
@@ -38,7 +38,10 @@ SELECT
         c.name NOT IN (
             'penjualan_orders_action_sale',
             'penjualan_orders_update_shopping_info',
-            'penjualan_orders_delete'
+            'penjualan_orders_trash',
+            'penjualan_orders_trash_list',
+            'penjualan_orders_trash_delete',
+            'penjualan_orders_trash_pulihkan'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -54,8 +57,12 @@ SELECT
         c.name NOT IN (
             'penjualan_orders_action_sale',
             'penjualan_orders_view_modifier',
-            'penjualan_orders_delete',
-            'penjualan_orders_update_shopping_info'
+            'penjualan_orders_update_shopping_info',
+            'penjualan_orders_to_trash',
+            'penjualan_orders_trash',
+            'penjualan_orders_trash_list',
+            'penjualan_orders_trash_delete',
+            'penjualan_orders_trash_pulihkan'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -74,7 +81,11 @@ SELECT
         'penjualan_orders_verify_payment',
         'penjualan_orders_action_sale',
         'penjualan_orders_update_shopping_info',
-        'penjualan_orders_delete'
+        'penjualan_orders_to_trash',
+        'penjualan_orders_trash',
+        'penjualan_orders_trash_list',
+        'penjualan_orders_trash_delete',
+        'penjualan_orders_trash_pulihkan'
     ) THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
