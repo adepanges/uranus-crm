@@ -7,7 +7,8 @@ class Orders_model extends SSO_Model {
         $sql = "SELECT a.order_id, b.created_at
             FROM orders a
             LEFT JOIN orders_process b ON a.order_id = b.order_id
-            WHERE a.order_status_id = 2 AND b.user_id = ?
+            WHERE a.order_status_id = 2 AND b.user_id = ? and a.is_deleted = 0 AND
+            (a.orders_double_id IS NULL OR a.orders_double_id = 0)
             ORDER BY b.created_at ASC
             LIMIT 1";
         return $this->db->query($sql, [$id]);

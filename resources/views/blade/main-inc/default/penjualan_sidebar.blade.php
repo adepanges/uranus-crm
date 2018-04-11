@@ -58,15 +58,28 @@
                             </a>
                         </li>
 @endif
-@if($access_list->penjualan_orders_cancel)
-                        <li>
-                            <a href="{{ site_url('orders_v1/cancel') }}">
-                                <i class="mdi mdi-cart-off" style="font-size: 13px;"></i>
-                                <span class="hide-menu">Cancel Orders</span>
-                                <span class="badge badge-info" id="count_cancel">?</span>
-                            </a>
+
+                        <li> <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart-outline fa-fw" data-icon="v" style="font-size: 13px;"></i> <span class="hide-menu"> Other <span class="fa arrow"></span> </span></a>
+                        <ul class="nav nav-second-level">
+                            @if($access_list->penjualan_orders_cancel)
+                                <li>
+                                    <a href="{{ site_url('orders_v1/cancel') }}">
+                                        <i class="mdi mdi-cart-off" style="font-size: 13px;"></i>
+                                        <span class="hide-menu">Cancel Orders</span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if($access_list->penjualan_orders_trash)
+                                <li>
+                                    <a href="{{ site_url('orders_v1/trash') }}">
+                                        <i class="fa fa-trash" style="font-size: 13px;"></i>
+                                        <span class="hide-menu">Trash Orders</span>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                         </li>
-@endif
+
                     </ul>
                 </div>
             </div>

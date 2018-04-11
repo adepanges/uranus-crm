@@ -52,7 +52,7 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/double/detail/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        if(document.app.access_list.penjualan_orders_double_trash_bulk)
+                        if(document.app.access_list.penjualan_orders_to_trash || document.app.role_active.role_id == 6)
                         {
                             button.push(`<a onclick="trashDoubleOrders(${data})" class="btn btn-rounded btn-warning"><i class="icon-trash"></i></a>`);
                         }
@@ -112,7 +112,7 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/double/detail/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        if(document.app.access_list.penjualan_orders_double_trash_bulk)
+                        if(document.app.access_list.penjualan_orders_to_trash || document.app.role_active.role_id == 6)
                         {
                             button.push(`<a onclick="trashDoubleOrders(${data})" class="btn btn-rounded btn-warning"><i class="icon-trash"></i></a>`);
                         }

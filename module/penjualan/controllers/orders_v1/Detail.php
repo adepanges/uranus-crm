@@ -43,7 +43,7 @@ class Detail extends Penjualan_Controller {
             }
         }
 
-        $reason_cancel = ['Tidak jadi beli','Tidak merasa pesan','Double Order','Nomor palsu'];
+        $reason_cancel = ['Tidak jadi beli','Tidak merasa pesan','Nomor palsu'];
         $reason_pending = ['Sudah di WhatsApp','Nomor WhatsApp tidak keluar','Tidak diangkat','Minta dihubungi lagi nanti'];
 
         $product_package = $this->master_model->product_package()->result();

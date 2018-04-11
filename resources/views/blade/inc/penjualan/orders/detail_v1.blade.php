@@ -44,7 +44,7 @@
 
             <div class="row white-box">
 
-@if($orders->order_status_id != 2)
+@if($orders->order_status_id != 2 || $orders->is_deleted == 1)
                 <div class="col-md-2 pull-right">
                     <button onclick="window.location = '{{ site_url($orders_state) }}'" class="btn btn-success btn-rounded form-control">
                         <i class="ti-arrow-left m-l-5"></i>
@@ -52,6 +52,10 @@
                     </button>
                 </div>
 @endif
+
+{{-- is deleted --}}
+@if($orders->is_deleted == 0)
+
 @if(in_array($orders->order_status_id, [2,3]))
     @if($access_list->penjualan_orders_action_pending)
                 <div class="col-md-2 pull-right">
@@ -106,6 +110,16 @@
                     </button>
                 </div>
 @endif
+
+{{-- is deleted --}}
+@else
+    <div class="col-md-2 pull-right">
+        <button onclick="pulihkanTrashOrders({{ $orders->order_id }})" class="btn btn-warning btn-rounded form-control">
+            <span>Pulihkan</span>
+        </button>
+    </div>
+@endif
+
 
             </div>
 

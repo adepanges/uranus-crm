@@ -66,7 +66,7 @@ class Double extends Penjualan_Controller {
 
     function trash($orders_double_id)
     {
-        $this->_restrict_access('penjualan_orders_double_trash_bulk', 'rest');
+        $this->_restrict_access('penjualan_orders_to_trash', 'rest');
         $orders_double_id = (int) $orders_double_id;
         $this->load->model(['double_orders_model','orders_model']);
 

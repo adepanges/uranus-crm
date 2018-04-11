@@ -97,7 +97,7 @@ class Orders_model extends Penjualan_Model {
             $join
             WHERE
             a.version = 1 AND
-            a.orders_double_id IS NULL AND
+            (a.orders_double_id IS NULL OR a.orders_double_id = 0) AND
             a.is_deleted = 0
             $where", TRUE);
         return [

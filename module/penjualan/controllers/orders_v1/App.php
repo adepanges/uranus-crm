@@ -27,7 +27,7 @@ class App extends Penjualan_Controller {
 
     function trash($id)
     {
-        $this->_restrict_access('penjualan_orders_trash');
+        $this->_restrict_access('penjualan_orders_to_trash');
         $id = (int) $id;
         $this->load->model('orders_model');
 
@@ -37,36 +37,14 @@ class App extends Penjualan_Controller {
         {
             $this->_response_json([
                 'status' => 1,
-                'message' => 'Berhasil menghapus orders'
+                'message' => 'Berhasil membuang orders'
             ]);
         }
         else
         {
             $this->_response_json([
                 'status' => 0,
-                'message' => 'Gagal menghapus orders'
-            ]);
-        }
-    }
-
-    function del()
-    {
-        $this->_restrict_access('penjualan_orders_delete', 'rest');
-        $this->load->model(['orders_model']);
-        $order_id = (int) $this->input->post('order_id');
-        $res = $this->orders_model->del($order_id);
-        if($res)
-        {
-            $this->_response_json([
-                'status' => 1,
-                'message' => 'Berhasil menghapus orders'
-            ]);
-        }
-        else
-        {
-            $this->_response_json([
-                'status' => 0,
-                'message' => 'Gagal menghapus orders'
+                'message' => 'Gagal membuang orders'
             ]);
         }
     }
