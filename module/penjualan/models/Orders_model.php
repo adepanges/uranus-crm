@@ -38,6 +38,7 @@ class Orders_model extends Penjualan_Model {
                 GROUP BY z.order_id, z.order_status_id, z.user_id, zo.username) d ON a.order_id = d.order_id";
             $select[] = 'd.username';
         }
+
         if(
             $only_self && isset($params['user_id']) &&
             !in_array($params['order_status_id'], [1]))
@@ -60,6 +61,12 @@ class Orders_model extends Penjualan_Model {
         }
         else
         {
+            // select nama cs yg sale produk
+            $select[] = "(SELECT ho.username
+                FROM orders_process h
+                LEFT JOIN sso_user ho ON h.user_id = ho.user_id
+                WHERE h.order_status_id = 6 and h.order_id = a.order_id LIMIT 1) as cs_sale";
+
             $ordering = 'ORDER BY created_at DESC';
             $where[] = "a.order_status_id >= {$params['order_status_id']}";
         }
