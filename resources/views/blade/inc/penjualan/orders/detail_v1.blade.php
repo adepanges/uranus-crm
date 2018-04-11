@@ -44,7 +44,7 @@
 
             <div class="row white-box">
 
-@if($orders->order_status_id != 2)
+@if($orders->order_status_id != 2 || $orders->is_deleted == 1)
                 <div class="col-md-2 pull-right">
                     <button onclick="window.location = '{{ site_url($orders_state) }}'" class="btn btn-success btn-rounded form-control">
                         <i class="ti-arrow-left m-l-5"></i>
@@ -52,6 +52,10 @@
                     </button>
                 </div>
 @endif
+
+{{-- is deleted --}}
+@if($orders->is_deleted == 0)
+
 @if(in_array($orders->order_status_id, [2,3]))
     @if($access_list->penjualan_orders_action_pending)
                 <div class="col-md-2 pull-right">
@@ -107,6 +111,16 @@
                 </div>
 @endif
 
+{{-- is deleted --}}
+@else
+    <div class="col-md-2 pull-right">
+        <button onclick="pulihkanTrashOrders({{ $orders->order_id }})" class="btn btn-warning btn-rounded form-control">
+            <span>Pulihkan</span>
+        </button>
+    </div>
+@endif
+
+
             </div>
 
             <div class="row white-box">
@@ -117,7 +131,10 @@
                         </div>
                         <div class="col-sm-2">
 
-@if(in_array($orders->order_status_id,[2,3,5]) && $access_list->penjualan_orders_update_customer_info)
+@if(
+    (in_array($orders->order_status_id,[2,3,5]) && $access_list->penjualan_orders_update_customer_info) ||
+    in_array($role_active->role_id, [1,2])
+)
                             <span class="circle circle-sm bg-danger di" onclick="updateCustomerInfo({{ $orders->order_id }})" style="cursor: pointer;">
                                 <i class="ti-pencil-alt"></i>
                             </span>
@@ -165,6 +182,42 @@
                             </div>
                         </div>
 @endif
+                        <hr>
+@if(!empty($orders->order_invoice_id))
+    @if(!empty($orders->invoice_number))
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Invoice</label>
+                            <div class="col-sm-8" onclick="window.open('{{ site_url('orders_v1/cetak/invoice/'.$orders->order_id) }}')">
+                                <span class="btn btn-info form-control input-sm" style="cursor: pointer;"><b>{{ $orders->invoice_number }}</b></span>
+                            </div>
+                        </div>
+    @endif
+    @if(!empty($orders->paid_date))
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Transfer Date</label>
+                            <div class="col-sm-8">
+                                <span class="form-control input-sm" style="cursor: pointer;"><b>{{ $orders->paid_date }}</b></span>
+                            </div>
+                        </div>
+    @endif
+    @if(!empty($orders->invoice_total_price))
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Price on Invoice</label>
+                            <div class="col-sm-8">
+                                <span class="form-control input-sm" style="cursor: pointer;"><b>{{ rupiah($orders->invoice_total_price) }}</b></span>
+                            </div>
+                        </div>
+                        <i>Jika informasi pada invoice tidak sesuai dengan yg sekarang silahkan untuk update invoice</i>
+                        <br>
+    @endif
+@endif
+@if(
+    $orders->order_status_id > 6 && in_array($role_active->role_id, [1,2])
+)
+                            <div class="form-group">
+                                <button class="btn btn-info pull-right" onclick="updInvoice(); return false;">Update Invoice</button>
+                            </div>
+@endif
                     </form>
                 </div>
                 <div class="col-md-6 col-xs-12">
@@ -172,8 +225,12 @@
                         <div class="col-sm-9">
                             <h1>List Orders</h1>
                         </div>
+
                         <div class="col-sm-2">
-@if(in_array($orders->order_status_id,[2,3,5, 6]) && $access_list->penjualan_orders_update_shopping_info)
+@if(
+    (in_array($orders->order_status_id, [2,3,5,6]) && $access_list->penjualan_orders_update_shopping_info) ||
+    in_array($role_active->role_id, [1,2])
+)
                             <span class="circle circle-sm bg-danger di" onclick="updateShoopingCart({{ $orders->order_id }})" style="cursor: pointer;">
                                 <i class="ti-pencil-alt"></i>
                             </span>
@@ -182,23 +239,15 @@
                     </div>
                     <br>
                     <div class="row">
-                        <form class="form-horizontal" >
 
-@if(!empty($orders->order_invoice_id) && !empty($orders->invoice_number))
-                            <div class="form-group">
-                                <label class="control-label col-sm-3">Invoice</label>
-                                <div class="col-sm-8" onclick="window.open('{{ site_url('orders_v1/cetak/invoice/'.$orders->order_id) }}')">
-                                    <span class="btn btn-info form-control input-sm" style="cursor: pointer;"><b>{{ $orders->invoice_number }}</b></span>
-                                </div>
-                            </div>
-@endempty
+                        <form class="form-horizontal" >
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Payment Method</label>
                                 <div class="col-sm-8">
                                     <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
-    @foreach ($master_payment_method as $key => $value)
-                                        <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
-    @endforeach
+@foreach ($master_payment_method as $key => $value)
+                                <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+@endforeach
                                     </select>
                                 </div>
                             </div>
@@ -225,8 +274,14 @@
             $btn_del = '';
             if(
                 !$value_cart->is_package &&
-                in_array($orders->order_status_id,[2,3,5,6]) &&
-                $access_list->penjualan_orders_update_shopping_info
+                (
+                    (
+                        in_array($orders->order_status_id,[2,3,5,6]) &&
+                        $access_list->penjualan_orders_update_shopping_info
+                    ) ||
+                    in_array($role_active->role_id, [1,2]
+                )
+            )
             ) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';;
         ?>
 
@@ -259,8 +314,8 @@
                         <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
                     </div>
 @if(
-    in_array($orders->order_status_id,[2,3,5,6]) &&
-    $access_list->penjualan_orders_update_shopping_info
+    (in_array($orders->order_status_id,[2,3,5,6]) && $access_list->penjualan_orders_update_shopping_info) ||
+    in_array($role_active->role_id, [1,2])
 )
                     <div class="row pull-right">
                         <button class="btn btn-info" onclick="addonShoopingCart()">Tambahkan Biaya</button>
@@ -534,8 +589,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label">Tanggal Transfer</label>
-                                    <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}">
+                                    <label class="control-label">Transfer Date</label>
+                                    <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose1" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}">
                                 </div>
 
                                 <div class="form-group">
@@ -552,6 +607,37 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
                             <button id="btnSaveSaleModal" type="button" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="updInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Invoice Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="updInvoiceForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
+                                <input type="hidden" name="order_invoice_id" value="{{ $orders->order_invoice_id }}">
+                                <div class="form-group">
+                                    <label class="control-label">Transfer Date</label>
+                                    <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose2" placeholder="yyyy-mm-dd" value="{{ $orders->paid_date }}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Nomor Invoice</label>
+                                    <input type="text" class="form-control" name="invoice_number" value="{{ $orders->invoice_number }}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnSaveUpdInvoiceModal" type="button" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
                 </div>

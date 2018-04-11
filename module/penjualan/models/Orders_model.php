@@ -38,6 +38,7 @@ class Orders_model extends Penjualan_Model {
                 GROUP BY z.order_id, z.order_status_id, z.user_id, zo.username) d ON a.order_id = d.order_id";
             $select[] = 'd.username';
         }
+
         if(
             $only_self && isset($params['user_id']) &&
             !in_array($params['order_status_id'], [1]))
@@ -60,6 +61,12 @@ class Orders_model extends Penjualan_Model {
         }
         else
         {
+            // select nama cs yg sale produk
+            $select[] = "(SELECT ho.username
+                FROM orders_process h
+                LEFT JOIN sso_user ho ON h.user_id = ho.user_id
+                WHERE h.order_status_id = 6 and h.order_id = a.order_id LIMIT 1) as cs_sale";
+
             $ordering = 'ORDER BY created_at DESC';
             $where[] = "a.order_status_id >= {$params['order_status_id']}";
         }
@@ -90,7 +97,7 @@ class Orders_model extends Penjualan_Model {
             $join
             WHERE
             a.version = 1 AND
-            a.orders_double_id IS NULL AND
+            (a.orders_double_id IS NULL OR a.orders_double_id = 0) AND
             a.is_deleted = 0
             $where", TRUE);
         return [
@@ -143,7 +150,8 @@ class Orders_model extends Penjualan_Model {
     {
         $sql = "SELECT
                 a.*, b.icon AS call_method_icon, c.name AS payment_method,
-                d.order_invoice_id, d.invoice_number
+                d.order_invoice_id, d.invoice_number, d.paid_date, d.publish_date,
+                d.total_price as invoice_total_price
             FROM orders a
             LEFT JOIN master_call_method b ON a.call_method_id = b.call_method_id
             LEFT JOIN master_payment_method c ON a.payment_method_id = c.payment_method_id

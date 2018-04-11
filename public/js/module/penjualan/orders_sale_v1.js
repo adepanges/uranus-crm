@@ -68,7 +68,11 @@ $(document).ready(function(){
 
                         if(document.app.access_list.penjualan_orders_view_modifier)
                         {
-                            button.push(`<span class="label label-warning label-rouded">${full.username}</span>`)
+                            if(full.cs_sale)
+                            {
+                                button.push(`<span class="label label-success label-rouded">CS: ${full.cs_sale}</span><br>`)
+                            }
+                            button.push(`<span class="label label-warning label-rouded">FIN: ${full.username}</span><br>`)
                         }
 
                         button.push(`<span class="label label-info label-rouded">${full.order_status}</span>`)
@@ -87,11 +91,10 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        if(document.app.access_list.penjualan_orders_delete)
+                        if(document.app.access_list.penjualan_orders_to_trash)
                         {
-                            button.push(`<button onclick="deleteOrders(${data})" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-trash"></i></button>`);
+                            button.push(`<button onclick="trashOrders(${data})" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-trash"></i></button>`);
                         }
-
 
                         return button.join('');
                     }
@@ -100,14 +103,14 @@ $(document).ready(function(){
         });
 });
 
-function deleteOrders(id){
+function trashOrders(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus orders ini!",
+        text: "Anda akan membuang orders ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
-        confirmButtonText: "Hapus",
+        confirmButtonText: "Buang",
         cancelButtonText: "Batal",
         closeOnConfirm: false,
         closeOnCancel: true
@@ -117,10 +120,7 @@ function deleteOrders(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/orders_v1/app/del',
-                data: {
-                    'order_id': id
-                }
+                url: document.app.site_url+'/orders_v1/app/trash/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

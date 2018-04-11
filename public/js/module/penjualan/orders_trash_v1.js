@@ -24,10 +24,17 @@ $(document).ready(function(){
         }).DataTable({
             serverSide: true,
             ajax: {
-                url: document.app.site_url + '/orders_v1/get/index/confirm_buy',
+                url: document.app.site_url + '/orders_v1/trash/get',
                 type: 'POST'
             },
             columns: [
+                {
+                    data: 'order_id',
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        return `<input class="logistics_checklist" type="checkbox" value="${data}">`;
+                    }
+                },
                 {
                     name: 'Number',
                     width: "5%",
@@ -65,12 +72,14 @@ $(document).ready(function(){
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
-                        //
-                        // if(document.app.access_list.penjualan_orders_view_modifier)
-                        // {
-                            button.push(`<span class="label label-warning label-rouded">${full.username}</span>`)
-                        // }
-                        return button.join('');
+
+                        if(full.orders_double_id != 0 && full.orders_double_id != '')
+                        {
+                            button.push(`<span class="label label-warning label-rouded">double orders</span><br>`)
+                        }
+                        button.push(`<span class="label label-info label-rouded">${full.order_status}</span>`)
+
+                        return button.join(' ');
                     }
                 },
                 {
@@ -81,19 +90,13 @@ $(document).ready(function(){
                         //
                         if(document.app.access_list.penjualan_orders_detail)
                         {
-                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
+                            button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        if(document.app.access_list.penjualan_orders_action_follow_up)
+                        if(document.app.access_list.penjualan_orders_delete)
                         {
-                            button.push(`<button onclick="verifyPayment(${data})" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-credit-card"></i></button>`);
+                            button.push(`<button onclick="deleteOrders(${data})" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-trash"></i></button>`);
                         }
-
-                        if(document.app.access_list.penjualan_orders_to_trash)
-                        {
-                            button.push(`<button onclick="trashOrders(${data})" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-trash"></i></button>`);
-                        }
-
                         return button.join('');
                     }
                 }
@@ -101,35 +104,66 @@ $(document).ready(function(){
         });
 });
 
+function deleteBulk(){
+    var el = $('.logistics_checklist:checked'),
+        orders = [],
+        orders_base64 = '';
 
-function verifyPayment(id){
-    swal({
-        title: "Apakah anda yakin?",
-        text: "Custemer telah membayar tagihan, verifikasi pembayaran ke Finance!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Ya",
-        cancelButtonText: "Batal",
-        closeOnConfirm: false,
-        closeOnCancel: true
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            window.location = document.app.site_url+'/orders_v1/confirm_buy/verify_payment/'+id;
-        }
-    });
+    if(el.length){
+        el.each(function( index ) {
+          orders.push($(this).val())
+        });
+        orders_base64 = btoa(orders.join(','));
+        swal({
+            title: "Apakah anda yakin?",
+            text: "Pesanan telah di packing",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Ya",
+            cancelButtonText: "Batal",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $('.preloader').fadeIn();
+                $.ajax({
+                    method: "POST",
+                    url: document.app.site_url+'/orders_v1/trash/del',
+                    data: {
+                        'order_id': orders_base64
+                    }
+                })
+                .done(function( response ) {
+                    $('.preloader').fadeOut();
+                    var title = 'Berhasil!';
+                    if(!response.status) title = 'Gagal!';
+                    else ordersTable.ajax.reload()
+
+                    swal({
+                        title: title,
+                        text: response.message,
+                        timer: 2000,
+                        showConfirmButton: true
+                    });
+                });
+            }
+        });
+    } else {
+        alert('Check orders terlebih dahulu');
+    }
+
 }
 
-
-function trashOrders(id){
+function deleteOrders(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan membuang orders ini!",
+        text: "Anda akan menghapus orders ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
-        confirmButtonText: "Buang",
+        confirmButtonText: "Hapus",
         cancelButtonText: "Batal",
         closeOnConfirm: false,
         closeOnCancel: true
@@ -139,7 +173,10 @@ function trashOrders(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/orders_v1/app/trash/'+id
+                url: document.app.site_url+'/orders_v1/trash/del',
+                data: {
+                    'order_id': btoa(id)
+                }
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
@@ -157,3 +194,12 @@ function trashOrders(id){
         }
     });
 }
+
+
+$('#logistics_checklist_bulk').click(function(){
+    if($(this).is(':checked')){
+        $('.logistics_checklist').prop('checked', true);
+    } else {
+        $('.logistics_checklist').prop('checked', false);
+    }
+});

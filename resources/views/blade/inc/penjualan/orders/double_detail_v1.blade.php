@@ -43,12 +43,20 @@
             </div>
 
             <div class="row white-box">
-                <div class="col-md-2 pull-right">
-                    <button onclick="window.location = '{{ site_url($orders_state) }}'" class="btn btn-success btn-rounded form-control">
-                        <i class="ti-arrow-left m-l-5"></i>
-                        <span>Kembali</span>
-                    </button>
-                </div>
+                    <div class="col-md-2 pull-right">
+                        <button onclick="window.location = '{{ site_url($orders_state) }}'" class="btn btn-success btn-rounded form-control">
+                            <i class="ti-arrow-left m-l-5"></i>
+                            <span>Kembali</span>
+                        </button>
+                    </div>
+@if($access_list->penjualan_orders_to_trash || $role_active->role_id == 6)
+                    <div class="col-md-2 pull-right">
+                        <button onclick="trashDoubleOrders({{ $orders_double->orders_double_id }})" class="btn btn-warning btn-rounded form-control">
+                            <i class="icon-trash"></i>
+                            <span>Buang</span>
+                        </button>
+                    </div>
+@endif
             </div>
 
             <div class="col-md-12 white-box">
@@ -113,7 +121,7 @@
 @if($access_list->penjualan_orders_double_pulihkan)
                     <a onclick="pulihkanOrders({{ $value->order_id }})" class="btn btn-rounded btn-success pull-right">Pulihkan</a>&nbsp;
 @endif
-@if($access_list->penjualan_orders_trash)
+@if($access_list->penjualan_orders_to_trash || $role_active->role_id == 6)
                     <a onclick="trashOrders({{ $value->order_id }})" class="btn btn-rounded btn-warning pull-right"><i class="icon-trash"></i></a>
 @endif
                     <br>

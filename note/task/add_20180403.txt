@@ -1,6 +1,7 @@
-- cetak label only
-- double orders mechanism
-- double orders page
+- cetak label only - done
+- double orders mechanism - done
+- double orders page - done
+
 - trash orders
 - delete permanently orders (with checkbox)
 - switch role
