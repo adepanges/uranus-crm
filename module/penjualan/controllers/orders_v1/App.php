@@ -172,14 +172,16 @@ class App extends Penjualan_Controller {
         $this->load->model(['orders_model']);
         $order_id = (int) $this->input->post('order_id');
 
+        $qty = (int) !empty($this->input->post('qty'))?$this->input->post('qty'):1;
+
         $params = [
             'order_id' => $order_id,
             'product_id' => !empty($this->input->post('product_id'))?$this->input->post('product_id'):NULL,
             'product_merk' => !empty($this->input->post('merk'))?$this->input->post('merk'):NULL,
             'product_name' => !empty($this->input->post('name'))?$this->input->post('name'):$this->input->post('name_other'),
-            'qty' => (int) !empty($this->input->post('qty'))?$this->input->post('qty'):1,
+            'qty' => $qty,
             'is_package' => 0,
-            'price' => (int) $this->input->post('price'),
+            'price' => ((int) $this->input->post('price')) * $qty,
             'weight' => (int) $this->input->post('weight'),
             'price_type' => 'RETAIL',
             'version' => 1,

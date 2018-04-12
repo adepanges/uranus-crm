@@ -2,6 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Penjualan_Model {
+    protected
+        $datatable_param = NULL,
+        $table = 'product',
+        $orderable_field = ['merk','name','weight','price','status'],
+        $fillable_field = ['code','merk','name','weight','price','status'],
+        $searchable_field = ['name'];
 
     function get_datatable()
     {

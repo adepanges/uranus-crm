@@ -9,9 +9,10 @@ function addProductList(){
 function addListProduct(data)
 {
     data = JSON.parse(atob(data));
+    data.qty = prompt("Berapa jumlah "+data.name+" yang dipesan", "1");
     swal({
         title: "Apakah anda yakin?",
-        text: "Menambah produk tersebut ke cart!",
+        text: "Tambahkan "+data.name+" dengan jumlah "+data.qty+" kedalam cart",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
