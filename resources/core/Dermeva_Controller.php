@@ -31,6 +31,21 @@ class Dermeva_Controller extends CI_Controller {
         //     'cipher' => 'aes-256',
         //     'mode' => 'cbc',
         // ]);
+
+        $role_sess = $this->session->userdata('role');
+        $role = [];
+        if(!empty($role_sess) && is_array($role_sess))
+        {
+            foreach ($role_sess as $key => $value) {
+                $role[$value['franchise_id']]['franchise_id'] = $value['franchise_id'];
+                $role[$value['franchise_id']]['franchise_name'] = $value['franchise_name'];
+                $role[$value['franchise_id']]['role'][] = [
+                    'chipper_user_role_id' => md5($value['user_role_id']),
+                    'role_label' => $value['role_label']
+                ];
+            }
+            $this->data['role'] = $role;
+        }
     }
 
     protected function _sso_profile()

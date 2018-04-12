@@ -24,3 +24,11 @@ code.catch {
 .double_side {
     line-height: 1.8;
 }
+
+.role_option {
+    margin-left: 5px;
+}
+
+.role_option_detail {
+    margin-left: 10px;
+}

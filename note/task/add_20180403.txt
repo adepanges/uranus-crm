@@ -1,10 +1,10 @@
 - cetak label only - done
 - double orders mechanism - done
 - double orders page - done
-
-- trash orders
-- delete permanently orders (with checkbox)
+- trash orders - done
+- delete permanently orders (with checkbox) - done
 - switch role
+
 - add product in cart
 - add package in cart
 - support package qty > 1

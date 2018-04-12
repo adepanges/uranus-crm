@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Init extends SSO_Controller {
-    public function index($q = '')
+    public function index($q = '', $param_q = '')
     {
         if(!$this->_is_sso_signed()) redirect('auth/log/in');
         $this->load->model(['auth_model','orders_model','team_cs_model']);
@@ -30,7 +30,23 @@ class Init extends SSO_Controller {
             $this->session->set_userdata('error_message', 'Anda tidak memiliki hak akses apapun');
             redirect('auth/log/in');
         }
-        $role_active = isset($role[0])?$role[0]:[];
+
+        if($q == 'switch_role')
+        {
+            foreach ($role as $key => $value) {
+                if(md5($value['user_role_id']) == $param_q)
+                {
+                    $role_active = $value;
+                }
+            }
+        }
+
+        if(empty($role_active))
+        {
+            $role_active = isset($role[0])?$role[0]:[];
+        }
+
+
         $is_tim_leader = FALSE;
         foreach ($role as $key => $value) {
             if($value['role_id'] == 6)
