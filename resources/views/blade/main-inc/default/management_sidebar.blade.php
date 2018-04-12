@@ -28,12 +28,14 @@
                             </a>
                         </li>
 @endif
+@if($access_list->management_package_product)
                         <li>
                             <a href="{{ site_url('package') }}">
                                 <i class="fa-fw">PK</i>
                                 <span class="hide-menu">Package</span>
                             </a>
                         </li>
+@endif
                     </ul>
                 </div>
             </div>

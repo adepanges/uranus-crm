@@ -37,7 +37,6 @@ SELECT
         b.module_id = 2 AND
         c.name NOT IN (
             'penjualan_orders_action_sale',
-            'penjualan_orders_update_shopping_info',
             'penjualan_orders_trash',
             'penjualan_orders_trash_list',
             'penjualan_orders_trash_delete',
@@ -57,7 +56,6 @@ SELECT
         c.name NOT IN (
             'penjualan_orders_action_sale',
             'penjualan_orders_view_modifier',
-            'penjualan_orders_update_shopping_info',
             'penjualan_orders_to_trash',
             'penjualan_orders_trash',
             'penjualan_orders_trash_list',

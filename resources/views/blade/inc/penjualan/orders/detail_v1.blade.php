@@ -276,8 +276,8 @@
                 !$value_cart->is_package &&
                 (
                     (
-                        in_array($orders->order_status_id,[2,3,5,6]) &&
-                        $access_list->penjualan_orders_update_shopping_info
+                        $orders->order_status_id == 6 &&
+                        $role_active->role_id == 3
                     ) ||
                     in_array($role_active->role_id, [1,2]
                 )
@@ -313,14 +313,27 @@
                         <div class="col-md-2" style="border-bottom: 1px dotted #000;"><h2>&nbsp</h2></div>
                         <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
                     </div>
+                    <div class="row">
 @if(
-    (in_array($orders->order_status_id,[2,3,5,6]) && $access_list->penjualan_orders_update_shopping_info) ||
+    (
+        $orders->order_status_id == 6 &&
+        $role_active->role_id == 3
+    ) ||
     in_array($role_active->role_id, [1,2])
 )
-                    <div class="row pull-right">
-                        <button class="btn btn-info" onclick="addonShoopingCart()">Tambahkan Biaya</button>
-                    </div>
+                        <div class="pull-right">
+                            <button class="btn btn-info" onclick="addonShoopingCart()">Tambahkan Biaya</button>
+                        </div>
 @endif
+@if(
+    (in_array($orders->order_status_id, [2,3,5]) && $access_list->penjualan_orders_update_shopping_info) ||
+    in_array($role_active->role_id, [1,2])
+)
+                        <div class="pull-right">
+                            <button class="btn btn-info" onclick="addonShoopingCart()">Tambah Produk</button>
+                        </div>
+@endif
+                    </div>
                 </div>
             </div>
 
