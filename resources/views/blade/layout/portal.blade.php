@@ -20,6 +20,7 @@
         <link href="{{ base_url('css/animate.css') }}" rel="stylesheet">
         <!-- Custom CSS -->
         <link href="{{ base_url('css/style.css') }}" rel="stylesheet">
+        <link href="{{ base_url('css/custom.css') }}" rel="stylesheet">
         <!-- color CSS -->
         <link href="{{ base_url('css/colors/megna-dark.css') }}" id="theme" rel="stylesheet">
 @show

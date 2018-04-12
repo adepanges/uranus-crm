@@ -41,6 +41,13 @@
                                     <div class="dw-user-box">
                                         <div class="u-text">
                                             <p class="text-muted">Switch Role</p>
+                                            @foreach ($role as $key => $value)
+                                                <p class="role_option">{{ $value['franchise_name'] }}</p>
+                                                    @foreach ($value['role'] as $key => $value_role)
+                                                        <a class="role_option_detail btn" onclick="window.location = '{{ base_url('sso.php/auth/init/index/switch_role/'.$value_role['chipper_user_role_id']) }}'">{{ $value_role['role_label'] }}</a>
+                                                    @endforeach
+                                                <hr>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </li>
