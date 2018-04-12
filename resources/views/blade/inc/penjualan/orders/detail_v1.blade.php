@@ -276,6 +276,11 @@
                 !$value_cart->is_package &&
                 (
                     (
+                        !empty($value_cart->product_id) &&
+                        in_array($orders->order_status_id, [2,3,5]) &&
+                        $access_list->penjualan_orders_update_shopping_info
+                    ) ||
+                    (
                         $orders->order_status_id == 6 &&
                         $role_active->role_id == 3
                     ) ||
@@ -329,8 +334,8 @@
     (in_array($orders->order_status_id, [2,3,5]) && $access_list->penjualan_orders_update_shopping_info) ||
     in_array($role_active->role_id, [1,2])
 )
-                        <div class="pull-right">
-                            <button class="btn btn-info" onclick="addonShoopingCart()">Tambah Produk</button>
+                        <div class="pull-right" style="margin-right: 5px;">
+                            <button class="btn btn-info" onclick="addProductList()">Tambah Produk</button>
                         </div>
 @endif
                     </div>
@@ -366,6 +371,39 @@
                         </div>
                     </div>
 @endforeach
+                </div>
+            </div>
+
+            <div class="modal fade" id="addProductListModal" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Add Product List</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12" style="border-right: 1px solid #000;">
+                                    <div class="white-box">
+                                        <table id="productTable" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Name</th>
+                                                    <th>Harga</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                            <button id="btnAddProductList" type="button" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

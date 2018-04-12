@@ -1,3 +1,57 @@
+function addProductList(){
+    productTable.ajax.reload();
+    $('#addProductListModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function addListProduct(data)
+{
+    data = JSON.parse(atob(data));
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Menambah produk tersebut ke cart!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Konfirmasi",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/orders_v1/app/addon_shopping_info',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                } else {
+                    document.location.reload();
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer
+                },function(){
+
+                });
+            });
+        }
+    });
+}
+
 function confirmBuy(id){
     swal({
         title: "Apakah anda yakin?",
@@ -216,6 +270,73 @@ function updInvoice(){
 }
 
 $(document).ready(function(){
+    var numbererProduct = 1;
+    productTable = $('#productTable').on('preXhr.dt', function ( e, settings, data ){
+        numbererProduct = data.start + 1;
+        $('#productTable').block({
+            message: '<h3>Please Wait...</h3>',
+            css: {
+                border: '1px solid #fff'
+            }
+        });
+    }).on('xhr.dt', function ( e, settings, json, xhr ){
+        $('#productTable').unblock();
+        if(!document.datatable_search_change_event)
+        {
+            $("div.dataTables_filter input[aria-controls=productTable]").unbind();
+            $("div.dataTables_filter input[aria-controls=productTable]").keyup( function (e) {
+                if (e.keyCode == 13) {
+                    productTable.search( this.value ).draw();
+                }
+            });
+        }
+        document.datatable_search_change_event = true;
+    }).DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
+        },
+        serverSide: true,
+        bInfo: false,
+        ajax: {
+            url: document.app.site_url + '/product/get',
+            type: 'POST'
+        },
+        columns: [
+            {
+                name: 'Number',
+                width: "5%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    return numbererProduct++;
+                }
+            },
+            {
+                data: "name",
+                render: function ( data, type, full, meta ) {
+                    return `${full.code} - ${full.merk} - ${full.name}`;
+                }
+            },
+            {
+                data: "price",
+                render: function ( data, type, full, meta ) {
+                    return rupiah(data);
+                }
+            },
+            {
+                data: 'product_id',
+                width: "12%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    var button = [];
+                    var data_json = full;
+                    data_json.order_id = document.app.penjualan.orders.order_id;
+                    button.push('<button onclick=addListProduct("'+btoa(JSON.stringify(data_json))+'") type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>');
+                    return button.join('');
+                }
+            }
+        ]
+    });
+
     jQuery('#datepicker-autoclose2').datepicker({
         autoclose: true,
         todayHighlight: true,

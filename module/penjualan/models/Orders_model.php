@@ -108,7 +108,7 @@ class Orders_model extends Penjualan_Model {
 
     function cart_v1($id)
     {
-        $orders_cart = $this->db->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
+        $orders_cart = $this->db->order_by('is_package', 'DESC')->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
         return $this->parse_cart_v1($orders_cart);
     }
 
@@ -228,7 +228,7 @@ class Orders_model extends Penjualan_Model {
 
     function addon_cart($params)
     {
-        return $this->db->insert('orders_cart', $this->_sanity_field($params, ['order_id','product_name','qty','is_package','price','price_type','version']));
+        return $this->db->insert('orders_cart', $this->_sanity_field($params, ['order_id','product_id','product_merk','product_name','qty','is_package','price','price_type','version']));
     }
 
     function del_by_cart_id($id = 0)
