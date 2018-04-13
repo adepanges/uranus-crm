@@ -212,19 +212,33 @@ $('#shopingCartForm select[name=product_package_id]').on('change', function(){
     initShoopingCart();
 });
 
+$('#shopingCartForm input[name=qty]').on('keyup', function(){
+    initShoopingCart();
+});
+
+$('#shopingCartForm').on('submit', function(event){
+    event.preventDefault();
+     return false;
+})
+
 function initShoopingCart(){
     var data = serialzeForm('#shopingCartForm');
     $('#shopingCartForm select[name=product_package_id] option').each(function(key, el){
         if($(el).val() == data.product_package_id){
             var cart = atob($(el).attr('data')),
                 detail = '', package_ = JSON.parse(cart), cart = [];
+            var qty = 1;
+            if(data.qty) qty = data.qty;
 
             if(package_){
                 if(Array.isArray(package_.product_list)){
                     var total_retail_price = 0;
                     package_.product_list.forEach(function(val, key){
                         var retail_price = '';
+                        var retail_qty = val.qty * qty;
+
                         if(package_.price_type == 'RETAIL') {
+                            val.price = qty * val.price;
                             retail_price = rupiah(val.price);
                             total_retail_price += (val.price * 1);
                         }
@@ -234,7 +248,7 @@ function initShoopingCart(){
                                 <h5>${val.name}</h5>
                             </div>
                             <div class="col-md-2" style="border-bottom: 1px dotted #000;">
-                                <h5>Qty. ${val.qty}</h5>
+                                <h5>Qty. ${retail_qty}</h5>
                             </div>
                             <div class="col-md-5">
                                 <h6>${retail_price}</h6>
@@ -244,7 +258,11 @@ function initShoopingCart(){
                 }
 
                 var package_price = '';
-                if(package_.price_type == 'PACKAGE') package_price = rupiah(package_.price);
+                if(package_.price_type == 'PACKAGE')
+                {
+                    package_.price = qty * package_.price;
+                    package_price = rupiah(package_.price);
+                }
                 else package_price = `(${package_.price_type}) ` + rupiah(total_retail_price);
 
                 detail = `<div class="row" style="margin-left: 7px;">
@@ -816,6 +834,7 @@ $(document).ready(function(){
                         var timer = 3000;
                         title = 'Gagal!';
                     } else {
+                        document.location.reload()
                         $('#shopingCartModal').modal('toggle')
                     }
 
@@ -824,7 +843,7 @@ $(document).ready(function(){
                         text: response.message,
                         timer: timer
                     },function(){
-                        document.location.reload()
+
                     });
                 });
             }

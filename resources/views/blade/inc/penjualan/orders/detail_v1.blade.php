@@ -562,11 +562,14 @@
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Product Package</label>
                                     <select class="form-control input-sm" name="product_package_id">
-                                        <option>Pilih</option>
     @foreach ($master_product_package as $key => $value)
                                         <option data="{{ base64_encode(json_encode($value)) }}" value="{{ $value->product_package_id }}" {{ ($value->product_package_id == $orders_cart_package_id)?'selected':'' }}>{{ $value->name }}</option>
     @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Qty</label>
+                                    <input type="number" class="form-control input-sm" name="qty" value="1">
                                 </div>
                                 <hr>
                                 <div class="form-group row" id="detailCart">
