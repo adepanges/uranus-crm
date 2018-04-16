@@ -36,13 +36,13 @@ class Simple_model extends Report_Model {
             	(
             		SELECT COUNT(*) AS total FROM orders_process z
             		WHERE z.user_id = a.user_id AND z.order_status_id = 6 AND
-            		(SELECT w.process_id FROM orders_process w WHERE w.order_id = z.order_id AND w.order_status_id = 7 LIMIT 1) IS NOT NULL
+            		(SELECT w.process_id FROM orders_process w WHERE w.order_id = z.order_id AND w.order_status_id > 6 LIMIT 1) IS NOT NULL
             	) AS total_sale,
             	(
             		SELECT SUM(p.total_price) AS total FROM orders_process z
             		LEFT JOIN orders p ON p.order_id = z.order_id
             		WHERE z.user_id = a.user_id AND z.order_status_id = 6 AND
-            		(SELECT w.process_id FROM orders_process w WHERE w.order_id = z.order_id AND w.order_status_id = 7 LIMIT 1) IS NOT NULL
+            		(SELECT w.process_id FROM orders_process w WHERE w.order_id = z.order_id AND w.order_status_id > 6 LIMIT 1) IS NOT NULL
             	) AS total_penjualan
             FROM sso_user a
             LEFT JOIN sso_user_role b ON a.user_id = b.user_id AND b.role_id = 5
