@@ -25,7 +25,8 @@ class Penjualan_Controller extends Dermeva_Controller {
             ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'update') ||
             ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'update_shooping_info') ||
             ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'del_addon_shopping_info') ||
-            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'addon_shopping_info')
+            ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'addon_shopping_info') ||
+            ($this->uri->segment(1) == 'product' && $this->uri->segment(2) == 'get')
             )
         {
             $check_condition = FALSE;

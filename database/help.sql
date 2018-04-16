@@ -34,13 +34,19 @@ INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`fea
 SELECT
     6, a.module_id, b.menu_id, c.feature_id, c.name,
     CASE WHEN
-        b.module_id = 2 AND
-        c.name NOT IN (
-            'penjualan_orders_action_sale',
-            'penjualan_orders_trash',
-            'penjualan_orders_trash_list',
-            'penjualan_orders_trash_delete',
-            'penjualan_orders_trash_pulihkan'
+        (
+            b.module_id = 2 AND
+            c.name NOT IN (
+                'penjualan_orders_action_sale',
+                'penjualan_orders_trash',
+                'penjualan_orders_trash_list',
+                'penjualan_orders_trash_delete',
+                'penjualan_orders_trash_pulihkan'
+            )
+        ) OR
+        c.name IN (
+            'report_simple',
+            'report_simple_list'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -52,15 +58,17 @@ INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`fea
 SELECT
     5, a.module_id, b.menu_id, c.feature_id, c.name,
     CASE WHEN
-        b.module_id = 2 AND
-        c.name NOT IN (
-            'penjualan_orders_action_sale',
-            'penjualan_orders_view_modifier',
-            'penjualan_orders_to_trash',
-            'penjualan_orders_trash',
-            'penjualan_orders_trash_list',
-            'penjualan_orders_trash_delete',
-            'penjualan_orders_trash_pulihkan'
+        (
+            b.module_id = 2 AND
+            c.name NOT IN (
+                'penjualan_orders_action_sale',
+                'penjualan_orders_view_modifier',
+                'penjualan_orders_to_trash',
+                'penjualan_orders_trash',
+                'penjualan_orders_trash_list',
+                'penjualan_orders_trash_delete',
+                'penjualan_orders_trash_pulihkan'
+            )
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -83,7 +91,9 @@ SELECT
         'penjualan_orders_trash',
         'penjualan_orders_trash_list',
         'penjualan_orders_trash_delete',
-        'penjualan_orders_trash_pulihkan'
+        'penjualan_orders_trash_pulihkan',
+        'report_simple',
+        'report_simple_list'
     ) THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
