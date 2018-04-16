@@ -69,7 +69,7 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var rate = (full.total_sale / full.total_follow_up);
                         if(isNaN(rate)) rate = 0;
-                        rate = rate * 100;
+                        rate = rate.toFixed(2) * 100;
                         return '<span style="color: #900;"><b>'+rate+' %</b></span>';
                     }
                 },
@@ -85,7 +85,7 @@ $(document).ready(function(){
                             )
                         );
                         if(isNaN(rate)) rate = 0;
-                        rate = rate * 100;
+                        rate = rate.toFixed(2) * 100;
                         return '<span style="color: #900;"><b>'+rate+' %</b></span>';
                     }
                 }
