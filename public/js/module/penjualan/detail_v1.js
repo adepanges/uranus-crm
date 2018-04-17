@@ -1,3 +1,58 @@
+function addProductList(){
+    productTable.ajax.reload();
+    $('#addProductListModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function addListProduct(data)
+{
+    data = JSON.parse(atob(data));
+    data.qty = prompt("Berapa jumlah "+data.name+" yang dipesan", "1");
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Tambahkan "+data.name+" dengan jumlah "+data.qty+" kedalam cart",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Konfirmasi",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/orders_v1/app/addon_shopping_info',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                } else {
+                    document.location.reload();
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer
+                },function(){
+
+                });
+            });
+        }
+    });
+}
+
 function confirmBuy(id){
     swal({
         title: "Apakah anda yakin?",
@@ -157,19 +212,33 @@ $('#shopingCartForm select[name=product_package_id]').on('change', function(){
     initShoopingCart();
 });
 
+$('#shopingCartForm input[name=qty]').on('keyup', function(){
+    initShoopingCart();
+});
+
+$('#shopingCartForm').on('submit', function(event){
+    event.preventDefault();
+     return false;
+})
+
 function initShoopingCart(){
     var data = serialzeForm('#shopingCartForm');
     $('#shopingCartForm select[name=product_package_id] option').each(function(key, el){
         if($(el).val() == data.product_package_id){
             var cart = atob($(el).attr('data')),
                 detail = '', package_ = JSON.parse(cart), cart = [];
+            var qty = 1;
+            if(data.qty) qty = data.qty;
 
             if(package_){
                 if(Array.isArray(package_.product_list)){
                     var total_retail_price = 0;
                     package_.product_list.forEach(function(val, key){
                         var retail_price = '';
+                        var retail_qty = val.qty * qty;
+
                         if(package_.price_type == 'RETAIL') {
+                            val.price = qty * val.price;
                             retail_price = rupiah(val.price);
                             total_retail_price += (val.price * 1);
                         }
@@ -179,7 +248,7 @@ function initShoopingCart(){
                                 <h5>${val.name}</h5>
                             </div>
                             <div class="col-md-2" style="border-bottom: 1px dotted #000;">
-                                <h5>Qty. ${val.qty}</h5>
+                                <h5>Qty. ${retail_qty}</h5>
                             </div>
                             <div class="col-md-5">
                                 <h6>${retail_price}</h6>
@@ -189,7 +258,11 @@ function initShoopingCart(){
                 }
 
                 var package_price = '';
-                if(package_.price_type == 'PACKAGE') package_price = rupiah(package_.price);
+                if(package_.price_type == 'PACKAGE')
+                {
+                    package_.price = qty * package_.price;
+                    package_price = rupiah(package_.price);
+                }
                 else package_price = `(${package_.price_type}) ` + rupiah(total_retail_price);
 
                 detail = `<div class="row" style="margin-left: 7px;">
@@ -216,6 +289,73 @@ function updInvoice(){
 }
 
 $(document).ready(function(){
+    var numbererProduct = 1;
+    productTable = $('#productTable').on('preXhr.dt', function ( e, settings, data ){
+        numbererProduct = data.start + 1;
+        $('#productTable').block({
+            message: '<h3>Please Wait...</h3>',
+            css: {
+                border: '1px solid #fff'
+            }
+        });
+    }).on('xhr.dt', function ( e, settings, json, xhr ){
+        $('#productTable').unblock();
+        if(!document.datatable_search_change_event)
+        {
+            $("div.dataTables_filter input[aria-controls=productTable]").unbind();
+            $("div.dataTables_filter input[aria-controls=productTable]").keyup( function (e) {
+                if (e.keyCode == 13) {
+                    productTable.search( this.value ).draw();
+                }
+            });
+        }
+        document.datatable_search_change_event = true;
+    }).DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
+        },
+        serverSide: true,
+        bInfo: false,
+        ajax: {
+            url: document.app.site_url + '/product/get',
+            type: 'POST'
+        },
+        columns: [
+            {
+                name: 'Number',
+                width: "5%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    return numbererProduct++;
+                }
+            },
+            {
+                data: "name",
+                render: function ( data, type, full, meta ) {
+                    return `${full.code} - ${full.merk} - ${full.name}`;
+                }
+            },
+            {
+                data: "price",
+                render: function ( data, type, full, meta ) {
+                    return rupiah(data);
+                }
+            },
+            {
+                data: 'product_id',
+                width: "12%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    var button = [];
+                    var data_json = full;
+                    data_json.order_id = document.app.penjualan.orders.order_id;
+                    button.push('<button onclick=addListProduct("'+btoa(JSON.stringify(data_json))+'") type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>');
+                    return button.join('');
+                }
+            }
+        ]
+    });
+
     jQuery('#datepicker-autoclose2').datepicker({
         autoclose: true,
         todayHighlight: true,
@@ -694,6 +834,7 @@ $(document).ready(function(){
                         var timer = 3000;
                         title = 'Gagal!';
                     } else {
+                        document.location.reload()
                         $('#shopingCartModal').modal('toggle')
                     }
 
@@ -702,7 +843,7 @@ $(document).ready(function(){
                         text: response.message,
                         timer: timer
                     },function(){
-                        document.location.reload()
+
                     });
                 });
             }

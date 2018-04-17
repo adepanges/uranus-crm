@@ -172,12 +172,17 @@ class App extends Penjualan_Controller {
         $this->load->model(['orders_model']);
         $order_id = (int) $this->input->post('order_id');
 
+        $qty = (int) !empty($this->input->post('qty'))?$this->input->post('qty'):1;
+
         $params = [
             'order_id' => $order_id,
+            'product_id' => !empty($this->input->post('product_id'))?$this->input->post('product_id'):NULL,
+            'product_merk' => !empty($this->input->post('merk'))?$this->input->post('merk'):NULL,
             'product_name' => !empty($this->input->post('name'))?$this->input->post('name'):$this->input->post('name_other'),
-            'qty' => 1,
+            'qty' => $qty,
             'is_package' => 0,
-            'price' => (int) $this->input->post('price'),
+            'price' => ((int) $this->input->post('price')) * $qty,
+            'weight' => (int) $this->input->post('weight'),
             'price_type' => 'RETAIL',
             'version' => 1,
         ];
@@ -210,13 +215,16 @@ class App extends Penjualan_Controller {
         $this->load->model(['orders_model']);
         $order_id = (int) $this->input->post('order_id');
         $product_package_id = (int) $this->input->post('product_package_id');
+        $qty = (int) $this->input->post('qty');
+        if($qty == 0) $qty = 1;
 
         $orders = [
             'payment_method_id' => (int) $this->input->post('payment_method_id')
         ];
+
         $res1 = $this->orders_model->upd($order_id, $orders);
         $res2 = $this->orders_model->clear_cart_package($order_id);
-        $res3 = $this->orders_model->upd_cart_package($order_id, $product_package_id);
+        $res3 = $this->orders_model->upd_cart_package($order_id, $product_package_id, $qty);
         $res4 = $this->orders_model->upd($order_id, [
             'total_price' => $this->orders_model->get_latest_price_cart($order_id)
         ]);

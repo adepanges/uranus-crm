@@ -5,7 +5,7 @@ class Product_list extends Management_Controller {
 
 	public function index($id = 0)
 	{
-        // $this->_restrict_access('management_network_postback');
+        $this->_restrict_access('management_package_product_detail');
         $id = (int) $id;
 
         $this->load->model(['package_model','package_product_list_model']);
@@ -23,7 +23,7 @@ class Product_list extends Management_Controller {
 
     function get($id = 0)
     {
-        // $this->_restrict_access('management_network_postback_list', 'rest');
+        $this->_restrict_access('management_package_product_detail', 'rest');
         $id = (int) $id;
 
         $this->load->model('package_product_list_model');
@@ -38,7 +38,7 @@ class Product_list extends Management_Controller {
 
     public function get_byid($id = 0)
     {
-        // $this->_restrict_access('management_network_postback_list', 'rest');
+        $this->_restrict_access('management_package_product_detail', 'rest');
         $data = (object) [];
         $id = (int) $id;
 
@@ -53,8 +53,7 @@ class Product_list extends Management_Controller {
     public function save()
     {
         $product_package_list_id = (int) $this->input->post('product_package_list_id');
-        // if($product_package_list_id) $this->_restrict_access('management_network_postback_add', 'rest');
-        // else $this->_restrict_access('management_network_postback_upd', 'rest');
+        $this->_restrict_access('management_package_product_manage', 'rest');
 
         $data = [
             'product_package_id' => (int) $this->input->post('product_package_id'),
@@ -105,7 +104,7 @@ class Product_list extends Management_Controller {
 
     function del($product_package_list_id = 0)
     {
-        // $this->_restrict_access('management_cs_team_member_del', 'rest');
+        $this->_restrict_access('management_package_product_manage', 'rest');
         $product_package_list_id = (int) $product_package_list_id;
 
         $this->load->model('package_product_list_model');

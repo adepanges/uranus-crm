@@ -81,13 +81,13 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        if(document.app.access_list.management_network_postback_upd)
+                        if(document.app.access_list.management_package_product_manage)
                         {
                             // edit
                             button.push('<button onclick="updNetwork('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                         }
 
-                        if(document.app.access_list.management_network_postback_del)
+                        if(document.app.access_list.management_package_product_manage)
                         {
                             // hapus
                             button.push('<button onclick="delProductList('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');

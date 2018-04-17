@@ -68,19 +68,19 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        if(document.app.access_list.management_product_upd)
+                        if(document.app.access_list.management_package_product_upd)
                         {
                             // edit
                             button.push('<button onclick="updPackage('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                         }
 
-                        if(document.app.access_list.management_product_del)
+                        if(document.app.access_list.management_package_product_del)
                         {
                             // hapus
                             button.push('<button onclick="delPackage('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
                         }
 
-                        if(document.app.access_list.management_network_postback)
+                        if(document.app.access_list.management_package_product_detail)
                         {
                             button.push('<a href="'+document.app.site_url+'/package/product_list/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
                         }

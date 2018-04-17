@@ -5,7 +5,7 @@ class App extends Management_Controller {
 
 	public function index()
 	{
-        // $this->_restrict_access('management_product');
+        $this->_restrict_access('management_package_product');
         $this->_set_data([
             'title' => 'Management Package'
         ]);
@@ -16,8 +16,8 @@ class App extends Management_Controller {
     public function save()
     {
         $product_package_id = (int) $this->input->post('product_package_id');
-        // if($product_package_id) $this->_restrict_access('management_product_upd', 'rest');
-        // else $this->_restrict_access('management_product_add', 'rest');
+        if($product_package_id) $this->_restrict_access('management_package_product_upd', 'rest');
+        else $this->_restrict_access('management_package_product_add', 'rest');
 
         $data = [
             'code' => $this->input->post('code'),

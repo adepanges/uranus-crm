@@ -73,7 +73,7 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
 
-                        if(full.orders_double_id != 0 && full.orders_double_id != '')
+                        if(full.orders_double_id)
                         {
                             button.push(`<span class="label label-warning label-rouded">double orders</span><br>`)
                         }
@@ -116,7 +116,7 @@ function deleteBulk(){
         orders_base64 = btoa(orders.join(','));
         swal({
             title: "Apakah anda yakin?",
-            text: "Pesanan telah di packing",
+            text: "Pesanan akan dihapus permanen",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-danger",

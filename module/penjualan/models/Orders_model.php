@@ -108,7 +108,7 @@ class Orders_model extends Penjualan_Model {
 
     function cart_v1($id)
     {
-        $orders_cart = $this->db->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
+        $orders_cart = $this->db->order_by('is_package', 'DESC')->get_where('orders_cart', ['order_id' => $id, 'version' => 1])->result();
         return $this->parse_cart_v1($orders_cart);
     }
 
@@ -171,11 +171,28 @@ class Orders_model extends Penjualan_Model {
         return $this->db->delete('orders_cart', ['order_id' => $order_id, 'is_package' => 1]);
     }
 
-    function upd_cart_package($order_id, $product_package_id)
+    function upd_cart_package($order_id, $product_package_id, $qty = 0)
     {
+        $qty = (int) $qty;
+        if($qty == 0) $qty = 1;
+
         $sql = "INSERT INTO orders_cart (
             order_id, product_id, product_package_id, product_merk, product_name, package_name, price, qty, weight, is_package, price_type, package_price)
-        SELECT ?, a.product_id, a.product_package_id, a.merk, a.name, b.name, a.price, a.qty, a.weight, 1, b.price_type, b.price
+        SELECT
+            ?, a.product_id, a.product_package_id, a.merk, a.name, b.name,
+            CASE b.price_type
+                WHEN 'RETAIL' THEN (a.price * $qty)
+                WHEN 'PACKAGE' THEN 0
+            ELSE NULL
+            END,
+            (a.qty * $qty),
+            (a.weight * $qty), 1,
+            b.price_type,
+            CASE b.price_type
+                WHEN 'RETAIL' THEN 0
+                WHEN 'PACKAGE' THEN (b.price * $qty)
+            ELSE NULL
+            END
         FROM product_package b
         LEFT JOIN product_package_list a ON b.product_package_id = a.product_package_id
         WHERE b.product_package_id = ?";
@@ -228,7 +245,7 @@ class Orders_model extends Penjualan_Model {
 
     function addon_cart($params)
     {
-        return $this->db->insert('orders_cart', $this->_sanity_field($params, ['order_id','product_name','qty','is_package','price','price_type','version']));
+        return $this->db->insert('orders_cart', $this->_sanity_field($params, ['order_id','product_id','product_merk','product_name','qty','is_package','price','price_type','version']));
     }
 
     function del_by_cart_id($id = 0)
