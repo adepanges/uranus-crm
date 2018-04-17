@@ -38,7 +38,7 @@ class Network_model extends Report_Model {
                     FROM orders_network_postback z
                     WHERE z.network_id = a.network_id AND
                     z.event_id = 3 AND
-                    z.postback_response LIKE '%SUCCESS%'
+                    (z.postback_response LIKE '%success%' OR z.postback_response LIKE '%duplicate%')
                     $sql
                 ) AS total_leads,
                 (
@@ -46,7 +46,7 @@ class Network_model extends Report_Model {
                     FROM orders_network_postback z
                     WHERE z.network_id = a.network_id AND
                     z.event_id = 4 AND
-                    z.postback_response LIKE '%SUCCESS%'
+                    (z.postback_response LIKE '%success%' OR z.postback_response LIKE '%duplicate%')
                     $sql
                 ) AS total_conversions,
                 (
@@ -54,7 +54,7 @@ class Network_model extends Report_Model {
                     FROM orders_network_postback z
                     WHERE z.network_id = a.network_id AND
                     z.event_id = 5 AND
-                    z.postback_response LIKE '%SUCCESS%'
+                    (z.postback_response LIKE '%success%' OR z.postback_response LIKE '%duplicate%')
                     $sql
                 ) AS total_sales
             FROM network a
