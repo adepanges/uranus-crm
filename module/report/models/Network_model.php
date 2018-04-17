@@ -29,7 +29,7 @@ class Network_model extends Report_Model {
             $params_sql['date_end'] = $this->db->escape($params['date_end'].' 23:59:59');
         }
 
-        $sql = "AND z.created_at BETWEEN DATE(". $params_sql['date_start'] .") AND DATE(". $params_sql['date_end'] .")";
+        $sql = "AND z.created_at BETWEEN ". $params_sql['date_start'] ." AND ". $params_sql['date_end'];
 
         $sql = "SELECT
                 a.network_id, a.name,
