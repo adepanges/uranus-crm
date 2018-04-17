@@ -12,6 +12,14 @@
                             </a>
                         </li>
 @endif
+@if($access_list->report_network)
+                        <li>
+                            <a href="{{ site_url('network') }}">
+                                <i class="mdi mdi-account-switch" style="font-size: 13px;"></i>
+                                <span class="hide-menu">Network</span>
+                            </a>
+                        </li>
+@endif
                     </ul>
                 </div>
             </div>

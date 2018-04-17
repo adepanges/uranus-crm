@@ -10,7 +10,6 @@ $(document).ready(function(){
             });
         }).on('xhr.dt', function ( e, settings, json, xhr ){
             $('.row .white-box').unblock();
-            /*
             if(!document.datatable_search_change_event)
             {
                 $("div.dataTables_filter input").unbind();
@@ -21,7 +20,6 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
-            */
         }).DataTable({
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
@@ -66,6 +64,7 @@ $(document).ready(function(){
                 { data: "total_sale", width: "8%" },
                 {
                     data: "name", width: "8%",
+                    orderable: false,
                     render: function ( data, type, full, meta ) {
                         var rate = (full.total_sale / full.total_follow_up);
                         if(isNaN(rate)) rate = 0;
@@ -75,6 +74,7 @@ $(document).ready(function(){
                 },
                 {
                     data: "name", width: "8%",
+                    orderable: false,
                     render: function ( data, type, full, meta ) {
                         var rate = (
                             (
