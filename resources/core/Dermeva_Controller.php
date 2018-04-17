@@ -178,6 +178,7 @@ class Dermeva_Controller extends CI_Controller {
 
     protected function _response_json($resp)
     {
+        $resp['process_time'] = (microtime(true) - URANUS_LAUNCH);
         header('Content-Type: application/json');
         echo json_encode($resp);
         exit;
