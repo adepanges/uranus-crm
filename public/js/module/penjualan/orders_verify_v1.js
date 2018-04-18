@@ -32,6 +32,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/orders_v1/get/index/verify',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     name: 'Number',

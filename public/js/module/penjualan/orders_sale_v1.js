@@ -27,6 +27,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/orders_v1/get/index/sale',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     name: 'Number',

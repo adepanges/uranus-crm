@@ -29,6 +29,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/orders_v1/double/get',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     name: 'Number',
@@ -88,6 +91,9 @@ $(document).ready(function(){
             ajax: {
                 url: document.app.site_url + '/orders_v1/double/get_follow_up',
                 type: 'POST'
+            },
+            language: {
+                infoFiltered: ""
             },
             columns: [
                 {
