@@ -23,6 +23,7 @@ class App extends Management_Controller {
             'code' => $this->input->post('code'),
             'name' => $this->input->post('name'),
             'nama_badan' => $this->input->post('nama_badan'),
+            'tax_number' => $this->input->post('tax_number'),
             'address' => $this->input->post('address'),
             'status' => (int) $this->input->post('status')
         ];

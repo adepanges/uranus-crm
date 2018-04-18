@@ -94,6 +94,11 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="recipient-name" class="control-label">NPWP</label>
+                                    <input type="text" class="form-control" name="tax_number" data-error="Hmm, nama NPWP perusahaan harap diisi" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group">
                                     <label for="message-text" class="control-label" style="margin-right: 10px;">Active</label>
                                     <input type="checkbox" name="status" value="1" checked class="js-switch" data-color="#99d683">
                                 </div>
