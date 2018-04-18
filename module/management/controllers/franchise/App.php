@@ -15,29 +15,28 @@ class App extends Management_Controller {
 
     public function save()
     {
-        $product_id = (int) $this->input->post('product_id');
-        if($product_id) $this->_restrict_access('management_product_upd', 'rest');
-        else $this->_restrict_access('management_product_add', 'rest');
+        $franchise_id = (int) $this->input->post('franchise_id');
+        // if($franchise_id) $this->_restrict_access('management_product_upd', 'rest');
+        // else $this->_restrict_access('management_product_add', 'rest');
 
         $data = [
             'code' => $this->input->post('code'),
-            'merk' => $this->input->post('merk'),
             'name' => $this->input->post('name'),
-            'weight' => (int) $this->input->post('weight'),
-            'price' => $this->input->post('price'),
+            'nama_badan' => $this->input->post('nama_badan'),
+            'address' => $this->input->post('address'),
             'status' => (int) $this->input->post('status')
         ];
 
-        $this->load->model('product_model');
-        if(!$product_id)
+        $this->load->model('franchise_model');
+        if(!$franchise_id)
         {
             // tambah
-            $res = $this->product_model->add($data);
+            $res = $this->franchise_model->add($data);
         }
         else
         {
             // ubah
-            $res = $this->product_model->upd($data, $product_id);
+            $res = $this->franchise_model->upd($data, $franchise_id);
         }
 
         if($res)

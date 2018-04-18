@@ -96,6 +96,41 @@ $(document).ready(function(){
     $('#csTeamModal').on('shown.bs.modal', function () {
       initLeaderTim();
     })
+
+    $('#btnSaveCsTeamModal').click(function(e){
+        if(formValidator('#csTeamForm')){
+            var data = serialzeForm('#csTeamForm');
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/cs_team/app/save',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#csTeamForm')[0].reset()
+                    csTeamTable.ajax.reload()
+                    $('#csTeamModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 document.app._leader_tim_init = false;
@@ -159,41 +194,6 @@ function updCSTeam(id){
         keyboard: false
     });
 }
-
-$('#btnSaveCsTeamModal').click(function(e){
-    if(formValidator('#csTeamForm')){
-        var data = serialzeForm('#csTeamForm');
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/cs_team/app/save',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#csTeamForm')[0].reset()
-                csTeamTable.ajax.reload()
-                $('#csTeamModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delCSTeam(id){
     swal({

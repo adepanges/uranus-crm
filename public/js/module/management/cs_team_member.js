@@ -64,6 +64,41 @@ $(document).ready(function(){
     $('#memberModal').on('shown.bs.modal', function () {
       initMemberTim();
     })
+
+    $('#btnSaveMemberModal').click(function(e){
+        if(formValidator('#memberForm')){
+            var data = serialzeForm('#memberForm');
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/cs_team/member/add',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#memberForm')[0].reset()
+                    memberTable.ajax.reload()
+                    $('#memberModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 document.app._leader_tim_init = false;
@@ -112,41 +147,6 @@ function addMember(){
         keyboard: false
     });
 }
-
-$('#btnSaveMemberModal').click(function(e){
-    if(formValidator('#memberForm')){
-        var data = serialzeForm('#memberForm');
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/cs_team/member/add',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#memberForm')[0].reset()
-                memberTable.ajax.reload()
-                $('#memberModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delMember(id){
     swal({

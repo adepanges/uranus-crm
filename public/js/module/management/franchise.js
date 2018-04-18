@@ -55,7 +55,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: 'product_id',
+                    data: 'franchise_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
@@ -79,12 +79,48 @@ $(document).ready(function(){
                 }
             ]
         });
+
+    $('#btnSaveCompanySetting').click(function(e){
+        if(formValidator('#companySettingForm')){
+            var data = serialzeForm('#companySettingForm');
+
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/franchise/app/save',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#companySettingForm')[0].reset()
+                    companySettingTable.ajax.reload()
+                    $('#companySettingModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 function add(){
     $('#companySettingForm')[0].reset();
     formPopulate('#companySettingForm', {
-        network_id: 0
+        franchise_id: 0
     })
     $('#companySettingModal').modal({
         backdrop: 'static',
@@ -96,7 +132,7 @@ function upd(id){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/product/get/byid/'+id
+        url: document.app.site_url+'/franchise/get/byid/'+id
     })
     .done(function( response ) {
         $('.preloader').fadeOut();
@@ -109,48 +145,10 @@ function upd(id){
     });
 }
 
-$('#btnSaveProduct').click(function(e){
-    if(formValidator('#companySettingForm')){
-        var data = serialzeForm('#companySettingForm');
-
-        console.log(data);
-
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/product/app/save',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#companySettingForm')[0].reset()
-                companySettingTable.ajax.reload()
-                $('#companySettingModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
-
 function del(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus product ini!",
+        text: "Anda akan menghapus franchise ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -164,7 +162,7 @@ function del(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/product/del/index/'+id
+                url: document.app.site_url+'/franchise/del/index/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

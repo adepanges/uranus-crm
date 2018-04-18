@@ -705,7 +705,6 @@ $(document).ready(function(){
         .done(function( response ) {
             if(response.data){
                 response.data.forEach(function(val, key){
-                    console.log(val);
                     var name = ucwords(val.name);
                     $('#desa_id_select').append(`<option value="${val.id}" kode-pos="${val.kode_pos}">${name}</option>`)
                 });
@@ -856,6 +855,5 @@ function initSelectOpt(ths, sl)
 {
     if($(ths).val() != sl.val()){
         sl.val($(ths).val());
-        console.log('change')
     } else console.log('not change')
 }

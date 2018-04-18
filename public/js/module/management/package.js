@@ -106,6 +106,42 @@ $(document).ready(function(){
             $('#packageForm [name=price]').prop('required', true);
         }
     })
+
+    $('#btnSavePackage').click(function(e){
+        if(formValidator('#packageForm')){
+            var data = serialzeForm('#packageForm');
+            
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/package/app/save',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#packageForm')[0].reset()
+                    packageTable.ajax.reload()
+                    $('#packageModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 function addProduct(){
@@ -135,44 +171,6 @@ function updPackage(id){
         keyboard: false
     });
 }
-
-$('#btnSavePackage').click(function(e){
-    if(formValidator('#packageForm')){
-        var data = serialzeForm('#packageForm');
-
-        console.log(data);
-
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/package/app/save',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#packageForm')[0].reset()
-                packageTable.ajax.reload()
-                $('#packageModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delPackage(id){
     swal({

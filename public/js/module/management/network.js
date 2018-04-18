@@ -82,6 +82,42 @@ $(document).ready(function(){
                 }
             ]
         });
+        
+    $('#btnSaveNetwork').click(function(e){
+        if(formValidator('#networkForm')){
+            var data = serialzeForm('#networkForm');
+
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/network/app/save',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#networkForm')[0].reset()
+                    networkTable.ajax.reload()
+                    $('#networkModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 function addNetwork(){
@@ -112,42 +148,6 @@ function updNetwork(id){
         keyboard: false
     });
 }
-
-$('#btnSaveNetwork').click(function(e){
-    if(formValidator('#networkForm')){
-        var data = serialzeForm('#networkForm');
-
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/network/app/save',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#networkForm')[0].reset()
-                networkTable.ajax.reload()
-                $('#networkModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delNetwork(id){
     swal({

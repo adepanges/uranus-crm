@@ -72,7 +72,7 @@
                         </div>
                         <div class="modal-body">
                             <form id="companySettingForm" data-toggle="validator" data-delay="100">
-                                <input type="hidden" name="product_id">
+                                <input type="hidden" name="franchise_id">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Code</label>
                                     <input type="text" class="form-control" name="code" data-error="Hmm, code perusahaan harap diisi" required>
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Alamat</label>
-                                    <textarea class="form-control" name="nama_badan" data-error="Hmm, alamat perusahaan harap diisi" required></textarea>
+                                    <textarea class="form-control" name="address" data-error="Hmm, alamat perusahaan harap diisi" required></textarea>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
