@@ -20,7 +20,7 @@ class Detail extends Penjualan_Controller {
         if(
             (
                 !in_array($this->role_active['role_id'], [1,2,6]) &&
-                $orders->order_status_id > 1 && $orders->order_status_id < 5
+                $orders->order_status_id > 1 && $orders->order_status_id < 6
             ) ||
             (
                 $orders->order_status_id > 5 &&

@@ -83,7 +83,8 @@ class Double extends Penjualan_Controller {
 
         $orders = $this->double_orders_model->get_orders($orders_double_id)->result();
         $order_id = [];
-        foreach ($orders as $key => $value) {
+        foreach ($orders as $key => $value)
+        {
             $order_id[] = $value->order_id;
         }
 

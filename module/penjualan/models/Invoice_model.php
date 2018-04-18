@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Invoice_model extends Penjualan_Model {
 
-    function publish_v1($order_id = 0, $paid_time = '', $invoice_number = '')
+    function publish_v1($order_id = 0, $paid_time = '', $invoice_number = '', $franchise_id = 0)
     {
         if(empty($paid_time))
         {
@@ -22,6 +22,7 @@ class Invoice_model extends Penjualan_Model {
 
         $invoice_data = [
             'order_id' => $orders->order_id,
+            'franchise_id' => $franchise_id,
             'customer_id' => $orders->customer_id,
             'customer_address_id' => $orders->customer_address_id,
             'invoice_number' => $invoice_number,
@@ -60,11 +61,16 @@ class Invoice_model extends Penjualan_Model {
         ]);
     }
 
-    function get_by_inv_numb($invoice_number, $order_invoice_id = 0)
+    function get_by_inv_numb($invoice_number, $order_invoice_id = 0, $franchise_id = 0)
     {
         if($order_invoice_id != 0)
         {
             $this->db->where('order_invoice_id !=', $order_invoice_id);
+        }
+
+        if($franchise_id != 0)
+        {
+            $this->db->where('franchise_id', $franchise_id);
         }
 
         return $this->db->get_where('orders_invoices', [

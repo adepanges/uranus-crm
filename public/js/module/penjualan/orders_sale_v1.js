@@ -69,12 +69,13 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
 
+                        if(full.cs_sale)
+                        {
+                            button.push(`<span class="label label-success label-rouded">CS: ${full.cs_sale}</span><br>`)
+                        }
+                        
                         if(document.app.access_list.penjualan_orders_view_modifier)
                         {
-                            if(full.cs_sale)
-                            {
-                                button.push(`<span class="label label-success label-rouded">CS: ${full.cs_sale}</span><br>`)
-                            }
                             button.push(`<span class="label label-warning label-rouded">FIN: ${full.username}</span><br>`)
                         }
 

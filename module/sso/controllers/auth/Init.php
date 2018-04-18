@@ -5,7 +5,7 @@ class Init extends SSO_Controller {
     public function index($q = '', $param_q = '')
     {
         if(!$this->_is_sso_signed()) redirect('auth/log/in');
-        $this->load->model(['auth_model','orders_model','team_cs_model']);
+        $this->load->model(['auth_model','orders_model','team_cs_model','franchise_model']);
 
         $profile = $this->session->userdata('profile');
 
@@ -15,20 +15,17 @@ class Init extends SSO_Controller {
         $role_active_access = [];
         $access_list = [];
         $tim_leader = [];
+        $franchise = [];
 
         $module = [];
         $menu = [];
+        $failed_to_login = FALSE;
 
         $role = $this->auth_model->get_role_by_userid($profile['user_id'])->result_array();
 
         if(empty($role))
         {
-            $this->session->set_userdata([
-                'profile' => '',
-                'sso' => ''
-            ]);
-            $this->session->set_userdata('error_message', 'Anda tidak memiliki hak akses apapun');
-            redirect('auth/log/in');
+            $failed_to_login = TRUE;
         }
 
         if($q == 'switch_role')
@@ -41,10 +38,7 @@ class Init extends SSO_Controller {
             }
         }
 
-        if(empty($role_active))
-        {
-            $role_active = isset($role[0])?$role[0]:[];
-        }
+        if(empty($role_active)) $role_active = isset($role[0])?$role[0]:[];
 
 
         $is_tim_leader = FALSE;
@@ -87,7 +81,19 @@ class Init extends SSO_Controller {
             }
         }
 
+        $franchise = $this->franchise_model->get_byid($role_active['franchise_id']);
+
+        if(empty($franchise)) $failed_to_login = TRUE;
+
+        if($failed_to_login)
+        {
+            $this->session->sess_destroy();
+            $this->session->set_userdata('error_message', 'Anda tidak memiliki hak akses apapun');
+            redirect('auth/log/in');
+        }
+
         $this->session->set_userdata([
+            'franchise' => $franchise,
             'role' => $role,
             'role_access' => $role_access,
             'role_active' => $role_active,

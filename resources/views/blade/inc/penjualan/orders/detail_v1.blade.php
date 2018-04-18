@@ -650,8 +650,8 @@
                                 <div class="form-group">
                                     <label class="control-label">Nomor Invoice</label>
                                     <div class="input-group m-b-30">
-                                        <input type="hidden" name="invoice_first" value="DKI/{{ date('Ymd') }}/">
-                                        <span class="input-group-addon" id="basic-addon1">DKI/{{ date('Ymd') }}/</span>
+                                        <input type="hidden" name="invoice_first" value="{{ $franchise->code }}/{{ date('Ymd') }}/">
+                                        <span class="input-group-addon" id="basic-addon1">{{ $franchise->code }}/{{ date('Ymd') }}/</span>
                                         <input type="text" class="form-control" name="invoice_number" placeholder="000001" aria-describedby="basic-addon1"  data-error="Hmm, nomor invoice harap diisi" required>
                                         <div class="help-block with-errors"></div>
                                     </div>

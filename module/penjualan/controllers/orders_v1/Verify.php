@@ -31,7 +31,7 @@ class Verify extends Penjualan_Controller {
 
         if(!$res->num_rows() || !in_array($data->order_status_id, [6])) redirect('orders_v1');
 
-        if(!empty($invoice_number) && $this->invoice_model->get_by_inv_numb($invoice_number)->num_rows() > 0)
+        if(!empty($invoice_number) && $this->invoice_model->get_by_inv_numb($invoice_number, 0, $this->franchise->franchise_id)->num_rows() > 0)
         {
             $this->_response_json([
                 'status' => 0,
@@ -59,7 +59,7 @@ class Verify extends Penjualan_Controller {
 
         $paid_date = !empty($paid_date)?$paid_date:$order_process['created_at'];
 
-        $res1 = $this->invoice_model->publish_v1($id, $paid_date, $invoice_number);
+        $res1 = $this->invoice_model->publish_v1($id, $paid_date, $invoice_number, $this->franchise->franchise_id);
         $res2 = $this->orders_model->upd($id, $order_status);
         $res3 = $this->orders_process_model->add($order_process);
 
