@@ -5,7 +5,7 @@ $(document).ready(function(){
     });
 
     var numberer = 1;
-    packageTable = $('#packageTable').on('preXhr.dt', function ( e, settings, data ){
+    companySettingTable = $('#companySettingTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;
             $('.row .white-box').block({
                 message: '<h3>Please Wait...</h3>',
@@ -20,7 +20,7 @@ $(document).ready(function(){
                 $("div.dataTables_filter input").unbind();
                 $("div.dataTables_filter input").keyup( function (e) {
                     if (e.keyCode == 13) {
-                        packageTable.search( this.value ).draw();
+                        companySettingTable.search( this.value ).draw();
                     }
                 });
             }
@@ -32,7 +32,7 @@ $(document).ready(function(){
             serverSide: true,
             bInfo: false,
             ajax: {
-                url: document.app.site_url + '/package/get',
+                url: document.app.site_url + '/franchise/get',
                 type: 'POST'
             },
             columns: [
@@ -46,13 +46,6 @@ $(document).ready(function(){
                 },
                 { data: "code" },
                 { data: "name" },
-                { data: "price_type" },
-                {
-                    data: "price",
-                    render: function ( data, type, full, meta ) {
-                        return rupiah(data);
-                    }
-                },
                 {
                     data: "status",
                     render: function ( data, type, full, meta ) {
@@ -62,27 +55,23 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: 'product_package_id',
+                    data: 'franchise_id',
                     width: "12%",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         //
-                        if(document.app.access_list.management_package_product_upd)
+                        // if(document.app.access_list.management_product_upd)
+                        if(true)
                         {
                             // edit
-                            button.push('<button onclick="updPackage('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
+                            button.push('<button onclick="upd('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                         }
 
-                        if(document.app.access_list.management_package_product_del)
+                        if(true)
                         {
                             // hapus
-                            button.push('<button onclick="delPackage('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
-                        }
-
-                        if(document.app.access_list.management_package_product_detail)
-                        {
-                            button.push('<a href="'+document.app.site_url+'/package/product_list/index/'+data+'" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-list-ul"></i></a>');
+                            button.push('<button onclick="del('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
                         }
 
                         return button.join('');
@@ -91,30 +80,14 @@ $(document).ready(function(){
             ]
         });
 
-    $('#packageForm [name=price_type]').on('change', function(){
-        var val = $(this).val();
+    $('#btnSaveCompanySetting').click(function(e){
+        if(formValidator('#companySettingForm')){
+            var data = serialzeForm('#companySettingForm');
 
-        if(val == 'RETAIL')
-        {
-            $('#fieldPrice').hide();
-            $('#packageForm [name=price]').prop('required', false);
-            $('#packageForm [name=price]').val('0');
-        }
-        else
-        {
-            $('#fieldPrice').show();
-            $('#packageForm [name=price]').prop('required', true);
-        }
-    })
-
-    $('#btnSavePackage').click(function(e){
-        if(formValidator('#packageForm')){
-            var data = serialzeForm('#packageForm');
-            
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/package/app/save',
+                url: document.app.site_url+'/franchise/app/save',
                 data: data
             })
             .done(function( response ) {
@@ -128,9 +101,9 @@ $(document).ready(function(){
                     title = 'Gagal!';
                     showConfirmButton = true;
                 } else {
-                    $('#packageForm')[0].reset()
-                    packageTable.ajax.reload()
-                    $('#packageModal').modal('toggle')
+                    $('#companySettingForm')[0].reset()
+                    companySettingTable.ajax.reload()
+                    $('#companySettingModal').modal('toggle')
                 }
 
                 swal({
@@ -144,38 +117,38 @@ $(document).ready(function(){
     })
 });
 
-function addProduct(){
-    $('#packageForm')[0].reset();
-    formPopulate('#packageForm', {
-        network_id: 0
+function add(){
+    $('#companySettingForm')[0].reset();
+    formPopulate('#companySettingForm', {
+        franchise_id: 0
     })
-    $('#packageModal').modal({
+    $('#companySettingModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-function updPackage(id){
+function upd(id){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/package/get/byid/'+id
+        url: document.app.site_url+'/franchise/get/byid/'+id
     })
     .done(function( response ) {
         $('.preloader').fadeOut();
-        formPopulate('#packageForm', response)
+        formPopulate('#companySettingForm', response)
     });
 
-    $('#packageModal').modal({
+    $('#companySettingModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-function delPackage(id){
+function del(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus product ini!",
+        text: "Anda akan menghapus franchise ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -189,11 +162,11 @@ function delPackage(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/product/del/index/'+id
+                url: document.app.site_url+'/franchise/del/index/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                packageTable.ajax.reload()
+                companySettingTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 

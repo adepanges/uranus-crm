@@ -27,6 +27,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/packing_v1/get/index/pickup',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     name: 'Number',

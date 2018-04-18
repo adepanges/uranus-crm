@@ -39,7 +39,7 @@ $(document).ready(function(){
             document.datatable_search_change_event = true;
         }).DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
+                infoFiltered: ""
             },
             serverSide: true,
             bInfo: false,
@@ -91,6 +91,42 @@ $(document).ready(function(){
                 }
             ]
         });
+
+    $('#btnSavePostbackModal').click(function(e){
+        if(formValidator('#postbackForm')){
+            var data = serialzeForm('#postbackForm');
+
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/network/postback/save/',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#postbackForm')[0].reset()
+                    postbackTable.ajax.reload()
+                    $('#postbackModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 function addPostback(){
@@ -121,42 +157,6 @@ function updNetwork(id){
         keyboard: false
     });
 }
-
-$('#btnSavePostbackModal').click(function(e){
-    if(formValidator('#postbackForm')){
-        var data = serialzeForm('#postbackForm');
-
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/network/postback/save/',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#postbackForm')[0].reset()
-                postbackTable.ajax.reload()
-                $('#postbackModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delPostback(id){
     swal({

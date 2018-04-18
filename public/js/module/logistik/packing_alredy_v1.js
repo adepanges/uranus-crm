@@ -34,6 +34,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/packing_v1/get/index/alredy',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     data: 'order_id',

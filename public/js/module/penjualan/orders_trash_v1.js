@@ -27,6 +27,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/orders_v1/trash/get',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     data: 'order_id',

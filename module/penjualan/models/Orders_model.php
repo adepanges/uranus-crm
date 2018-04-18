@@ -6,7 +6,7 @@ class Orders_model extends Penjualan_Model {
         $datatable_param = NULL,
         $table = 'orders',
         $orderable_field = ['name','franchise_name','franchise_name','jumlah_cs','status'],
-        $fillable_field = ['payment_method_id','logistic_id','order_status_id','logistics_status_id','order_status','logistics_status','call_method_id','customer_info','customer_address','total_price'],
+        $fillable_field = ['franchise_id','payment_method_id','logistic_id','order_status_id','logistics_status_id','order_status','logistics_status','call_method_id','customer_info','customer_address','total_price'],
         $searchable_field = ['payment_method_id','logistic_id','order_status_id','logistics_status_id','call_method_id','order_status','logistics_status','shipping_code','call_method','order_code','customer_info','customer_address'];
 
     function get_datatable_v1($params = [], $only_self = TRUE)

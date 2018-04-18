@@ -36,6 +36,12 @@
                             </a>
                         </li>
 @endif
+                        <li>
+                            <a href="{{ site_url('franchise') }}">
+                                <i class="fa-fw">C</i>
+                                <span class="hide-menu">Company Seting</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

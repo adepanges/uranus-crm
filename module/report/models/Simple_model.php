@@ -41,7 +41,7 @@ class Simple_model extends Report_Model {
             	(
             		SELECT SUM(p.total_price) AS total FROM orders_process z
             		LEFT JOIN orders p ON p.order_id = z.order_id
-            		WHERE z.user_id = a.user_id AND z.order_status_id = 6 AND
+            		WHERE z.user_id = a.user_id AND z.order_status_id = 6 AND p.is_deleted = 0 AND
             		(SELECT w.process_id FROM orders_process w WHERE w.order_id = z.order_id AND w.order_status_id = 7 LIMIT 1) IS NOT NULL
             	) AS total_penjualan
             FROM sso_user a

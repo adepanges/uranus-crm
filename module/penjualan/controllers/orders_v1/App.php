@@ -123,6 +123,7 @@ class App extends Penjualan_Controller {
 
         $label_status = isset($follow_up_status->label)?$follow_up_status->label:'Follow Up';
         $order_status = [
+            'franchise_id' => $this->franchise->franchise_id,
             'order_status_id' => 2,
             'order_status' => $label_status
         ];

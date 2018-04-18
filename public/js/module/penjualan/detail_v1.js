@@ -312,7 +312,7 @@ $(document).ready(function(){
         document.datatable_search_change_event = true;
     }).DataTable({
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
+            infoFiltered: ""
         },
         serverSide: true,
         bInfo: false,
@@ -705,7 +705,6 @@ $(document).ready(function(){
         .done(function( response ) {
             if(response.data){
                 response.data.forEach(function(val, key){
-                    console.log(val);
                     var name = ucwords(val.name);
                     $('#desa_id_select').append(`<option value="${val.id}" kode-pos="${val.kode_pos}">${name}</option>`)
                 });
@@ -856,6 +855,5 @@ function initSelectOpt(ths, sl)
 {
     if($(ths).val() != sl.val()){
         sl.val($(ths).val());
-        console.log('change')
     } else console.log('not change')
 }

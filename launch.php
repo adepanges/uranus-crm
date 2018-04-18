@@ -1,7 +1,9 @@
 <?php
 
+define('DEBUG_PROCESS_TIME', TRUE);
 define('URANUS_LAUNCH', microtime(true));
 date_default_timezone_set('Asia/Jakarta');
+
 
 /**
  * CodeIgniter

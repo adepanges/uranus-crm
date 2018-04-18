@@ -22,7 +22,7 @@ $(document).ready(function(){
             document.datatable_search_change_event = true;
         }).DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
+                infoFiltered: ""
             },
             serverSide: true,
             bInfo: false,
@@ -63,6 +63,41 @@ $(document).ready(function(){
 
     $('#memberModal').on('shown.bs.modal', function () {
       initMemberTim();
+    })
+
+    $('#btnSaveMemberModal').click(function(e){
+        if(formValidator('#memberForm')){
+            var data = serialzeForm('#memberForm');
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/cs_team/member/add',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#memberForm')[0].reset()
+                    memberTable.ajax.reload()
+                    $('#memberModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
     })
 });
 
@@ -112,41 +147,6 @@ function addMember(){
         keyboard: false
     });
 }
-
-$('#btnSaveMemberModal').click(function(e){
-    if(formValidator('#memberForm')){
-        var data = serialzeForm('#memberForm');
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/cs_team/member/add',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#memberForm')[0].reset()
-                memberTable.ajax.reload()
-                $('#memberModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delMember(id){
     swal({

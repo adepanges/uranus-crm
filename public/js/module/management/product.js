@@ -27,7 +27,7 @@ $(document).ready(function(){
             document.datatable_search_change_event = true;
         }).DataTable({
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Indonesian.json'
+                infoFiltered: ""
             },
             serverSide: true,
             bInfo: false,
@@ -91,6 +91,42 @@ $(document).ready(function(){
                 }
             ]
         });
+
+    $('#btnSaveProduct').click(function(e){
+        if(formValidator('#productForm')){
+            var data = serialzeForm('#productForm');
+
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/product/app/save',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
+                    $('#productForm')[0].reset()
+                    productTable.ajax.reload()
+                    $('#productModal').modal('toggle')
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
 });
 
 function addProduct(){
@@ -121,43 +157,6 @@ function updProduct(id){
     });
 }
 
-$('#btnSaveProduct').click(function(e){
-    if(formValidator('#productForm')){
-        var data = serialzeForm('#productForm');
-
-        console.log(data);
-
-        $('.preloader').fadeIn();
-        $.ajax({
-            method: "POST",
-            url: document.app.site_url+'/product/app/save',
-            data: data
-        })
-        .done(function( response ) {
-            $('.preloader').fadeOut();
-            var title = 'Berhasil!',
-                timer = 1000;
-                showConfirmButton = false;
-
-            if(!response.status) {
-                var timer = 3000;
-                title = 'Gagal!';
-                showConfirmButton = true;
-            } else {
-                $('#productForm')[0].reset()
-                productTable.ajax.reload()
-                $('#productModal').modal('toggle')
-            }
-
-            swal({
-                title: title,
-                text: response.message,
-                timer: timer,
-                showConfirmButton: showConfirmButton
-            });
-        });
-    }
-})
 
 function delProduct(id){
     swal({

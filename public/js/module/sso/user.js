@@ -35,6 +35,9 @@ $(document).ready(function(){
                 url: document.app.site_url + '/user/get',
                 type: 'POST'
             },
+            language: {
+                infoFiltered: ""
+            },
             columns: [
                 {
                     name: 'Number',

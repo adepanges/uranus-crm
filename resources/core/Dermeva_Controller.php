@@ -17,11 +17,13 @@ class Dermeva_Controller extends CI_Controller {
             ],
             'access_list' => (object) $this->session->userdata('access_list'),
             'role_active' => (object) $this->session->userdata('role_active'),
+            'franchise' => (object) $this->session->userdata('franchise'),
             'logout_link' => $this->config->item('sso_link').'/auth/log/out'
         ];
 
         $this->profile = $this->session->userdata('profile');
         $this->role_active = $this->session->userdata('role_active');
+        $this->franchise = $this->session->userdata('franchise');
 
         $this->_check_active_user();
 
@@ -178,8 +180,12 @@ class Dermeva_Controller extends CI_Controller {
 
     protected function _response_json($resp)
     {
+        if(is_object($resp)) $resp->system_process_time = (microtime(true) - URANUS_LAUNCH);
+        else if(is_array($resp)) $resp['system_process_time'] = (microtime(true) - URANUS_LAUNCH);
+
         header('Content-Type: application/json');
         echo json_encode($resp);
+
         exit;
     }
 }
