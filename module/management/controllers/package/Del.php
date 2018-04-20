@@ -6,15 +6,15 @@ class Del extends Management_Controller {
     {
         $this->_restrict_access('management_package_product_del', 'rest');
 
-        $network_id = (int) $id;
-        if(!$network_id) $this->_response_json([
+        $product_package_id = (int) $id;
+        if(!$product_package_id) $this->_response_json([
             'status' => 0,
             'message' => 'id must be set in uri'
         ]);
 
-        $this->load->model('product_model');
+        $this->load->model('package_model');
 
-        if($this->product_model->del($network_id))
+        if($this->package_model->del($product_package_id))
         {
             $this->_response_json([
                 'status' => 1,
