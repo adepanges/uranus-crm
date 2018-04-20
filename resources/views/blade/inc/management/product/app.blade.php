@@ -71,7 +71,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Network</h4> </div>
+                            <h4 class="modal-title" id="exampleModalLabel1">Product</h4> </div>
                         <div class="modal-body">
                             <form id="productForm" data-toggle="validator" data-delay="100">
                                 <input type="hidden" name="product_id">

@@ -25,6 +25,8 @@ class Invoice_model extends Penjualan_Model {
             'franchise_id' => $franchise_id,
             'customer_id' => $orders->customer_id,
             'customer_address_id' => $orders->customer_address_id,
+            'logistic_id' => $orders->logistic_id,
+            'logistic_name' =>  $orders->logistic_name,
             'invoice_number' => $invoice_number,
             'order_code' => $orders->order_code,
             'customer' => json_encode($customer),
@@ -103,9 +105,10 @@ class Invoice_model extends Penjualan_Model {
 
     protected function get_orders_info($order_id = 0)
     {
-        $sql = "SELECT a.*, b.name as payment_method
+        $sql = "SELECT a.*, b.name as payment_method, c.name as logistic_name
         FROM orders a
         LEFT JOIN master_payment_method b ON a.payment_method_id = b.payment_method_id
+        LEFT JOIN master_logistics c ON a.logistic_id = c.logistic_id
         WHERE a.order_id = ? AND a.version = 1 LIMIT 1";
         return $this->db->query($sql, [
             'order_id' => (int) $order_id

@@ -110,7 +110,7 @@ $(document).ready(function(){
     $('#btnSavePackage').click(function(e){
         if(formValidator('#packageForm')){
             var data = serialzeForm('#packageForm');
-            
+
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
@@ -147,7 +147,7 @@ $(document).ready(function(){
 function addProduct(){
     $('#packageForm')[0].reset();
     formPopulate('#packageForm', {
-        network_id: 0
+        product_package_id: 0
     })
     $('#packageModal').modal({
         backdrop: 'static',

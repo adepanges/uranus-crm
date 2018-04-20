@@ -216,6 +216,10 @@ $('#shopingCartForm input[name=qty]').on('keyup', function(){
     initShoopingCart();
 });
 
+$('#shopingCartForm input[name=qty]').on('click', function(){
+    initShoopingCart();
+});
+
 $('#shopingCartForm').on('submit', function(event){
     event.preventDefault();
      return false;
