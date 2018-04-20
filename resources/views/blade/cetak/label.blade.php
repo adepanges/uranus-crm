@@ -133,8 +133,7 @@
             <hr>
             {{ $value->customer_address->address }}<br>
             Ds./Kel. {{ $value->customer_address->desa_kelurahan }} Kec. {{ $value->customer_address->kecamatan }}<br>
-            {{ $value->customer_address->kabupaten }} Prov. {{ $value->customer_address->provinsi }}<br>
-            {{ $value->customer_address->postal_code }}<br>
+            {{ $value->customer_address->kabupaten }} Prov. {{ $value->customer_address->provinsi }} {{ $value->customer_address->postal_code }}
         </div>
         @if($count==14)
         <br>
