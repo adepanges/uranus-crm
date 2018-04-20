@@ -83,6 +83,15 @@
     @endif
 @endif
 
+@if($access_list->penjualan_orders_action_pending && $orders->order_status_id == 4 && in_array($role_active->role_id, [1,2,6]))
+            <div class="col-md-2 pull-right">
+                <button onclick="pendingOrders({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
+                    <i class="mdi mdi-briefcase-download"></i>
+                    <span>Pending</span>
+                </button>
+            </div>
+@endif
+
 @if ($orders->order_status_id == 5 && $access_list->penjualan_orders_action_verify_payment)
                 <div class="col-md-2 pull-right">
                     <button onclick="verifyPayment({{ $orders->order_id }})" class="btn btn-warning btn-rounded form-control">
@@ -256,10 +265,8 @@
 
 @foreach ($orders_cart_package as $key => $value)
                     <div class="row" style="margin-top: 7px;">
-                        <div class="col-md-5">
+                        <div class="col-md-7">
                             <h3>{{ $value['info']->package_name }}</h3>
-                        </div>
-                        <div class="col-md-2">
                         </div>
                         <div class="col-md-5">
     @if($value['info']->price_type == 'PACKAGE')

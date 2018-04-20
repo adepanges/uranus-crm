@@ -20,7 +20,7 @@ class Follow_up extends Penjualan_Controller {
         $res = $this->orders_model->get_byid_v1($id);
         $orders = $res->first_row();
 
-        if(!$res->num_rows() || $orders->order_status_id != 2) {
+        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3,4])) {
             $this->_response_json([
                 'status' => 0,
                 'message' => 'Orders tidak dapat dibatalkan'
@@ -81,10 +81,12 @@ class Follow_up extends Penjualan_Controller {
         $notes = (!empty($this->input->post('notes')))?$this->input->post('notes'):$this->input->post('notes_value');
 
         $profile = $this->session->userdata('profile');
+        $user_id_asign = $profile['user_id'];
+
         $res = $this->orders_model->get_byid_v1($id);
         $orders = $res->first_row();
 
-        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3])) {
+        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3,4])) {
             $this->_response_json([
                 'status' => 0,
                 'message' => 'Orders tidak dapat dipending'
@@ -94,9 +96,29 @@ class Follow_up extends Penjualan_Controller {
         if($orders->order_status_id > 1)
         {
             $check_followup_cs = $this->orders_model->validate_followup_cs($orders->order_id, $this->profile['user_id']);
-            if($check_followup_cs->num_rows() == 0)
+            if($check_followup_cs->num_rows() == 0 && $orders->order_status_id != 4)
             {
-                redirect($this->session->userdata('orders_state'));
+                $this->_response_json([
+                    'status' => 0,
+                    'message' => 'Orders gagal dipending'
+                ]);
+            }
+            else if($check_followup_cs->num_rows() == 0)
+            {
+                // from cancel to follow up
+                $followup_process = $this->orders_model->get_follow_up($orders->order_id);
+                if(!$followup_process->num_rows())
+                {
+                    $this->_response_json([
+                        'status' => 0,
+                        'message' => 'Orders gagal dipending'
+                    ]);
+                }
+                else
+                {
+                    $user_id_asign = $followup_process->first_row()->user_id;
+                    $notes .= ", By <b>{$profile['first_name']} {$profile['last_name']}</b>";
+                }
             }
         }
 
@@ -109,7 +131,7 @@ class Follow_up extends Penjualan_Controller {
         ];
         $order_process = [
             'order_id' => $id,
-            'user_id' => $profile['user_id'],
+            'user_id' => $user_id_asign,
             'order_status_id' => 3,
             'status' => $label_status,
             'notes' => trim($notes),

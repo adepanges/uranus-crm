@@ -560,6 +560,7 @@ $(document).ready(function(){
                         var timer = 3000;
                         title = 'Gagal!';
                     } else {
+                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
                         $('#cancelForm')[0].reset()
                         $('#cancelModal').modal('toggle')
                     }
@@ -569,7 +570,6 @@ $(document).ready(function(){
                         text: response.message,
                         timer: timer
                     },function(){
-                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
                     });
                 });
             }
@@ -614,6 +614,7 @@ $(document).ready(function(){
                         var timer = 3000;
                         title = 'Gagal!';
                     } else {
+                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
                         $('#pendingForm')[0].reset()
                         $('#pendingModal').modal('toggle')
                     }
@@ -623,7 +624,6 @@ $(document).ready(function(){
                         text: response.message,
                         timer: timer
                     },function(){
-                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
                     });
                 });
             }

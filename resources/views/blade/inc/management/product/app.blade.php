@@ -92,8 +92,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Berat</label>
-                                    <input type="number" class="form-control" name="weight" data-error="Hmm, berat produt harap diisi" required>
-                                    <div class="help-block with-errors"></div>
+                                    <input type="number" class="form-control" name="weight">
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Harga</label>

@@ -1,5 +1,7 @@
 table.dataTable tbody td {
     vertical-align: middle;
+    color: #000 !important;
+    font-size: 15px;
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
