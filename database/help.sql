@@ -208,3 +208,10 @@ SELECT table_schema "DB Name",
     ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB"
 FROM information_schema.tables
 GROUP BY table_schema;
+
+-- chesk size table
+SELECT
+    table_name AS `Table`,
+    ROUND(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
+FROM information_schema.TABLES
+WHERE table_schema = "newhb_db"
