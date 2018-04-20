@@ -39,6 +39,15 @@
                 <!-- /.page title -->
             </div>
 
+            <div class="row white-box">
+                <div class="col-md-2 pull-right">
+                    <button onclick="ordersTable.ajax.reload()" class="btn btn-primary btn-rounded form-control">
+                        <i class="fa fa-refresh"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
