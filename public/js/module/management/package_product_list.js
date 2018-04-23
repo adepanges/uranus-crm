@@ -62,6 +62,7 @@ $(document).ready(function(){
                 {
                     data: "price",
                     render: function ( data, type, full, meta ) {
+                        if(!data) data = 0;
                         if(package_.price_type == 'RETAIL') return rupiah(data);
                         else return 'Package';
                     }

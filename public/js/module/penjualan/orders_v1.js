@@ -46,7 +46,7 @@ $(document).ready(function(){
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var row = JSON.parse(data);
-                        return row.full_name;
+                        return `<b>${row.full_name}</b>`;
                     }
                 },
                 {
@@ -67,10 +67,14 @@ $(document).ready(function(){
                         </span>`;
                     }
                 },
-                { data: "package_name", orderable: false },
+                { data: "package_name", orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        return `<b style="color: #0077B5;">${data}</b>`;
+                    }
+                },
                 { data: "total_price", orderable: false,
                     render: function ( data, type, full, meta ) {
-                        return rupiah(data);
+                        return `<b style="color: #FF2D55;">${rupiah(data)}</b>`;
                     }
                 },
                 {

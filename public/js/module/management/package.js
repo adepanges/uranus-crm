@@ -50,6 +50,7 @@ $(document).ready(function(){
                 {
                     data: "price",
                     render: function ( data, type, full, meta ) {
+                        if(!data) data = 0;
                         return rupiah(data);
                     }
                 },
@@ -110,7 +111,7 @@ $(document).ready(function(){
     $('#btnSavePackage').click(function(e){
         if(formValidator('#packageForm')){
             var data = serialzeForm('#packageForm');
-            
+
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
@@ -144,17 +145,6 @@ $(document).ready(function(){
     })
 });
 
-function addProduct(){
-    $('#packageForm')[0].reset();
-    formPopulate('#packageForm', {
-        network_id: 0
-    })
-    $('#packageModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-}
-
 function updPackage(id){
     $('.preloader').fadeIn();
     $.ajax({
@@ -175,7 +165,7 @@ function updPackage(id){
 function delPackage(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus product ini!",
+        text: "Anda akan menghapus package ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -189,7 +179,7 @@ function delPackage(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/product/del/index/'+id
+                url: document.app.site_url+'/package/del/index/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

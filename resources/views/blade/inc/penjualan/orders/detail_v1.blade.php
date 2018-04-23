@@ -56,8 +56,8 @@
 {{-- is deleted --}}
 @if($orders->is_deleted == 0)
 
-@if(in_array($orders->order_status_id, [2,3]))
-    @if($access_list->penjualan_orders_action_pending)
+@if(in_array($orders->order_status_id, [2,3,5]))
+    @if($access_list->penjualan_orders_action_pending && $orders->order_status_id != 5)
                 <div class="col-md-2 pull-right">
                     <button onclick="pendingOrders({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
                         <i class="mdi mdi-briefcase-download"></i>
@@ -73,7 +73,7 @@
                     </button>
                 </div>
     @endif
-    @if($access_list->penjualan_orders_action_confirm_buy)
+    @if($access_list->penjualan_orders_action_confirm_buy && $orders->order_status_id != 5)
                 <div class="col-md-2 pull-right">
                     <button onclick="confirmBuy({{ $orders->order_id }})" class="btn btn-success btn-rounded form-control">
                         <i class="mdi mdi-cart-outline"></i>
@@ -81,6 +81,15 @@
                     </button>
                 </div>
     @endif
+@endif
+
+@if($access_list->penjualan_orders_action_pending && $orders->order_status_id == 4 && in_array($role_active->role_id, [1,2,6]))
+            <div class="col-md-2 pull-right">
+                <button onclick="pendingOrders({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
+                    <i class="mdi mdi-briefcase-download"></i>
+                    <span>Pending</span>
+                </button>
+            </div>
 @endif
 
 @if ($orders->order_status_id == 5 && $access_list->penjualan_orders_action_verify_payment)
@@ -256,10 +265,8 @@
 
 @foreach ($orders_cart_package as $key => $value)
                     <div class="row" style="margin-top: 7px;">
-                        <div class="col-md-5">
+                        <div class="col-md-7">
                             <h3>{{ $value['info']->package_name }}</h3>
-                        </div>
-                        <div class="col-md-2">
                         </div>
                         <div class="col-md-5">
     @if($value['info']->price_type == 'PACKAGE')

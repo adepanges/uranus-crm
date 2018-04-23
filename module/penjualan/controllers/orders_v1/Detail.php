@@ -46,6 +46,11 @@ class Detail extends Penjualan_Controller {
         $reason_cancel = ['Tidak jadi beli','Tidak merasa pesan','Nomor palsu'];
         $reason_pending = ['Sudah di WhatsApp','Nomor WhatsApp tidak keluar','Tidak diangkat','Minta dihubungi lagi nanti'];
 
+        if($orders->order_status_id == 4)
+        {
+            $reason_pending = ['FROM_CANCEL: Customer jadi beli'];
+        }
+
         $product_package = $this->master_model->product_package()->result();
         foreach ($product_package as $key => $value) {
             $value->product_list = $this->master_model->product_package_list([

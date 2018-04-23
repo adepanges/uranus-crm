@@ -20,13 +20,15 @@
 
     .side {
         margin: 0mm;
-        padding-left: 10mm;
-        padding-right: 10mm;
+        padding-left: 5mm;
+        padding-top: 3mm;
+        padding-right: 5mm;
         width: 82mm;
         height: 40mm;
         float: left;
         font-size: 1em;
         font-size: 11px;
+        border: 1px solid #000;
     }
 
     .side.label-pengiriman {
@@ -77,24 +79,61 @@
 </style>
 <div id="noPrintArea">
     <div class="example-print">Dermeva Kosmetik Indonesia</div>
+
+    <?php
+    foreach ($invoices as $key => $value)
+    {
+        // $package = [];
+        // $produk_qty = 0;
+        // foreach ($value->order_cart as $key => $value_cart) {
+        //     $package[] = $value_cart['info']->package_name;
+        //
+        //     foreach ($value_cart['cart'] as $key => $value_cart_detail) {
+        //         if(!empty($value_cart_detail->product_id))
+        //         {
+        //             $produk_qty = $produk_qty + $value_cart_detail->qty;
+        //         }
+        //     }
+        // }
+        // $package = implode(", ", $package);
+        // dd($package);
+    }
+    // exit;
+    ?>
 </div>
 
 <div id="printArea">
     <body>
 <?php $count = 0; ?>
 @foreach ($invoices as $key => $value)
-        <?php $count++; ?>
+        <?php
+        $count++;
+        $package = [];
+        $produk_qty = 0;
+        foreach ($value->order_cart as $key => $value_cart) {
+            $package[] = $value_cart['info']->package_name;
+
+            foreach ($value_cart['cart'] as $key => $value_cart_detail) {
+                if(!empty($value_cart_detail->product_id))
+                {
+                    $produk_qty = $produk_qty + $value_cart_detail->qty;
+                }
+            }
+        }
+        $package = implode(", ", $package);
+        // dd($produk_qty);
+        ?>
         <div class="side">
-            <br>
-            <h3>Label Pengiriman:</h3>
+            <b>Label Pengiriman:</b><br>
             {{ $value->customer->full_name }}<br>
-            {{ $value->customer->telephone }}<br><br>
+            {{ $value->customer->telephone }}
+            <hr>
+            Logistik: <b>{{ $value->logistic_name }}</b><br>
+            Paket: <b>{{ $package }}</b>, Qty : <b>{{ $produk_qty }}</b>
+            <hr>
             {{ $value->customer_address->address }}<br>
             Ds./Kel. {{ $value->customer_address->desa_kelurahan }} Kec. {{ $value->customer_address->kecamatan }}<br>
-            {{ $value->customer_address->kabupaten }} Prov. {{ $value->customer_address->provinsi }}<br>
-            {{ $value->customer_address->postal_code }}<br>
-            <hr>
-
+            {{ $value->customer_address->kabupaten }} Prov. {{ $value->customer_address->provinsi }} {{ $value->customer_address->postal_code }}
         </div>
         @if($count==14)
         <br>
