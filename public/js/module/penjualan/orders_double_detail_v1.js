@@ -1,8 +1,8 @@
 function pulihkanOrders(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan memulihkan orders ini!",
-        type: "success",
+        text: "Anda akan memulihkan orders ini! dan yakin sisanya akan dibuang",
+        type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-success",
         confirmButtonText: "Pulihkan",
@@ -17,15 +17,17 @@ function pulihkanOrders(id){
                 method: "POST",
                 url: document.app.site_url+'/orders_v1/double/pulihkan/'+id
             })
-            .done(function( response ) {
+            .done(function( response) {
                 $('.preloader').fadeOut();
 
                 var title = 'Berhasil!';
                 if(!response.status) {
-                    title = 'Gagal!';
-                } else {
-                    document.location.reload()
+                    title = 'Hmmm!';
                 }
+
+                if(!response.message) response.message = 'Sedang memuat...'
+
+                document.location.reload()
 
                 swal({
                     title: title,

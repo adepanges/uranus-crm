@@ -57,7 +57,7 @@
 @if($orders->is_deleted == 0)
 
 @if(in_array($orders->order_status_id, [2,3,5]))
-    @if($access_list->penjualan_orders_action_pending)
+    @if($access_list->penjualan_orders_action_pending && $orders->order_status_id != 5)
                 <div class="col-md-2 pull-right">
                     <button onclick="pendingOrders({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
                         <i class="mdi mdi-briefcase-download"></i>

@@ -112,11 +112,39 @@ class Double extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_double_pulihkan', 'rest');
         $id = (int) $id;
-        $this->load->model('double_orders_model');
+        $this->load->model(['double_orders_model','orders_model']);
+        $res_orders = $this->orders_model->get_byid_v1($id)->first_row();
+        $orders_double_id = 0;
 
         $res = $this->double_orders_model->pulihkan($id);
 
-        if($res)
+        if(!empty($res_orders) && isset($res_orders->orders_double_id))
+        {
+            $orders_double_id = $res_orders->orders_double_id;
+        }
+
+        $orders = $this->double_orders_model->get_orders($orders_double_id)->result();
+        $order_id = [];
+        $follow_up = TRUE;
+        foreach ($orders as $key => $value)
+        {
+            if($value->order_status_id > 1) $follow_up = FALSE;
+            $order_id[] = $value->order_id;
+        }
+
+        if($orders_double_id == 0) $res = FALSE;
+
+        $res2 = TRUE;
+        $res3 = TRUE;
+        if(!empty($order_id)) $res2 = $this->orders_model->trash($order_id);
+        $res3 = $this->double_orders_model->solve($orders_double_id);
+
+        if($follow_up && !empty($orders))
+        {
+            redirect('orders_v1/app/follow_up/'.$id);
+        }
+
+        if($res && $res2 && $res3)
         {
             $this->_response_json([
                 'status' => 1,
