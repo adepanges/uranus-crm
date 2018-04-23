@@ -20,7 +20,7 @@ class Follow_up extends Penjualan_Controller {
         $res = $this->orders_model->get_byid_v1($id);
         $orders = $res->first_row();
 
-        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3,4])) {
+        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3,4,5])) {
             $this->_response_json([
                 'status' => 0,
                 'message' => 'Orders tidak dapat dibatalkan'
@@ -86,7 +86,7 @@ class Follow_up extends Penjualan_Controller {
         $res = $this->orders_model->get_byid_v1($id);
         $orders = $res->first_row();
 
-        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3,4])) {
+        if(!$res->num_rows() || !in_array($orders->order_status_id, [2,3,4,5])) {
             $this->_response_json([
                 'status' => 0,
                 'message' => 'Orders tidak dapat dipending'

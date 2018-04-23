@@ -126,7 +126,7 @@ class V1 extends API_Controller {
             $double_orders = $this->double_orders_model->init_double_orders([
                 'customer_name' => $customer_info->full_name,
                 'customer_telephone' => $customer_info->telephone,
-                'double_reason' => 'SAME_CUSTOMER_BY_MSISDN'
+                'double_reason' => 'SAME_CUSTOMER_BY_PHONE'
             ], $customer_info->customer_id);
             if(!empty($double_orders))
             {
