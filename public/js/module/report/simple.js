@@ -1,4 +1,10 @@
 $(document).ready(function(){
+    jQuery('#date-range').datepicker({
+        toggleActive: true,
+        format: 'yyyy-mm-dd'
+    });
+
+
     var numberer = 1;
     reportTable = $('#reportTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;
@@ -8,6 +14,11 @@ $(document).ready(function(){
                     border: '1px solid #fff'
                 }
             });
+
+            data.date_start = $('#date-range [name=start]').val();
+            data.date_end = $('#date-range [name=end]').val();
+            data.by_date = $('#filterSection [name=by_date]:checked').val();
+
         }).on('xhr.dt', function ( e, settings, json, xhr ){
             $('.row .white-box').unblock();
             if(!document.datatable_search_change_event)
@@ -20,6 +31,10 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+
+            $('#fieldPenjualan').html(rupiah(json.information.total_price));
+            $('#fieldSales').html(json.information.total_sale);
+            $('#fieldProduct').html(json.information.product_total);
         }).DataTable({
             language: {
                 infoFiltered: ""
@@ -47,6 +62,13 @@ $(document).ready(function(){
                         return '<span style="color: #090;"><b>'+rupiah(data)+'</b></span>';
                     }
                 },
+                {
+                    data: "total_product",
+                    render: function ( data, type, full, meta ) {
+                        if(!data) data = 0;
+                        return data;
+                    }
+                },
                 { data: "total_follow_up", width: "8%" },
                 { data: "total_pending", width: "8%",
                     render: function ( data, type, full, meta ) {
@@ -68,7 +90,7 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var rate = (full.total_sale / full.total_follow_up);
                         if(isNaN(rate)) rate = 0;
-                        rate = rate.toFixed(2) * 100;
+                        rate = precisionRound((rate * 100), 2);
                         return '<span style="color: #900;"><b>'+rate+' %</b></span>';
                     }
                 },
@@ -85,7 +107,7 @@ $(document).ready(function(){
                             )
                         );
                         if(isNaN(rate)) rate = 0;
-                        rate = rate.toFixed(2) * 100;
+                        rate = precisionRound((rate * 100), 2);
                         return '<span style="color: #900;"><b>'+rate+' %</b></span>';
                     }
                 }

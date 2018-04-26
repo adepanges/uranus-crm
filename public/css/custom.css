@@ -34,3 +34,11 @@ code.catch {
 .role_option_detail {
     margin-left: 10px;
 }
+
+#informationSection div {
+    border-right: 1px solid #000;
+}
+
+#informationSection div h3 {
+    text-align: center;
+}

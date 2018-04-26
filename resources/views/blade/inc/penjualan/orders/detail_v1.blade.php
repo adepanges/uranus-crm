@@ -719,6 +719,7 @@
                                     <select name="name" class="form-control">
                                         <option value="Diskon">Diskon</option>
                                         <option value="Kode Unik">Kode Unik</option>
+                                        <option value="Ongkir">Ongkir</option>
                                         <option value="">Lainnya</option>
                                     </select>
                                 </div>
