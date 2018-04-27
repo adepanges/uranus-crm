@@ -28,9 +28,9 @@ class Simple_model extends Report_Model {
                 break;
 
             case 'action':
-                $join = "LEFT JOIN orders_process fu ON fu.order_id = z.order_id and fu.order_status_id = 2";
-                $join_where = "(fu.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
-                $join_where_sale = $join_where;
+                // $join = "LEFT JOIN orders_process fu ON fu.order_id = z.order_id and fu.order_status_id = 2";
+                // $join_where = "(fu.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
+                // $join_where_sale = $join_where;
                 $join_other = "";
                 $where = "(z.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
                 $where_sale = "(w.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
@@ -127,9 +127,10 @@ class Simple_model extends Report_Model {
                 break;
 
             case 'action':
-                $join = "LEFT JOIN orders_process fu ON p.order_id = fu.order_id AND fu.order_status_id = 2
-                        LEFT JOIN orders_process z ON p.order_id = z.order_id AND z.order_status_id = 7";
-                $where = "(fu.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND (z.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
+                // LEFT JOIN orders_process fu ON p.order_id = fu.order_id AND fu.order_status_id = 2LEFT JOIN orders_process fu ON p.order_id = fu.order_id AND fu.order_status_id = 2
+                // (fu.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND
+                $join = "LEFT JOIN orders_process z ON p.order_id = z.order_id AND z.order_status_id = 7";
+                $where = "(z.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
                 break;
         }
 
