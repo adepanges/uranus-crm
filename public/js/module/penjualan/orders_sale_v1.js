@@ -1,4 +1,11 @@
 $(document).ready(function(){
+    $('#penjualan_checklist_bulk').click(function(){
+        if($(this).is(':checked')){
+            $('.penjualan_checklist').prop('checked', true);
+        } else {
+            $('.penjualan_checklist').prop('checked', false);
+        }
+    });
 
     var numberer = 1;
     ordersTable = $('#ordersTable').on('preXhr.dt', function ( e, settings, data ){
@@ -31,6 +38,13 @@ $(document).ready(function(){
                 infoFiltered: ""
             },
             columns: [
+                {
+                    data: 'order_id',
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        return `<input class="penjualan_checklist" type="checkbox" value="${data}">`;
+                    }
+                },
                 {
                     name: 'Number',
                     width: "5%",
@@ -73,7 +87,7 @@ $(document).ready(function(){
                         {
                             button.push(`<span class="label label-success label-rouded">CS: ${full.cs_sale}</span><br>`)
                         }
-                        
+
                         if(document.app.access_list.penjualan_orders_view_modifier)
                         {
                             button.push(`<span class="label label-warning label-rouded">FIN: ${full.username}</span><br>`)
@@ -141,4 +155,20 @@ function trashOrders(id){
             });
         }
     });
+}
+
+function cetakExcel(){
+    var el = $('.penjualan_checklist:checked'),
+        orders = [],
+        orders_base64 = '';
+
+    if(el.length){
+        el.each(function( index ) {
+          orders.push($(this).val())
+        });
+        orders_base64 = btoa(orders.join(','));
+        window.open(document.app.site_url + '/orders_v1/cetak/excel/' + orders_base64);
+    } else {
+        alert('Check orders terlebih dahulu');
+    }
 }

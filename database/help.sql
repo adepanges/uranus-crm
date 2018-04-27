@@ -104,7 +104,12 @@ INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`fea
 SELECT
     4, a.module_id, b.menu_id, c.feature_id, c.name,
     CASE WHEN
-        b.module_id = 3
+        b.module_id = 3 OR
+        c.name IN (
+            'penjualan_orders_detail',
+            'penjualan_orders_list',
+            'penjualan_orders_sale'
+        )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1

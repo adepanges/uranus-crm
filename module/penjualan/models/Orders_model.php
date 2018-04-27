@@ -160,6 +160,27 @@ class Orders_model extends Penjualan_Model {
         return $this->db->query($sql, [$id]);
     }
 
+    function get_byid_bulk($id = [])
+    {
+        foreach ($id as $key => $value) {
+            $id[$key] = (int) $value;
+        }
+        $id = implode(',', $id);
+        $sql = "SELECT
+            a.*, b.total_product, c.name AS logistic_name,
+            (SELECT package_name FROM orders_cart WHERE order_id = a.order_id AND is_package = 1 LIMIT 1) AS package_name
+        FROM orders a
+        LEFT JOIN (
+            SELECT order_id, SUM(qty) AS total_product
+            FROM orders_cart
+            WHERE product_id IS NOT NULL AND product_id != 0
+            GROUP BY order_id
+        ) b ON a.order_id = b.order_id
+        LEFT JOIN master_logistics c ON a.logistic_id = c.logistic_id
+        WHERE a.order_id IN ({$id})";
+        return $this->db->query($sql);
+    }
+
     function upd($id, $params)
     {
         $this->db->where('order_id', $id);

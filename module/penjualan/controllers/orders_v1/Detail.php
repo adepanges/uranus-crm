@@ -24,7 +24,7 @@ class Detail extends Penjualan_Controller {
             ) ||
             (
                 $orders->order_status_id > 5 &&
-                !in_array($this->role_active['role_id'], [1,2,3])
+                !in_array($this->role_active['role_id'], [1,2,3,4])
             )
         )
         {
