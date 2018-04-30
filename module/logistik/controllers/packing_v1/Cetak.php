@@ -16,8 +16,10 @@ class Cetak extends Logistik_Controller {
             $value->customer = json_decode($value->customer);
             $value->customer_address = json_decode($value->customer_address);
             $value->order_cart = $this->orders_model->parse_cart_v1(json_decode($value->order_cart));
+            $value->total_price_terbilang = ucfirst(terbilang($value->total_price)).' rupiah';
             $data[$key] = $value;
         }
+
         $this->blade->view('cetak/label_invoice', [
             'invoices' => $data
         ]);

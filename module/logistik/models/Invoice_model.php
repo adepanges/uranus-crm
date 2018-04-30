@@ -5,14 +5,20 @@ class Invoice_model extends Logistik_Model {
 
     function get_available_print($id = [])
     {
-        $id_clean = [];
+        $id_clean_array = [];
         foreach ($id as $key => $value) {
-            if((int) $value != 0) $id_clean[] = (int) $value;
+            if((int) $value != 0) $id_clean_array[] = (int) $value;
         }
 
-        $this->db->where_in('order_id', $id_clean);
-        $res = $this->db->get('orders_invoices');
-        $this->set_printed($id_clean);
+        $id_clean = implode(',', $id_clean_array);
+
+        $sql = "SELECT
+                a.*, b.*
+            FROM orders_invoices a
+            LEFT JOIN franchise b ON a.franchise_id = b.franchise_id
+            WHERE a.order_id IN ({$id_clean})";
+        $res = $this->db->query($sql);
+        $this->set_printed($id_clean_array);
         return $res;
     }
 

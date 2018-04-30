@@ -24,7 +24,7 @@
         width: 82mm;
         height: 125.5mm;
         float: left;
-        font-size: 1em;
+        font-size: 10px;
     }
 
     .side.label-pengiriman {
@@ -49,7 +49,7 @@
 
     .product-list {
         display: flex;
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .product-list .product-name {
@@ -105,8 +105,11 @@
 @endif
         <img src="{{ base_url('images/logo/dermeva_logo_205x41.png') }}">
         <hr>
-        <h3>INVOICE</h3>
-        Penjual: <b>Dermeva Kosmetik Indonesia</b><br>
+        <h3>Faktur</h3>
+        <b>{{ $value->nama_badan }}</b><br>
+        NPWP <b>{{ $value->tax_number }}</b><br>
+        <span style="font-size: 8px">{{ $value->address }}</span><br>
+        <hr>
         Nomor: {{ $value->invoice_number }}<br>
         Tanggal: {{ tanggal_indonesia(date('Y-m-d', strtotime($value->paid_date))) }}<br>
         Metode Pembayaran: {{ $value->payment_method }}<br>
@@ -140,16 +143,12 @@
             <div class="product-qty"></div>
             <div class="product-price">{{ rupiah($value->total_price) }}</div>
         </div>
-        <hr>
-        <div class="label-pengiriman" style="font-size: 11px;">
-            Tujuan Pengiriman:<br>
-            {{ $value->customer->full_name }}<br>
-            {{ $value->customer->telephone }}<br><br>
-            {{ $value->customer_address->address }}<br>
-            Ds./Kel. {{ $value->customer_address->desa_kelurahan }} Kec. {{ $value->customer_address->kecamatan }}<br>
-            {{ $value->customer_address->kabupaten }} Prov. {{ $value->customer_address->provinsi }}<br>
-            {{ $value->customer_address->postal_code }}<br>
+        <div class="product-list detail">
+            <div class="product-name"></div>
+            <div class="product-qty"></div>
+            <div class="product-price" style="text-align: right; font-size: 8px;">(<i>{{ $value->total_price_terbilang }}</i>)</div>
         </div>
+        <hr>
     </div>
         @endfor
     <div class="pagebreak"></div>

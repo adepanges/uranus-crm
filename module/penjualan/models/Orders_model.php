@@ -16,6 +16,14 @@ class Orders_model extends Penjualan_Model {
         $where = [];
         $ordering = 'ORDER BY created_at ASC';
 
+        if(
+            isset($params['date_start']) && !empty($params['date_start'])
+        ) $params['date_start'] = $this->db->escape($params['date_start'].' 00:00:00');
+        if(
+            isset($params['date_end']) && !empty($params['date_end'])
+        ) $params['date_end'] = $this->db->escape($params['date_end'].' 23:59:59');
+
+
         if($params['order_status_id'] == 4) $ordering = 'ORDER BY created_at DESC';
 
         if(isset($params['order_status_id']) && $params['order_status_id'] != 1)
@@ -67,8 +75,23 @@ class Orders_model extends Penjualan_Model {
                 LEFT JOIN sso_user ho ON h.user_id = ho.user_id
                 WHERE h.order_status_id = 6 and h.order_id = a.order_id LIMIT 1) as cs_sale";
 
-            $ordering = 'ORDER BY created_at DESC';
             $where[] = "a.order_status_id >= {$params['order_status_id']}";
+
+            // filter tanggal sale dan tampilkan
+            $join[] = "LEFT JOIN orders_process j ON a.order_id = j.order_id and j.order_status_id = 7";
+            $select[] = 'j.created_at AS sale_date';
+            $where[] = "j.created_at BETWEEN ".$params['date_start'] ." AND ". $params['date_end'];
+            $ordering = 'ORDER BY j.created_at DESC';
+
+            switch ($params['filter_sale']) {
+                case 'orders_sale':
+                $where[] = "a.order_status_id = 7";
+                    break;
+
+                case 'orders_logistics':
+                    $where[] = "a.order_status_id > 7";
+                    break;
+            }
         }
 
         if(empty($select)) $select = ''; else $select = ", ".implode(", ",$select);
@@ -158,6 +181,27 @@ class Orders_model extends Penjualan_Model {
             LEFT JOIN orders_invoices d ON a.order_id = d.order_id
             WHERE a.version = 1 AND a.order_id = ? LIMIT 1";
         return $this->db->query($sql, [$id]);
+    }
+
+    function get_byid_bulk($id = [])
+    {
+        foreach ($id as $key => $value) {
+            $id[$key] = (int) $value;
+        }
+        $id = implode(',', $id);
+        $sql = "SELECT
+            a.*, b.total_product, c.name AS logistic_name,
+            (SELECT package_name FROM orders_cart WHERE order_id = a.order_id AND is_package = 1 LIMIT 1) AS package_name
+        FROM orders a
+        LEFT JOIN (
+            SELECT order_id, SUM(qty) AS total_product
+            FROM orders_cart
+            WHERE product_id IS NOT NULL AND product_id != 0
+            GROUP BY order_id
+        ) b ON a.order_id = b.order_id
+        LEFT JOIN master_logistics c ON a.logistic_id = c.logistic_id
+        WHERE a.order_id IN ({$id})";
+        return $this->db->query($sql);
     }
 
     function upd($id, $params)
