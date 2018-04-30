@@ -12,7 +12,10 @@ class Get extends Penjualan_Controller {
             'order_status_id' => 1,
             'user_id' => $this->profile['user_id'],
             'role_id' => $this->data['role_active']->role_id,
-            'tim_leader' => $this->session->userdata('tim_leader')
+            'tim_leader' => $this->session->userdata('tim_leader'),
+            'date_start' => $this->input->post('date_start'),
+            'date_end' => $this->input->post('date_end'),
+            'filter_sale' => $this->input->post('filter_sale')
         ];
         $status = [
             'new' => 1,
@@ -44,6 +47,9 @@ class Get extends Penjualan_Controller {
         {
             $only_see_own = TRUE;
         }
+
+        $params['date_start'] = !empty($params['date_start'])?$params['date_start']:date('Y-m-01');
+        $params['date_end'] = !empty($params['date_end'])?$params['date_end']:date('Y-m-d');
 
         $this->orders_model->set_datatable_param($this->_datatable_param());
         $data = $this->orders_model->get_datatable_v1($params, $only_see_own);
