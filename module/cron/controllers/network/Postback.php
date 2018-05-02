@@ -51,7 +51,7 @@ class Postback extends Cron_Controller {
                 }
                 else
                 {
-                    $resp = 'NO_HTTP-SUCCESS';
+                    $params['postback_response'] = 'NO_HTTP-SUCCESS';;
                 }
 
                 $this->eins_log->write('info', 'ADD LOG POSTBACK', $params);
