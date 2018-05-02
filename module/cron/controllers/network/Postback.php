@@ -42,10 +42,17 @@ class Postback extends Cron_Controller {
                     'network_name' => $value->name,
                     'status' => 1
                 ];
-                $this->eins_log->write('info', 'NETWORK '.$value->name.' POSTBACK REQ :', $params['url']);
-                $resp = Unirest\Request::get($params['url']);
-                if($resp) $params['postback_response'] = $resp->raw_body;
-                $this->eins_log->write('info', 'NETWORK '.$value->name.' POSTBACK RES :', $params['postback_response']);
+                if($params['url'] != 'none')
+                {
+                    $this->eins_log->write('info', 'NETWORK '.$value->name.' POSTBACK REQ :', $params['url']);
+                    $resp = Unirest\Request::get($params['url']);
+                    if($resp) $params['postback_response'] = $resp->raw_body;
+                    $this->eins_log->write('info', 'NETWORK '.$value->name.' POSTBACK RES :', $params['postback_response']);
+                }
+                else
+                {
+                    $resp = 'NO_HTTP-SUCCESS';
+                }
 
                 $this->eins_log->write('info', 'ADD LOG POSTBACK', $params);
                 $this->network_model->add_network_postback($params);
