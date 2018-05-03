@@ -116,6 +116,7 @@ function initMemberTim(){
                             value: params.term,
                             regex: false
                         },
+                        from: 'management_cs_team_member',
                         type: 'public'
                     }
                     return query;

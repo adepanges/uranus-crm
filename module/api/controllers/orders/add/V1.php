@@ -75,6 +75,9 @@ class V1 extends API_Controller {
             ];
             $this->orders_process_model->add($order_process);
 
+            $network_id = 0;
+            $network = [];
+            $data_catch = [];
             if(
                 isset($json_data->network) &&
                 isset($json_data->network->id) && !empty($json_data->network->id) &&
@@ -82,16 +85,17 @@ class V1 extends API_Controller {
             )
             {
                 $network_id = (int) $json_data->network->id;
-                $network = $this->network_model->get_byid($network_id)->first_row();
-                if(!empty($network))
-                {
-                    $data_catch = (array) $json_data->network->catch;
-                    $field_catch = explode(",",$network->catch);
-                    $this->network_model->orders_add([
-                        'order_id' => $order_id,
-                        'network_id' => $network_id
-                    ], $data_catch, $field_catch);
-                }
+                $data_catch = (array) $json_data->network->catch;
+            }
+
+            $network = $this->network_model->get_byid($network_id)->first_row();
+            if(!empty($network))
+            {
+                $field_catch = explode(",",$network->catch);
+                $this->network_model->orders_add([
+                    'order_id' => $order_id,
+                    'network_id' => $network_id
+                ], $data_catch, $field_catch);
             }
 
             if($res && $res_cart)

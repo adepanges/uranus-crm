@@ -29,7 +29,13 @@ class Verify extends Penjualan_Controller {
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
-        if(!$res->num_rows() || !in_array($data->order_status_id, [6])) redirect('orders_v1');
+        if(!$res->num_rows() || !in_array($data->order_status_id, [6]))
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Orders telah di sale sebelumnya'
+            ]);
+        }
 
         if(!empty($invoice_number) && $this->invoice_model->get_by_inv_numb($invoice_number, 0, $this->franchise->franchise_id)->num_rows() > 0)
         {

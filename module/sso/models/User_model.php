@@ -22,6 +22,10 @@ class User_model extends SSO_Model {
         if(isset($params['from']) && $params['from'] == 'management_cs_team')
         {
             $where[] = "a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id IN (1,2,6))";
+        } else
+        if(isset($params['from']) && $params['from'] == 'management_cs_team_member')
+        {
+            $where[] = "a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id = 5)";
         }
 
         $where[] = "a.user_id <> 1";
