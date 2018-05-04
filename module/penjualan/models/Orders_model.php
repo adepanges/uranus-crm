@@ -56,11 +56,18 @@ class Orders_model extends Penjualan_Model {
         }
         else if(
             $params['role_id'] == 6 &&
-            !empty($params['tim_leader']) &&
-            isset($params['tim_leader']->team_cs_id) &&
-            $params['order_status_id'] != 1)
+            $params['order_status_id'] != 1 && $params['order_status_id'] != 7
+            )
         {
             $where[] = "d.user_id IN (SELECT user_id FROM management_team_cs_member WHERE team_cs_id = {$params['tim_leader']->team_cs_id})";
+        }
+        else if(
+            $params['role_id'] == 6 &&
+            $params['order_status_id'] == 7
+            )
+        {
+            $join[] = "LEFT JOIN orders_process e ON a.order_id = e.order_id AND e.order_status_id = 6";
+            $where[] = "e.user_id IN (SELECT user_id FROM management_team_cs_member WHERE team_cs_id = {$params['tim_leader']->team_cs_id})";
         }
 
         if($params['order_status_id'] < 7)

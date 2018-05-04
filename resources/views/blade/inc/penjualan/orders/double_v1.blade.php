@@ -19,6 +19,7 @@
         <script src="{{ base_url('plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
         <script src="{{ base_url('js/module/penjualan/orders_double_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/orders_badge_v1.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')

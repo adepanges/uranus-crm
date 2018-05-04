@@ -7,8 +7,6 @@
         <link href="{{ base_url('plugins/bower_components/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ base_url('plugins/bower_components/datatables-bootstrap/Buttons-1.5.1/css/buttons.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ base_url('plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
-        <link href="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/css/select2.min.css') }}" rel="stylesheet" />
 @endsection
 
 @section('load_js')
@@ -20,10 +18,8 @@
         <!-- Sweet-Alert  -->
         <script src="{{ base_url('plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
-        <script src="{{ base_url('plugins/bower_components/select2-4.0.6-rc.1/dist/js/select2.min.js') }}"></script>
-        <script src="{{ base_url('plugins/bower_components/switchery/dist/switchery.min.js') }}"></script>
-        <script src="{{ base_url('js/validator.js') }}"></script>
         <script src="{{ base_url('js/module/penjualan/orders_cancel_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/orders_badge_v1.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')

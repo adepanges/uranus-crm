@@ -1,10 +1,4 @@
 $(document).ready(function(){
-    jQuery('#datepicker-autoclose').datepicker({
-        autoclose: true,
-        todayHighlight: true,
-        format: 'yyyy-mm-dd'
-    });
-
     var numberer = 1;
     ordersTable = $('#ordersTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;

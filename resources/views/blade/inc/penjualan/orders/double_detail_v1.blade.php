@@ -26,6 +26,7 @@
         <script src="{{ base_url('plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
         <script src="{{ base_url('js/module/penjualan/orders_double_detail_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/orders_badge_v1.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')
