@@ -220,3 +220,8 @@ SELECT
     ROUND(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
 FROM information_schema.TABLES
 WHERE table_schema = "newhb_db"
+-- check sessin created at
+SELECT
+  FROM_UNIXTIME(`timestamp`) AS created_at
+FROM
+  sso_session_web
