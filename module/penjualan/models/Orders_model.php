@@ -304,6 +304,11 @@ class Orders_model extends Penjualan_Model {
         return $this->db->delete('orders_cart', ['cart_id' => (int) $id]);
     }
 
+    function del_by_package_id($id = 0)
+    {
+        return $this->db->delete('orders_cart', ['product_package_id' => (int) $id]);
+    }
+
     function get_follow_up($order_id)
     {
         return $this->db->order_by('process_id', 'ASC')->get_where('orders_process', [

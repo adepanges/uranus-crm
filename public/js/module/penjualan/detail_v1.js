@@ -144,6 +144,25 @@ function deleteCart(id){
     });
 }
 
+function deletePackage(id){
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Anda akan menghapus product/biaya tersebut!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            window.location = document.app.site_url+'/orders_v1/app/del_package_on_chart/'+document.app.penjualan.orders.order_id+'/'+id;
+        }
+    });
+}
+
 function cancelOrders(id){
     $('#cancelForm')[0].reset();
     formPopulate('#cancelForm', {

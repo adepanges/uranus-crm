@@ -181,6 +181,25 @@ class App extends Penjualan_Controller {
         else redirect('orders_v1/detail/index/'.$id.'?FAIL');
     }
 
+    function del_package_on_chart($id = 0, $package_id = 0)
+    {
+        $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');
+        $this->load->model(['orders_model']);
+        $order_id = (int) $id;
+        $package_id = (int) $package_id;
+
+        $res1 = $this->orders_model->del_by_package_id($package_id);
+        $res2 = $this->orders_model->upd($order_id, [
+            'total_price' => $this->orders_model->get_latest_price_cart($order_id)
+        ]);
+
+        if($res1 && $res2)
+        {
+            redirect('orders_v1/detail/index/'.$id.'?SUCCESS');
+        }
+        else redirect('orders_v1/detail/index/'.$id.'?FAIL');
+    }
+
     function addon_shopping_info()
     {
         $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');

@@ -278,9 +278,28 @@
                     </div>
 
 @foreach ($orders_cart_package as $key => $value)
+    <?php
+        $del_package = '';
+        $show_btn_del = FALSE;
+        if(
+            (
+                !empty($value_cart->product_id) &&
+                in_array($orders->order_status_id, [2,3,5]) &&
+                $access_list->penjualan_orders_update_shopping_info
+            ) ||
+            (
+                $orders->order_status_id == 6 &&
+                $role_active->role_id == 3
+            ) ||
+            in_array($role_active->role_id, [1,2])
+        ){
+            if($value['info']->product_package_id) $del_package = '<span class="delete_cart" onclick="deletePackage('.$value['info']->product_package_id.')">[ x ]</span>';
+            $show_btn_del = TRUE;
+        }
+    ?>
                     <div class="row" style="margin-top: 7px;">
                         <div class="col-md-7">
-                            <h3>{{ $value['info']->package_name }}</h3>
+                            <h3>{!! $del_package !!}{{ $value['info']->package_name }}</h3>
                         </div>
                         <div class="col-md-5">
     @if($value['info']->price_type == 'PACKAGE')
@@ -293,22 +312,7 @@
     @foreach ($value['cart'] as $key_cart => $value_cart)
         <?php
             $btn_del = '';
-            if(
-                !$value_cart->is_package &&
-                (
-                    (
-                        !empty($value_cart->product_id) &&
-                        in_array($orders->order_status_id, [2,3,5]) &&
-                        $access_list->penjualan_orders_update_shopping_info
-                    ) ||
-                    (
-                        $orders->order_status_id == 6 &&
-                        $role_active->role_id == 3
-                    ) ||
-                    in_array($role_active->role_id, [1,2]
-                )
-            )
-            ) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';;
+            if($show_btn_del && !$value_cart->is_package) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';
         ?>
 
                         <div class="row" style="padding-left: 40px;">
