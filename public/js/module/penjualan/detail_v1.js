@@ -864,6 +864,62 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('#labelNoteOrders').click(function(){
+        $('#fieldNoteOrders').show();
+        $('#labelNoteOrders').hide();
+    })
+
+    $('#fieldNoteOrders').focusout(function(){
+        $('#fieldNoteOrders').hide();
+        $('#labelNoteOrders').show();
+    })
+
+    $('#fieldNoteOrders').keyup(function(){
+        var data_saved = $(this).attr('data-saved'),
+            val = btoa($(this).val());
+
+        $('#labelNoteOrders').html($(this).val());
+
+        if(data_saved != val){
+            $('#btnSaveNoteOrders').show();
+        } else {
+            $('#btnSaveNoteOrders').hide();
+        }
+    })
+
+    $('#btnSaveNoteOrders').click(function(){
+        $('.preloader').fadeIn();
+        $.ajax({
+            method: "POST",
+            url: document.app.site_url+'/orders_v1/detail/save_note',
+            data: {
+                order_id: document.app.penjualan.orders.order_id,
+                note: $('#fieldNoteOrders').val()
+            }
+        })
+        .done(function( response ) {
+            $('.preloader').fadeOut();
+            var title = 'Berhasil!',
+                timer = 1000;
+
+            if(!response.status) {
+                var timer = 3000;
+                title = 'Gagal!';
+            } else {
+                $('#fieldNoteOrders').attr('data-saved', btoa($('#fieldNoteOrders').val()));
+                $('#fieldNoteOrders').trigger('keyup');
+            }
+
+            swal({
+                title: title,
+                text: response.message,
+                timer: timer
+            },function(){
+
+            });
+        });
+    })
 });
 
 

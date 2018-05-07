@@ -78,4 +78,30 @@ class Detail extends Penjualan_Controller {
 
         $this->blade->view('inc/penjualan/orders/detail_v1', $this->data);
     }
+
+    public function save_note()
+    {
+        $this->load->model('orders_model');
+        $order_id = (int) $this->input->post('order_id');
+
+        $data = [
+            'note' => $this->input->post('note'),
+        ];
+        $res = $this->orders_model->upd($order_id, $data);
+
+        if($res)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil mengubah note'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah note'
+            ]);
+        }
+    }
 }

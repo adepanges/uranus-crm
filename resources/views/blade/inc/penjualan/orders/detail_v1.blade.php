@@ -364,6 +364,17 @@
             </div>
 
             <div class="row white-box">
+                <div class="col-md-4 col-xs-12">
+                    <h1>Catatan</h1>
+                </div>
+                <div class="col-md-8 col-xs-12">
+                    <pre style="cursor: text;" id="labelNoteOrders">{{ $orders->note }}</pre>
+                    <textarea rows="5" id="fieldNoteOrders" class="form-control" placeholder="Tidak ada" data-saved="{!! base64_encode($orders->note) !!}" style="display: none;">{{ $orders->note }}</textarea><br>
+                    <button class="btn btn-primary pull-right" id="btnSaveNoteOrders" style="display: none;">Simpan</button>
+                </div>
+            </div>
+
+            <div class="row white-box">
                 <div class="col-md-6 col-xs-12">
                     <h1>History Orders</h1>
 
