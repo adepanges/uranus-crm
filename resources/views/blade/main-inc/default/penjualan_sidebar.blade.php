@@ -54,7 +54,7 @@
                             <a href="{{ site_url('orders_v1/sale') }}">
                                 <i class="fa fa-money" style="font-size: 13px;"></i>
                                 <span class="hide-menu">Sale Orders</span>
-                                <span class="badge badge-info" id="count_cancel">?</span>
+                                <span class="badge badge-info" id="count_sale">?</span>
                             </a>
                         </li>
 @endif
@@ -66,6 +66,7 @@
                                     <a href="{{ site_url('orders_v1/cancel') }}">
                                         <i class="mdi mdi-cart-off" style="font-size: 13px;"></i>
                                         <span class="hide-menu">Cancel Orders</span>
+                                        <span class="badge badge-info" id="count_cancel">?</span>
                                     </a>
                                 </li>
                             @endif
@@ -74,6 +75,7 @@
                                     <a href="{{ site_url('orders_v1/trash') }}">
                                         <i class="fa fa-trash" style="font-size: 13px;"></i>
                                         <span class="hide-menu">Trash Orders</span>
+                                        <span class="badge badge-info" id="count_trash">?</span>
                                     </a>
                                 </li>
                             @endif
@@ -85,9 +87,9 @@
             </div>
             <!-- Left navbar-header end -->
 
-
             <script type="text/javascript">
                 document.app.penjualan = {
-                    orders_state: '{{ $orders_state }}'
+                    orders_state: '{{ $orders_state }}',
+                    interval_badge_load: 10000
                 }
             </script>

@@ -11,7 +11,9 @@ class Get extends Report_Controller {
         $params = [
             'date_start' => $this->input->post('date_start'),
             'date_end' => $this->input->post('date_end'),
-            'by_date' => $this->input->post('by_date')
+            'by_date' => $this->input->post('by_date'),
+            'role_id' => $this->role_active['role_id'],
+            'user_id' => $this->role_active['user_id']
         ];
 
         $params['date_start'] = (!empty($params['date_start'])?$params['date_start']:date('Y-m-01')).' 00:00:00';

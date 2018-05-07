@@ -37,6 +37,13 @@ class Simple_model extends Report_Model {
                 break;
         }
 
+        $global_where = '';
+        if($params['role_id'] == 6)
+        {
+            $global_where = 'AND a.user_id IN (SELECT user_id FROM management_team_cs_member
+            WHERE team_cs_id IN (SELECT team_cs_id FROM management_team_cs WHERE leader_id = 57 AND `status` = 1) AND `status` = 1)';
+        }
+
         $sql = "SELECT
             	a.user_id, CONCAT(a.first_name,' ',a.last_name) AS name, b.user_role_id,
             	(
@@ -100,7 +107,7 @@ class Simple_model extends Report_Model {
                ) AS total_product
             FROM sso_user a
             LEFT JOIN sso_user_role b ON a.user_id = b.user_id AND b.role_id = 5
-            WHERE a.status = 1 AND b.user_role_id IS NOT NULL";
+            WHERE a.status = 1 AND b.user_role_id IS NOT NULL $global_where";
 
         // echo $sql;
         // exit;
@@ -134,6 +141,13 @@ class Simple_model extends Report_Model {
                 break;
         }
 
+        $global_where = '';
+        if($params['role_id'] == 6)
+        {
+            $where .= " fu.user_id IN (SELECT user_id FROM management_team_cs_member
+            WHERE team_cs_id IN (SELECT team_cs_id FROM management_team_cs WHERE leader_id = 57 AND `status` = 1) AND `status` = 1) AND";
+        }
+
         $sql = "SELECT COUNT(DISTINCT p.order_id) AS total_sale, SUM(p.total_price) AS total_price, SUM(cart.qty_total) AS product_total
             FROM orders p
             LEFT JOIN (
@@ -141,6 +155,7 @@ class Simple_model extends Report_Model {
                        FROM orders_cart
                        WHERE product_id IS NOT NULL AND product_id != 0 GROUP BY order_id
             ) cart ON cart.order_id = p.order_id
+            LEFT JOIN orders_process fu ON p.order_id = fu.order_id and fu.order_status_id = 2
             $join
             WHERE $where p.order_status_id >= 7";
 

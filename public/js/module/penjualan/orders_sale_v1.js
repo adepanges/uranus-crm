@@ -38,6 +38,8 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+            $('#count_sale').html(json.recordsFiltered);
+
         }).DataTable({
             serverSide: true,
             ajax: {

@@ -26,6 +26,7 @@
         <script src="{{ base_url('plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
         <script src="{{ base_url('js/validator.js') }}"></script>
         <script src="{{ base_url('js/module/penjualan/detail_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/orders_badge_v1.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('header')
@@ -166,10 +167,23 @@
                                 <input value="{{ $orders->customer_info->telephone }}" type="text" class="form-control input-sm" name="telephone" {{ $attr_readonly }}>
                             </div>
                         </div>
+
+                        <?php
+                        $address = '';
+                        if(
+                            isset($orders->customer_address) &&
+                            !empty($orders->customer_address) &&
+                            is_object($orders->customer_address)
+                        )
+                        {
+                            $address = "{$orders->customer_address->address} Ds./Kel. {$orders->customer_address->desa_kelurahan} Kec. {$orders->customer_address->kecamatan} Kab./Kota. {$orders->customer_address->kabupaten} Prov. {$orders->customer_address->provinsi},  {$orders->customer_address->postal_code}";
+                        }
+                        ?>
+
                         <div class="form-group">
                             <label class="control-label col-sm-3">Alamat</label>
                             <div class="col-sm-8">
-                                <textarea rows="4" class="form-control input-sm" name="address" {{ $attr_readonly }}>{{ "{$orders->customer_address->address} Ds./Kel. {$orders->customer_address->desa_kelurahan} Kec. {$orders->customer_address->kecamatan} Kab./Kota. {$orders->customer_address->kabupaten} Prov. {$orders->customer_address->provinsi},  {$orders->customer_address->postal_code}" }}</textarea>
+                                <textarea rows="4" class="form-control input-sm" name="address" {{ $attr_readonly }}>{{ $address }}</textarea>
                             </div>
                         </div>
                         <div class="form-group">

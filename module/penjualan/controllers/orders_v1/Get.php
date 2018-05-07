@@ -59,4 +59,23 @@ class Get extends Penjualan_Controller {
             'data' => $data['row']
         ]);
     }
+
+    function badge()
+    {
+        $this->load->model('badge_model');
+        $this->badge_model->set_viewer_profile($this->profile);
+        $this->badge_model->set_viewer_tim($this->session->userdata('tim_leader'));
+        $this->badge_model->set_viewer_role($this->role_active);
+
+        $this->_response_json([
+            'count_new' => (int) $this->badge_model->new()->count,
+            'count_double' => (int) $this->badge_model->double()->count,
+            'count_pending' => (int) $this->badge_model->pending()->count,
+            'count_confirm_buy' => (int) $this->badge_model->confirm_buy()->count,
+            'count_verify' => (int) $this->badge_model->verify()->count,
+            'count_sale' => (int) $this->badge_model->sale()->count,
+            'count_cancel' => (int) $this->badge_model->cancel()->count,
+            'count_trash' => (int) $this->badge_model->trash()->count
+        ]);
+    }
 }

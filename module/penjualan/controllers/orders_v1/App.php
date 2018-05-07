@@ -55,8 +55,6 @@ class App extends Penjualan_Controller {
 
         $this->load->model(['orders_model', 'customer_model']);
         $order_id = (int) $this->input->post('order_id');
-        $customer_id = (int) $this->input->post('customer_id');
-        $customer_address_id = (int) $this->input->post('customer_address_id');
 
         $customer_info = [
             'full_name' => $this->input->post('full_name'),
@@ -78,11 +76,27 @@ class App extends Penjualan_Controller {
             'logistic_id' => (int) $this->input->post('logistic_id'),
             'call_method_id' => (int) $this->input->post('call_method_id'),
             'customer_info' => json_encode($customer_info),
-            'customer_address' => json_encode($customer_address)
+            'customer_address' => json_encode($customer_address),
+            'customer_id' => (int) $this->input->post('customer_id'),
+            'customer_address_id' => (int) $this->input->post('customer_address_id')
         ];
+        if($orders['customer_id']) $res2 = $this->customer_model->upd($orders['customer_id'], $customer_info);
+        else
+        {
+            $customer_info['created_at'] = date('Y-m-d H:i:s');
+            $res2 = $this->customer_model->add($customer_info);
+            $orders['customer_id'] = $this->db->insert_id();
+        }
+
+        if($orders['customer_address_id']) $res3 = $this->customer_model->upd_address($orders['customer_address_id'], $customer_address);
+        else
+        {
+            $customer_address['customer_id'] = $orders['customer_id'];
+            $customer_address['created_at'] = date('Y-m-d H:i:s');
+            $res3 = $this->customer_model->add_address($customer_address);
+            $orders['customer_address_id'] = $this->db->insert_id();
+        }
         $res1 = $this->orders_model->upd($order_id, $orders);
-        $res2 = $this->customer_model->upd($customer_id, $customer_info);
-        $res3 = $this->customer_model->upd_address($customer_address_id, $customer_address);
 
         if($res1 && $res2 && $res3)
         {

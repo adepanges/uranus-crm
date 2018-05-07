@@ -45,26 +45,44 @@ $(document).ready(function(){
                     data: "customer_info",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        var row = JSON.parse(data);
-                        return `<b>${row.full_name}</b>`;
+                        try {
+                            var row = JSON.parse(data);
+                            return `<b>${row.full_name}</b>`;
+                        }
+                        catch(err) {
+                            console.log(err.message);
+                            return '';
+                        }
                     }
                 },
                 {
                     data: "customer_info",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        var row = JSON.parse(data);
-                        return `<i class="${full.call_method_icon}"> ${row.telephone}</i>`;
+                        try {
+                            var row = JSON.parse(data);
+                            return `<i class="${full.call_method_icon}"> ${row.telephone}</i>`;
+                        }
+                        catch(err) {
+                            console.log(err.message);
+                            return '';
+                        }
                     }
                 },
                 {
                     data: 'customer_address',
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        var customer_address = JSON.parse(data);
-                        return `<span style="font-size: 9px;">
-                        ${customer_address.address}<br>Ds./Kel. ${customer_address.desa_kelurahan}<br>Kec. ${customer_address.kecamatan}<br>${customer_address.kabupaten}<br>Prov. ${customer_address.provinsi}<br>${customer_address.postal_code}
-                        </span>`;
+                        try {
+                            var customer_address = JSON.parse(data);
+                            return `<span style="font-size: 9px;">
+                            ${customer_address.address}<br>Ds./Kel. ${customer_address.desa_kelurahan}<br>Kec. ${customer_address.kecamatan}<br>${customer_address.kabupaten}<br>Prov. ${customer_address.provinsi}<br>${customer_address.postal_code}
+                            </span>`;
+                        }
+                        catch(err) {
+                            console.log(err.message);
+                            return '';
+                        }
                     }
                 },
                 { data: "package_name", orderable: false,
