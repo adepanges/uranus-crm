@@ -189,11 +189,17 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Logistik</label>
                             <div class="col-sm-8">
-                                <select class="form-control" name="logistic_id">
-                                    <option>Pilih</option>
-@foreach ($master_logistics as $key => $value)
-                                    <option value="{{ $value->logistic_id }}" {{ ($orders->logistic_id==$value->logistic_id)?'selected':'' }}>{{ ucwords(strtolower($value->name)) }}</option>
-@endforeach
+                                <?php
+                                $logistics = '';
+                                ?>
+                                @foreach ($master_logistics as $key => $value)
+                                    <?php
+                                    if ($orders->logistic_id==$value->logistic_id) {
+                                        $logistics = $value->name;
+                                    }
+                                    ?>
+                                @endforeach
+                                <input type="text" class="form-control" name="logistic_id" value="{{ $logistics }}" readonly>
                                 </select>
                             </div>
                         </div>
