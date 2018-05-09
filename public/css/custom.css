@@ -42,3 +42,14 @@ code.catch {
 #informationSection div h3 {
     text-align: center;
 }
+
+.cs-list h4 {
+    cursor: pointer;
+    border-bottom: 1px solid #EDF1F5;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.cs-list h4:hover {
+    font-weight: bold;
+}
