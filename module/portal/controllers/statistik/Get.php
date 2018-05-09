@@ -29,4 +29,17 @@ class Get extends Portal_Controller {
             'data' => $res->result()
         ]);
     }
+
+    public function logistics()
+    {
+        $this->load->model('statistik_model');
+
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+
+        $res = $this->statistik_model->logistics($start_date, $end_date);
+        $this->_response_json([
+            'data' => $res->result()
+        ]);
+    }
 }

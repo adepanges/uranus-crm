@@ -90,8 +90,8 @@ class Statistik_model extends Portal_Model {
                     SELECT COUNT(DISTINCT z.order_id) AS total
                     FROM orders_process z
                     WHERE
-                        order_status_id = 2 AND
-                        DATE(created_at) = a.db_date
+                        z.order_status_id = 2 AND
+                        DATE(z.created_at) = a.db_date
                 ) AS total_fu,
                 (
                     SELECT COUNT(DISTINCT z.order_id) AS total
@@ -129,6 +129,40 @@ class Statistik_model extends Portal_Model {
                         DATE(z.created_at) = a.db_date
                 ) AS total_sale
 
+            FROM time_dimension a
+            WHERE a.db_date BETWEEN ? AND ?";
+
+        return $this->db->query($sql, [$start_date, $end_date]);
+	}
+
+    public function logistics($start_date = '', $end_date = '')
+	{
+        $start_date = !empty($start_date)?$start_date.' 00:00:00':date('Y-m-01 00:00:00');
+        $end_date = !empty($end_date)?$end_date.' 23:59:59':date('Y-m-d 23:59:59');
+
+        $sql = "SELECT
+                CONCAT(a.day,'/',a.month) AS periode,
+                (
+                    SELECT COUNT(DISTINCT z.order_id) AS total
+                    FROM orders_logistics z
+                    WHERE
+                        z.logistics_status_id = 3 AND
+                        DATE(z.created_at) = a.db_date
+                ) AS total_sudah_packing,
+                (
+                    SELECT COUNT(DISTINCT z.order_id) AS total
+                    FROM orders_logistics z
+                    WHERE
+                        z.logistics_status_id = 4 AND
+                        DATE(z.created_at) = a.db_date
+                ) AS total_sudah_pickup,
+                (
+                    SELECT COUNT(DISTINCT z.order_id) AS total
+                    FROM orders_logistics z
+                    WHERE
+                        z.logistics_status_id = 5 AND
+                        DATE(z.created_at) = a.db_date
+                ) AS total_pengiriman
             FROM time_dimension a
             WHERE a.db_date BETWEEN ? AND ?";
 
