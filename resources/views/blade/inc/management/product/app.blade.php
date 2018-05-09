@@ -50,6 +50,7 @@
                                     <th>Name</th>
                                     <th>Berat</th>
                                     <th>Harga<br>Retail</th>
+                                    <th>Komisi</th>
                                     <th>Status</th>
                                     <th>
                                         Action
@@ -99,6 +100,15 @@
                                     <div class="input-group m-b-30">
                                         <span class="input-group-addon">Rp.</span>
                                         <input type="number" class="form-control" name="price" data-error="Hmm, harga produt harap diisi" required>
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Komisi</label>
+                                    <div class="input-group m-b-30">
+                                        <span class="input-group-addon">Rp.</span>
+                                        <input type="number" class="form-control" name="commission" data-error="Hmm, komisi produt harap diisi" required>
                                         <span class="input-group-addon">.00</span>
                                     </div>
                                     <div class="help-block with-errors"></div>

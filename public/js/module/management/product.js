@@ -60,6 +60,12 @@ $(document).ready(function(){
                     }
                 },
                 {
+                    data: "commission",
+                    render: function ( data, type, full, meta ) {
+                        return rupiah(data);
+                    }
+                },
+                {
                     data: "status",
                     render: function ( data, type, full, meta ) {
                         var text = '<span class="label label-danger">deactivated</span>';

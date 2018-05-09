@@ -5,8 +5,8 @@ class Product_model extends Management_Model {
     protected
         $datatable_param = NULL,
         $table = 'product',
-        $orderable_field = ['merk','name','weight','price','status'],
-        $fillable_field = ['code','merk','name','weight','price','status'],
+        $orderable_field = ['merk','name','weight','price','commission','status'],
+        $fillable_field = ['code','merk','name','weight','price','commission','status'],
         $searchable_field = ['name'];
 
     function get_datatable()
