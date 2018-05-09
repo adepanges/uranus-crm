@@ -225,3 +225,69 @@ SELECT
   FROM_UNIXTIME(`timestamp`) AS created_at
 FROM
   sso_session_web
+
+
+-- query statistik
+--  sampple user 57
+SELECT
+    CONCAT(a.day,'/',a.month) AS periode,
+    (
+        SELECT COUNT(DISTINCT z.order_id) AS total
+        FROM orders_process z
+        WHERE
+            order_status_id = 2 AND
+            user_id = 57 AND
+            DATE(created_at) = a.db_date
+    ) AS total_fu,
+    (
+        SELECT COUNT(DISTINCT z.order_id) AS total
+        FROM orders_process z
+        WHERE
+            z.order_status_id = 3 AND
+            z.user_id = 57 AND
+            DATE(z.created_at) = a.db_date
+    ) AS total_pending,
+    (
+        SELECT COUNT(DISTINCT z.order_id) AS total
+        FROM orders_process z
+        WHERE
+            z.order_status_id = 4 AND
+            z.user_id = 57 AND
+            DATE(z.created_at) = a.db_date
+    ) AS total_cancel,
+    (
+        SELECT COUNT(DISTINCT z.order_id) AS total
+        FROM orders_process z
+        WHERE
+            z.order_status_id = 5 AND
+            z.user_id = 57 AND
+            DATE(z.created_at) = a.db_date
+    ) AS total_confirm,
+    (
+        SELECT COUNT(DISTINCT z.order_id) AS total
+        FROM orders_process z
+        WHERE
+            z.order_status_id = 6 AND
+            z.user_id = 57 AND
+            DATE(z.created_at) = a.db_date
+    ) AS total_verify,
+    (
+        SELECT COUNT(DISTINCT z.order_id) AS total
+        FROM orders_process z
+        WHERE
+            z.order_status_id = 6 AND
+            z.user_id = 57 AND
+            (
+                SELECT process_id
+                FROM orders_process
+                WHERE
+                    order_id = z.order_id AND
+                    order_status_id = 7 AND
+                    DATE(created_at) = DATE(z.created_at)
+                LIMIT 1
+            ) IS NOT NULL AND
+            DATE(z.created_at) = a.db_date
+    ) AS total_sale
+
+FROM time_dimension a
+WHERE a.db_date BETWEEN '2018-05-01 00:00:00' AND '2018-05-08 23:59:59'
