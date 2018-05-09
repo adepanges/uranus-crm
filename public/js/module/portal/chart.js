@@ -4,6 +4,11 @@ $(document).ready(function(){
         format: 'yyyy-mm-dd'
     });
 
+    jQuery('#date-range-logistics').datepicker({
+        toggleActive: true,
+        format: 'yyyy-mm-dd'
+    });
+
     jQuery('#date-range-all').datepicker({
         toggleActive: true,
         format: 'yyyy-mm-dd'
@@ -33,28 +38,28 @@ $(document).ready(function(){
         $('#btnFilter').click();
     })
 
-    statistikAll = Morris.Area({
-        element: 'morris-area-chart-all',
+    statistikLogistics = Morris.Area({
+        element: 'morris-area-chart-logistics',
         xkey: 'periode',
         parseTime: false,
-        ykeys: ['total_fu','total_pending','total_cancel','total_confirm','total_verify','total_sale'],
-        labels: ['Follow Up','Pending','Cancel','Confirm Buy','Verify Pay','Sale'],
+        ykeys: ['total_sudah_packing','total_sudah_pickup','total_pengiriman'],
+        labels: ['Sudah di Packing','Sudah di Pickup','Pengiriman'],
         pointSize: 3,
         fillOpacity: 0,
-        pointStrokeColors:['#00C3ED','#004471','#E80094','#FF7A01','#FED700','#73B700'],
+        pointStrokeColors:['#FF7A01','#FED700','#73B700'],
         behaveLikeLine: true,
         gridLineColor: '#e0e0e0',
         lineWidth: 1,
         hideHover: 'auto',
-        lineColors: ['#00C3ED','#004471','#E80094','#FF7A01','#FED700','#73B700'],
+        lineColors: ['#FF7A01','#FED700','#73B700'],
         resize: true,
         data: []
     });
 
-    $('#btnFilterAll').click();
+    $('#btnFilterLogistics').click();
 
-    $('#statusSectionAll [name=status]').change(function(){
-        $('#btnFilterAll').click();
+    $('#statusSectionLogistics [name=status]').change(function(){
+        $('#btnFilterLogistics').click();
     })
 })
 
@@ -65,10 +70,16 @@ function setCS_User_id_and_load(id, name)
 }
 
 function loadDataCS(name){
+
+    var url = document.app.site_url+'/statistik/get/all';
+    if(portal.cs_user_id != 0){
+        url = document.app.site_url+'/statistik/get/cs/'+portal.cs_user_id;
+    }
+
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/statistik/get/cs/'+portal.cs_user_id,
+        url: url,
         data: {
             'start_date': $('#date-range [name=start]').val(),
             'end_date': $('#date-range [name=end]').val()
@@ -113,14 +124,15 @@ function loadDataCS(name){
     });
 }
 
-function loadDataStatistikAll(name){
+
+function loadDataLogistics(){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/statistik/get/all',
+        url: document.app.site_url+'/statistik/get/logistics',
         data: {
-            'start_date': $('#date-range-all [name=start]').val(),
-            'end_date': $('#date-range-all [name=end]').val()
+            'start_date': $('#date-range-logistics [name=start]').val(),
+            'end_date': $('#date-range-logistics [name=end]').val()
         }
     })
     .done(function( response ) {
@@ -128,7 +140,7 @@ function loadDataStatistikAll(name){
 
         var indexs = ['periode'], keys = [], labels = [], colors = [], data_parsed = [];
 
-        $('#statusSectionAll [name=status]:checked').each(function(){
+        $('#statusSectionLogistics [name=status]:checked').each(function(){
             indexs.push($(this).attr('keys'));
             keys.push($(this).attr('keys'));
             labels.push($(this).attr('labels'));
@@ -148,15 +160,13 @@ function loadDataStatistikAll(name){
             console.log(err.message);
             return '';
         }
-        if(name){
-            $('#fieldCsName').html(name);
-        }
 
-        statistikAll.options.pointStrokeColors = colors;
-        statistikAll.options.lineColors = colors;
-        statistikAll.options.ykeys = keys;
-        statistikAll.options.labels = labels
-        statistikAll.setData(data_parsed);
-        statistikAll.redraw()
+        statistikLogistics.options.pointStrokeColors = colors;
+        statistikLogistics.options.lineColors = colors;
+        statistikLogistics.options.ykeys = keys;
+        statistikLogistics.options.labels = labels
+        statistikLogistics.setData(data_parsed);
+        statistikLogistics.redraw()
+
     });
 }

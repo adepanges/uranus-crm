@@ -25,6 +25,7 @@ class App extends Management_Controller {
             'name' => $this->input->post('name'),
             'weight' => (int) $this->input->post('weight'),
             'price' => $this->input->post('price'),
+            'commission' => $this->input->post('commission'),
             'status' => (int) $this->input->post('status')
         ];
 
