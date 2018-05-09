@@ -4,6 +4,11 @@ $(document).ready(function(){
         format: 'yyyy-mm-dd'
     });
 
+    jQuery('#date-range-all').datepicker({
+        toggleActive: true,
+        format: 'yyyy-mm-dd'
+    });
+
     statistikCs = Morris.Area({
         element: 'morris-area-chart',
         xkey: 'periode',
@@ -26,6 +31,30 @@ $(document).ready(function(){
 
     $('#statusSection [name=status]').change(function(){
         $('#btnFilter').click();
+    })
+
+    statistikAll = Morris.Area({
+        element: 'morris-area-chart-all',
+        xkey: 'periode',
+        parseTime: false,
+        ykeys: ['total_fu','total_pending','total_cancel','total_confirm','total_verify','total_sale'],
+        labels: ['Follow Up','Pending','Cancel','Confirm Buy','Verify Pay','Sale'],
+        pointSize: 3,
+        fillOpacity: 0,
+        pointStrokeColors:['#00C3ED','#004471','#E80094','#FF7A01','#FED700','#73B700'],
+        behaveLikeLine: true,
+        gridLineColor: '#e0e0e0',
+        lineWidth: 1,
+        hideHover: 'auto',
+        lineColors: ['#00C3ED','#004471','#E80094','#FF7A01','#FED700','#73B700'],
+        resize: true,
+        data: []
+    });
+
+    $('#btnFilterAll').click();
+
+    $('#statusSectionAll [name=status]').change(function(){
+        $('#btnFilterAll').click();
     })
 })
 
@@ -78,12 +107,56 @@ function loadDataCS(name){
         statistikCs.options.lineColors = colors;
         statistikCs.options.ykeys = keys;
         statistikCs.options.labels = labels
-        setStatistik(data_parsed);
+        statistikCs.setData(data_parsed);
         statistikCs.redraw()
 
     });
 }
 
-function setStatistik(data) {
-    statistikCs.setData(data);
+function loadDataStatistikAll(name){
+    $('.preloader').fadeIn();
+    $.ajax({
+        method: "POST",
+        url: document.app.site_url+'/statistik/get/all',
+        data: {
+            'start_date': $('#date-range-all [name=start]').val(),
+            'end_date': $('#date-range-all [name=end]').val()
+        }
+    })
+    .done(function( response ) {
+        $('.preloader').fadeOut();
+
+        var indexs = ['periode'], keys = [], labels = [], colors = [], data_parsed = [];
+
+        $('#statusSectionAll [name=status]:checked').each(function(){
+            indexs.push($(this).attr('keys'));
+            keys.push($(this).attr('keys'));
+            labels.push($(this).attr('labels'));
+            colors.push($(this).attr('colors'));
+        });
+
+        try {
+            response.data.forEach(function(val, keys){
+                var tmp = [];
+                indexs.forEach(function(ind){
+                    tmp[ind] = val[ind];
+                })
+                data_parsed.push(tmp)
+            });
+        }
+        catch(err) {
+            console.log(err.message);
+            return '';
+        }
+        if(name){
+            $('#fieldCsName').html(name);
+        }
+
+        statistikAll.options.pointStrokeColors = colors;
+        statistikAll.options.lineColors = colors;
+        statistikAll.options.ykeys = keys;
+        statistikAll.options.labels = labels
+        statistikAll.setData(data_parsed);
+        statistikAll.redraw()
+    });
 }

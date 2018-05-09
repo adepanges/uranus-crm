@@ -18,6 +18,20 @@
 @endsection
 
 @section('content')
+
+                <div class="row">
+                @foreach ($list_module as $key => $module)
+                    <div class="col-lg-4">
+                        <div class="well panel-primary" style="cursor: pointer;"
+                            onclick="window.location = '{{ base_url($module['module_link']) }}'">
+                            <h1>{{ $module['module_name'] }}</h1>
+                        </div>
+                    </div>
+                @endforeach
+                </div>
+
+                <hr>
+
                 <?php
                 $show_list_cs = FALSE;
                 $size_side_left = 'col-md-0';
@@ -124,14 +138,72 @@
                 <hr>
 
                 <div class="row">
-@foreach ($list_module as $key => $module)
-                    <div class="col-lg-4">
-                        <div class="well panel-primary" style="cursor: pointer;"
-                            onclick="window.location = '{{ base_url($module['module_link']) }}'">
-                            <h1>{{ $module['module_name'] }}</h1>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-2 pull-right">
+                                <button id="btnFilterAll" class="btn btn-rounded form-control" onclick="loadDataStatistikAll()">
+                                    <i class="fa fa-search"></i>
+                                    <span>Filter</span>
+                                </button>
+                            </div>
+                            <div class="col-md-4 pull-right">
+                                <div class="input-daterange input-group" id="date-range-all">
+                                    <input type="text" class="form-control" name="start" value="{{ date('Y-m-01') }}">
+                                    <span class="input-group-addon bg-info b-0 text-white">to</span>
+                                    <input type="text" class="form-control" name="end" value="{{ date('Y-m-d') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="white-box">
+                            <h3>Statistik All</h3>
+                            <hr>
+                            <ul class="list-inline text-right" id="statusSectionAll">
+                                <li>
+                                    <h5>
+                                        <i class="fa fa-circle m-r-5" style="color: #00C3ED;"></i>
+                                        <input type="checkbox" name="status" colors="#00C3ED" keys="total_fu" labels="Follow Up">
+                                        Follow Up
+                                    </h5>
+                                </li>
+                                <li>
+                                    <h5>
+                                        <i class="fa fa-circle m-r-5" style="color: #004471;"></i>
+                                        <input type="checkbox" name="status" colors="#004471" keys="total_pending" labels="Pending">
+                                        Pending
+                                    </h5>
+                                </li>
+                                <li>
+                                    <h5>
+                                        <i class="fa fa-circle m-r-5" style="color: #E80094;"></i>
+                                        <input type="checkbox" name="status" colors="#E80094" keys="total_cancel" labels="Cancel">
+                                        Cancel
+                                    </h5>
+                                </li>
+                                <li>
+                                    <h5>
+                                        <i class="fa fa-circle m-r-5" style="color: #FF7A01;"></i>
+                                        <input type="checkbox" name="status" colors="#FF7A01" keys="total_confirm" labels="Confirm Buy">
+                                        Confirm Buy
+                                    </h5>
+                                </li>
+                                <li>
+                                    <h5>
+                                        <i class="fa fa-circle m-r-5" style="color: #FED700;"></i>
+                                        <input type="checkbox" name="status" colors="#FED700" keys="total_verify" labels="Verify Pay">
+                                        Verify Pay
+                                    </h5>
+                                </li>
+                                <li>
+                                    <h5>
+                                        <i class="fa fa-circle m-r-5" style="color: #73B700;"></i>
+                                        <input type="checkbox" name="status" colors="#73B700" keys="total_sale" labels="Sale" checked>
+                                        Sale
+                                    </h5>
+                                </li>
+                            </ul>
+                            <div id="morris-area-chart-all"></div>
                         </div>
                     </div>
-@endforeach
                 </div>
-
 @endsection
