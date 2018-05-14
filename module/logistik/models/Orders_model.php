@@ -35,7 +35,7 @@ class Orders_model extends Logistik_Model {
             LEFT JOIN master_logistics c ON a.logistic_id = c.logistic_id
             $join
             WHERE
-            a.version = 1
+            a.version = 1 AND a.is_deleted != 1
             $where
             $ordering";
 

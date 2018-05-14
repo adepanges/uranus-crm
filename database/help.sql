@@ -108,7 +108,8 @@ SELECT
         c.name IN (
             'penjualan_orders_detail',
             'penjualan_orders_list',
-            'penjualan_orders_sale'
+            'penjualan_orders_sale',
+            'penjualan_orders_update_customer_info'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a

@@ -142,7 +142,8 @@
                         <div class="col-sm-2">
 
 @if(
-    (in_array($orders->order_status_id,[2,3,5]) && $access_list->penjualan_orders_update_customer_info) ||
+    (in_array($orders->order_status_id,[2,3,5,4]) && $access_list->penjualan_orders_update_customer_info) ||
+    (in_array($orders->order_status_id,[7,8,9]) && $role_active->role_id == 4 && $access_list->penjualan_orders_update_customer_info)  ||
     in_array($role_active->role_id, [1,2])
 )
                             <span class="circle circle-sm bg-danger di" onclick="updateCustomerInfo({{ $orders->order_id }})" style="cursor: pointer;">
@@ -241,7 +242,7 @@
     @endif
 @endif
 @if(
-    $orders->order_status_id > 6 && in_array($role_active->role_id, [1,2])
+    $orders->order_status_id > 6 && in_array($role_active->role_id, [1,2,3])
 )
                             <div class="form-group">
                                 <button class="btn btn-info pull-right" onclick="updInvoice(); return false;">Update Invoice</button>
@@ -289,7 +290,6 @@
         $show_btn_del = FALSE;
         if(
             (
-                !empty($value_cart->product_id) &&
                 in_array($orders->order_status_id, [2,3,5]) &&
                 $access_list->penjualan_orders_update_shopping_info
             ) ||
@@ -299,7 +299,7 @@
             ) ||
             in_array($role_active->role_id, [1,2])
         ){
-            if($value['info']->product_package_id) $del_package = '<span class="delete_cart" onclick="deletePackage('.$value['info']->product_package_id.')">[ x ]</span>';
+            if((bool) $value['info']->product_package_id) $del_package = '<span class="delete_cart" onclick="deletePackage('.$value['info']->product_package_id.')">[ x ]</span>';
             $show_btn_del = TRUE;
         }
     ?>

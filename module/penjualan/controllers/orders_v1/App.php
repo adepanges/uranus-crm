@@ -188,7 +188,7 @@ class App extends Penjualan_Controller {
         $order_id = (int) $id;
         $package_id = (int) $package_id;
 
-        $res1 = $this->orders_model->del_by_package_id($package_id);
+        $res1 = $this->orders_model->del_by_package_id($order_id, $package_id);
         $res2 = $this->orders_model->upd($order_id, [
             'total_price' => $this->orders_model->get_latest_price_cart($order_id)
         ]);

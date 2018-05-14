@@ -17,7 +17,7 @@ class Sale extends Penjualan_Controller {
     public function upd_invoice()
     {
         if(
-            !in_array($this->role_active['role_id'], [1,2])
+            !in_array($this->role_active['role_id'], [1,2,3])
         )
         {
             $this->_response_json([
