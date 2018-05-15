@@ -80,6 +80,7 @@ INSERT INTO `sso_role_access` (`role_id`,`module_id`,`menu_id`,`feature_id`,`fea
 SELECT
     3, a.module_id, b.menu_id, c.feature_id, c.name,
     CASE WHEN
+    b.module_id = 4 OR
     c.name IN (
         'penjualan_orders_detail',
         'penjualan_orders_list',
