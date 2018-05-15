@@ -5,6 +5,7 @@
 @section('load_css')
 @parent
         <link href="{{ base_url('plugins/bower_components/morrisjs/morris.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ base_url('plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('load_js')
