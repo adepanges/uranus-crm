@@ -76,7 +76,7 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
 
-                        if(full.orders_double_id)
+                        if(full.orders_double_id != null && full.orders_double_id != 0)
                         {
                             button.push(`<span class="label label-warning label-rouded">double orders</span><br>`)
                         }
