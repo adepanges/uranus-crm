@@ -112,6 +112,7 @@ function followUp(id){
 }
 
 function saleOrders(id){
+    dataTableAccountStatement.ajax.reload();
     $('#saleModal').modal({
         backdrop: 'static',
         keyboard: false
@@ -318,6 +319,11 @@ function updInvoice(){
 }
 
 $(document).ready(function(){
+    jQuery('#date-range').datepicker({
+        toggleActive: true,
+        format: 'yyyy-mm-dd'
+    });
+
     var numbererProduct = 1;
     productTable = $('#productTable').on('preXhr.dt', function ( e, settings, data ){
         numbererProduct = data.start + 1;
@@ -384,6 +390,85 @@ $(document).ready(function(){
             }
         ]
     });
+
+    var numbererAccountStatement = 1;
+    dataTableAccountStatement = $('#dataTableAccountStatement').on('preXhr.dt', function ( e, settings, data ){
+        numbererAccountStatement = data.start + 1;
+        $('.row .white-box').block({
+            message: '<h3>Please Wait...</h3>',
+            css: {
+                border: '1px solid #fff'
+            }
+        });
+
+        data.date_start = $('#date-range [name=start]').val();
+        data.date_end = $('#date-range [name=end]').val();
+        data.payment_method_id  = $('#filterSection [name=payment_method_id]').val();
+        data.total_price  = $('#filterSection [name=total_price]').val();
+
+    }).on('xhr.dt', function ( e, settings, json, xhr ){
+        $('.row .white-box').unblock();
+        $("#saleModal div.dataTables_filter").hide();
+    }).DataTable({
+        language: {
+            infoFiltered: ""
+        },
+        serverSide: true,
+        bInfo: false,
+        ajax: {
+            url: document.app.site_url + '/orders_v1/account_statement/get_useable',
+            type: 'POST'
+        },
+        columns: [
+            {
+                name: 'Number',
+                width: "5%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    return numbererAccountStatement++;
+                }
+            },
+            { data: "account_name", orderable: false },
+            { data: "generated_invoice", orderable: false },
+            { data: "transaction_date", orderable: false },
+            {
+                data: "transaction_amount", orderable: false,
+                render: function ( data, type, full, meta ) {
+                    return rupiah(data);
+                }
+            },
+            {
+                data: 'account_statement_id',
+                width: "12%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    var button = [],
+                        total_price = $('#filterSection [name=total_price]').val();
+
+                    if(full.commit == 1)
+                    {
+                        button.push('<button onclick="claimInvoice('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-share"></i></button>');
+                    }
+
+                    if(
+                        total_price == full.transaction_amount &&
+                        document.app.penjualan.orders.payment_method_id == full.payment_method_id
+                    ){
+                        button.push('<i id="recomended" class="fa fa-hand-o-left" style="color: #75EBB1; font-size: 16px;"></i>');
+                    }
+
+                    return button.join('');
+                }
+            }
+        ],
+        createdRow: function (row, data, index) {
+            if($(row).find('#recomended').length > 0)
+            {
+                $(row).addClass("bg-warning");
+            }
+        }
+    });
+
 
     jQuery('#datepicker-autoclose2').datepicker({
         autoclose: true,
@@ -495,54 +580,6 @@ $(document).ready(function(){
                 },function(){
 
                 });
-            });
-        }
-    });
-
-    $('#btnSaveSaleModal').click(function(){
-        if(formValidator('#saleForm')){
-            var data = serialzeForm('#saleForm');
-            swal({
-                title: "Apakah anda yakin?",
-                text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonClass: "btn-warning",
-                confirmButtonText: "Ya",
-                cancelButtonText: "Batal",
-                closeOnConfirm: false,
-                closeOnCancel: true
-            },
-            function(isConfirm) {
-                if (isConfirm) {
-                    $('.preloader').fadeIn();
-                    $.ajax({
-                        method: "POST",
-                        url: document.app.site_url+'/orders_v1/verify/sale',
-                        data: data
-                    })
-                    .done(function( response ) {
-                        $('.preloader').fadeOut();
-                        var title = 'Berhasil!',
-                            timer = 1000;
-
-                        if(!response.status) {
-                            var timer = 3000;
-                            title = 'Gagal!';
-                        }
-
-                        swal({
-                            title: title,
-                            text: response.message,
-                            timer: timer
-                        },function(){
-                            if(response.status)
-                            {
-                                window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
-                            }
-                        });
-                    });
-                }
             });
         }
     });
@@ -947,4 +984,54 @@ function initSelectOpt(ths, sl)
     if($(ths).val() != sl.val()){
         sl.val($(ths).val());
     } else console.log('not change')
+}
+
+function claimInvoice(account_statement_id){
+    swal({
+        title: "Apakah anda yakin?",
+        text: "Pesanan telah dibayar dan akan dilanjutkan ke tim logistik!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/orders_v1/account_statement/claim',
+                data: {
+                    order_id: document.app.penjualan.orders.order_id,
+                    account_statement_id: account_statement_id
+                }
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer
+                },function(){
+                    if(response.status)
+                    {
+                        window.location.href = document.app.site_url+'/'+document.app.penjualan.orders_state;
+                    } else {
+                        dataTableAccountStatement.ajax.reload()
+                    }
+                });
+            });
+        }
+    });
 }

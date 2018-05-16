@@ -56,7 +56,12 @@ class App extends Keuangan_Controller {
         else
         {
             // ubah
-            $res = $this->account_statement_model->upd($data, $account_statement_id);
+            $check = $this->account_statement_model->get_byid($account_statement_id);
+            $res = FALSE;
+            if(isset($check->commit) && $check->commit != 1)
+            {
+                $res = $this->account_statement_model->upd($data, $account_statement_id);
+            }
         }
 
         if($res)

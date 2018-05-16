@@ -14,7 +14,14 @@ class Del extends Keuangan_Controller {
 
         $this->load->model('account_statement_model');
 
-        if($this->account_statement_model->del($account_statement_id))
+        $check = $this->account_statement_model->get_byid($account_statement_id);
+        $res = FALSE;
+        if(isset($check->commit) && $check->commit != 1)
+        {
+            $res = $this->account_statement_model->del($account_statement_id);
+        }
+
+        if($res)
         {
             $this->_response_json([
                 'status' => 1,
