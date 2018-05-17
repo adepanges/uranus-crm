@@ -25,9 +25,16 @@ class App extends Keuangan_Controller {
         $this->load->model(['account_statement_model','franchise_model']);
 
         $trx_date = !empty($this->input->post('transaction_date'))?$this->input->post('transaction_date'):date('Y-m-d');
-
+        $trx_date_unix = strtotime($trx_date);
 
         $franchise = $this->franchise_model->get_byid($this->franchise->franchise_id)->first_row();
+
+        $last_date_commited_trx = strtotime('2000-01-01');
+        $last_commited_trx = $this->account_statement_model->get_last_date_inv($this->franchise->franchise_id)->first_row();
+        if(!empty($last_commited_trx) && isset($last_commited_trx->transaction_date))
+        {
+            $last_date_commited_trx = strtotime($last_commited_trx->transaction_date);
+        }
 
         $data = [
             'franchise_id' => $franchise->franchise_id,
@@ -38,12 +45,18 @@ class App extends Keuangan_Controller {
             'note' => $this->input->post('note'),
             'user_id' => $this->profile['user_id'],
             'updated_at' => date('Y-m-d H:i:s')
-
         ];
+
+        if($trx_date_unix < $last_date_commited_trx)
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal menyimpan data, tanggal transaksi harus lebih atau sama dengan urutan terakhir'
+            ]);
+        }
 
         if(!$account_statement_id)
         {
-            $trx_date_unix = strtotime($trx_date);
             $next_seq = $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix));
             $inv_seq_number = str_pad($next_seq, 7, "0", STR_PAD_LEFT);
 
