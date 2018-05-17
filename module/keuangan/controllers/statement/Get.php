@@ -20,9 +20,17 @@ class Get extends Keuangan_Controller {
         $this->account_statement_model->set_datatable_param($this->_datatable_param());
         $data = $this->account_statement_model->get_datatable($params);
 
+        $last_date_commited_trx = '';
+        $last_commited_trx = $this->account_statement_model->get_last_date_inv($this->franchise->franchise_id)->first_row();
+        if(!empty($last_commited_trx) && isset($last_commited_trx->transaction_date))
+        {
+            $last_date_commited_trx = $last_commited_trx->transaction_date;
+        }
+
         $this->_response_json([
             'recordsFiltered' => $data['total'],
-            'data' => $data['row']
+            'data' => $data['row'],
+            'last_date_commited_trx' => $last_date_commited_trx
         ]);
 	}
 

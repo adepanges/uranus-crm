@@ -52,12 +52,12 @@
             </div>
 
             <div class="row white-box" id="actionSection">
-                <div class="col-md-2 pull-right">
+                <div class="col-lg-3 col-md-4 col-sm-5 pull-right">
                     <button class="btn btn-danger btn-rounded form-control" onclick="commitInvoiceNumber()">
-                        <span>Commit All Invoice Number</span>
+                        <span>Commit All Transaction</span>
                     </button>
                 </div>
-                <div class="col-md-2 pull-right">
+                <div class="col-lg-3 col-md-4 col-sm-5 pull-right">
                     <button class="btn btn-warning btn-rounded form-control" onclick="sortInvoiceNumber()">
                         <span>Fix & Sort Invoice Number</span>
                     </button>
@@ -76,6 +76,7 @@
                                     <th>Invoice Number</th>
                                     <th>Trx Date</th>
                                     <th>Trx Amount</th>
+                                    <th>Claim</th>
                                     <th>Commit</th>
                                     <th>
                                         Action

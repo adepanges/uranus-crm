@@ -23,10 +23,10 @@ class Account_statement_model extends Keuangan_Model {
                 a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
             ORDER BY a.transaction_date ASC, a.seq_invoice ASC";
 
-        $sql = $this->_combine_datatable_param($sql);
+        $sql_row = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);
         return [
-            'row' => $this->db->query($sql)->result(),
+            'row' => $this->db->query($sql_row)->result(),
             'total' => $this->db->query($sql_count)->row()->count
         ];
     }
@@ -63,9 +63,12 @@ class Account_statement_model extends Keuangan_Model {
     function get_next_seq($franchise_id, $year, $commited = 0)
     {
         $where = '';
-        if($commited != 0)
+        if($commited == 1)
         {
             $where = "AND commit = 1 OR fix = 1";
+        } else if($commited == 2)
+        {
+            $where = "AND commit = 1";
         }
 
         $last_sequence = 0;
@@ -97,5 +100,13 @@ class Account_statement_model extends Keuangan_Model {
         $this->db->where('franchise_id', $franchise_id);
         $this->db->where('commit !=', 1);
         return $this->db->update($this->table, ['fix' => 0]);
+    }
+
+    function get_last_date_inv($franchise_id)
+    {
+        $sql = "SELECT * FROM account_statement
+            WHERE franchise_id = ? AND commit = 1
+            ORDER BY transaction_date DESC LIMIT 1";
+        return $this->db->query($sql, [(int) $franchise_id]);
     }
 }

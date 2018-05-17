@@ -719,6 +719,10 @@
                                     </div>
                                 </div>
                             </div>
+
+                            *) <i>Jika transaksi tidak ditemukan silahkan buat baru di modul keuangan, atau klik tombol dibawah</i><br>
+                            <button class="btn" onclick="openAccountStatement()">Account Statement</button>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>

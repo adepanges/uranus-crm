@@ -36,6 +36,7 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+            $('#datepicker-autoclose1').datepicker('setStartDate', json.last_date_commited_trx);
 
         }).DataTable({
             language: {
@@ -66,11 +67,20 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    data: "commit",
+                    data: "claim",
                     orderable: false,
                     render: function ( data, type, full, meta ) {
-                        var text = '<i class="mdi mdi-shield" style="color: #75EBB1; font-size: 20px;"></i>';
-                        if(data == 1) text = '<i class="mdi mdi-shield" style="color: #2F323E; font-size: 20px;"></i>';
+                        var text = '';
+                        if(data == 1) text = '<i class="fa fa-check" style="color: #75EBB1; font-size: 20px;"></i>';
+                        return text;
+                    }
+                },
+                {
+                    data: "account_statement_id",
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        var text = '<i class="mdi mdi-shield" style="color: #FFC36D; font-size: 20px;"></i>';
+                        if(full.commit == 1) text = '<i class="mdi mdi-shield" style="color: #2F323E; font-size: 20px;"></i>';
                         return text;
                     }
                 },
@@ -83,13 +93,13 @@ $(document).ready(function(){
 
                         if(full.commit != 1)
                         {
-                            if(document.app.access_list.management_product_upd)
+                            if(document.app.access_list.account_statement_upd)
                             {
                                 // edit
                                 button.push('<button onclick="upd('+data+')" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="ti-pencil-alt"></i></button>');
                             }
 
-                            if(document.app.access_list.management_product_del)
+                            if(document.app.access_list.account_statement_upd)
                             {
                                 // hapus
                                 button.push('<button onclick="del('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
@@ -206,7 +216,7 @@ function sortInvoiceNumber(id){
 function commitInvoiceNumber(id){
     swal({
         title: "Are you sure?",
-        text: "Akan mengurutkan semua nomor invoice sesuai tanggal trx, hanya yg belum di commit",
+        text: "Akan meng-commit semua transaksi yg belum di commit, transaksi yang sudah di commit tidak dapat dihapus maupun dirubah",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -220,7 +230,7 @@ function commitInvoiceNumber(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/statement/app/commit_invoice_number'
+                url: document.app.site_url+'/statement/app/commit_transaction'
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

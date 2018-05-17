@@ -109,10 +109,28 @@ class App extends Keuangan_Controller {
         ]);
     }
 
-    function commit_invoice_number()
+    function commit_transaction()
     {
         $this->_restrict_access('account_statement_commit', 'rest');
         $this->load->model(['account_statement_model','franchise_model']);
+
+        $data = $this->account_statement_model->get_uncommit($this->franchise->franchise_id)->first_row();
+        $next_seq = 1;
+        $trx_date_unix = time();
+        if(!empty($data))
+        {
+            $trx_date_unix = strtotime($data->transaction_date);
+            $next_seq = (int) $data->seq_invoice;
+        }
+        $next_seq_expected = (int) $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix), 2);
+
+        if($next_seq_expected != $next_seq)
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal commit invoice, nomor invoice tidak urut, klik tombol Sort'
+            ]);
+        }
 
         $res = $this->account_statement_model->commit_invoice_number($this->franchise->franchise_id);
         if($res)

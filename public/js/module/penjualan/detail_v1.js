@@ -6,6 +6,13 @@ function addProductList(){
     });
 }
 
+function openAccountStatement(){
+    var window_AS = window.open(document.app.base_url+'finance.php/statement','winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=1000,height=480');
+    window_AS.onbeforeunload = function(){
+        dataTableAccountStatement.ajax.reload();
+    }
+}
+
 function addListProduct(data)
 {
     data = JSON.parse(atob(data));

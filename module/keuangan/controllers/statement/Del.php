@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Del extends Keuangan_Controller {
     public function index($id = 0)
     {
-        $this->_restrict_access('management_product_del', 'rest');
+        $this->_restrict_access('account_statement_upd', 'rest');
 
         $account_statement_id = (int) $id;
         if(!$account_statement_id) $this->_response_json([
