@@ -10,7 +10,11 @@ $(document).ready(function(){
         format: 'yyyy-mm-dd'
     });
 
+    var today = new Date(),
+        month = today.getMonth()+1;
+
     var numberer = 1;
+    last_date_commited_trx = `${today.getFullYear()}-${month}-${today.getDate()}`;
     dataTable = $('#dataTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;
             $('.row .white-box').block({
@@ -36,7 +40,9 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+            last_date_commited_trx = json.last_date_commited_trx;
             $('#datepicker-autoclose1').datepicker('setStartDate', json.last_date_commited_trx);
+            $('#appForm [name=transaction_date]').val(json.last_date_commited_trx);
 
         }).DataTable({
             language: {
@@ -152,7 +158,8 @@ $(document).ready(function(){
 function add(){
     $('#appForm')[0].reset();
     formPopulate('#appForm', {
-        account_statement_id: 0
+        account_statement_id: 0,
+        transaction_date: last_date_commited_trx
     })
     $('#componentModal').modal({
         backdrop: 'static',
