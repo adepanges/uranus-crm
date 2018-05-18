@@ -53,3 +53,10 @@ code.catch {
 .cs-list h4:hover {
     font-weight: bold;
 }
+
+#list_cs {
+    border: 1px solid #808080;
+    margin-left: 10px;
+    background-color: #EDF1F5;
+    padding-top: 10px;
+}

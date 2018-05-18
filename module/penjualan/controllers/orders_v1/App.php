@@ -7,8 +7,21 @@ class App extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_new');
         $this->session->set_userdata('orders_state', 'orders_v1/app');
+
+        $this->load->model('cs_team_model');
+
+        $leader_tim = $this->session->userdata('tim_leader');
+        $cs_team = [];
+        if(in_array($this->role_active['role_id'], [1,2]))
+        {
+            $cs_team = $this->cs_team_model->get_active($this->franchise->franchise_id)->result();
+        } else if($this->role_active['role_id'] == 6 && !empty($leader_tim)) {
+            $cs_team[] = (object) $leader_tim;
+        }
+
         $this->_set_data([
-            'title' => 'New Orders'
+            'title' => 'New Orders',
+            'cs_team' => $cs_team
         ]);
 
         $this->blade->view('inc/penjualan/orders/app_v1', $this->data);

@@ -1,3 +1,2 @@
-cs followUp ga bisa kasih notes
-ligostics ngga bisa ubah Alamat
-cetakan label ngga keluar info barangnya
+cs followUp ga bisa kasih notes - done
+ligostics ngga bisa ubah Alamat - done
