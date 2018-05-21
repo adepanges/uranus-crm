@@ -18,5 +18,6 @@ function loadBadgePenjualan(){
         $('#count_sale').html(response.count_sale);
         $('#count_cancel').html(response.count_cancel);
         $('#count_trash').html(response.count_trash);
+        $('#count_assigned_order').html(response.count_assigned);
     });
 }

@@ -112,7 +112,7 @@
 @endif
 
 
-@if($orders->order_status_id == 1 && $access_list->penjualan_orders_action_follow_up)
+@if($orders->order_status_id == 10 && $access_list->penjualan_orders_action_follow_up)
                 <div class="col-md-2 pull-right">
                     <button onclick="followUp({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
                         <i class="mdi mdi-briefcase-upload"></i>

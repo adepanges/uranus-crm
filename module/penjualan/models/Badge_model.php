@@ -50,6 +50,18 @@ class Badge_model extends Penjualan_Model {
                 (a.orders_double_id IS NULL OR a.orders_double_id = 0)")->first_row();
     }
 
+    function assigned()
+    {
+        return $this->db->query("SELECT count(*) as count
+        FROM orders a
+        LEFT JOIN orders_process fu ON a.order_id = fu.order_id AND fu.order_status_id = 10
+        WHERE
+        a.order_status_id = 10 AND
+        a.is_deleted = 0 AND
+        (a.orders_double_id IS NULL OR a.orders_double_id = 0) AND
+        fu.user_id = {$this->profile['user_id']}")->first_row();
+    }
+
     function double()
     {
         return $this->db->query("SELECT COUNT(a.orders_double_id) AS `count`
@@ -73,6 +85,7 @@ class Badge_model extends Penjualan_Model {
                     )
                 )")->first_row();
     }
+
 
     function pending()
     {

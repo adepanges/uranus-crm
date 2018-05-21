@@ -60,3 +60,7 @@ code.catch {
     background-color: #EDF1F5;
     padding-top: 10px;
 }
+
+.preloader {
+    z-index: 100000 !important;
+}

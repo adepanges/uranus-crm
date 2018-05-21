@@ -19,7 +19,7 @@
         <!-- Sweet-Alert  -->
         <script src="{{ base_url('plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
         <script src="{{ base_url('plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js')}}"></script>
-        <script src="{{ base_url('js/module/penjualan/orders_v1.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('js/module/penjualan/orders_assigned_v1.js') }}" type="text/javascript"></script>
         <script src="{{ base_url('js/module/penjualan/orders_badge_v1.js') }}" type="text/javascript"></script>
 @endsection
 
@@ -32,7 +32,7 @@
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                    <h4 class="page-title">Orders New</h4> </div>
+                    <h4 class="page-title">Assigned Orders</h4> </div>
                 <!-- /.page title -->
             </div>
 
@@ -41,12 +41,6 @@
                     <button onclick="ordersTable.ajax.reload()" class="btn btn-primary btn-rounded form-control">
                         <i class="fa fa-refresh"></i>
                         <span>Refresh</span>
-                    </button>
-                </div>
-                <div class="col-md-2 pull-right">
-                    <button onclick="assignOrders()" class="btn btn-rounded form-control">
-                        <i class="fa fa-child"></i>
-                        <span>Assign Orders</span>
                     </button>
                 </div>
             </div>
