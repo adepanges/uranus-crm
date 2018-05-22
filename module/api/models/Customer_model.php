@@ -18,6 +18,8 @@ class Customer_model extends API_Model {
         $data = (array) $data;
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['status'] = 1;
+        if(isset($data['full_name'])) $data['full_name'] = clean_special_char($data['full_name']);
+
         $this->db->insert('customer', $this->_sanity_field($data, ['full_name','telephone','created_at','status']));
         return $this->get_byid($this->db->insert_id());
     }
@@ -27,6 +29,8 @@ class Customer_model extends API_Model {
         $data = (array) $data;
         $data['status'] = 1;
         $data['updated_at'] = date('Y-m-d H:i:s');
+        if(isset($data['full_name'])) $data['full_name'] = clean_special_char($data['full_name']);
+
         $this->db->where('customer_id', $id);
         return $this->db->update('customer', $this->_sanity_field($data, ['full_name','telephone','created_at','status']));
     }
