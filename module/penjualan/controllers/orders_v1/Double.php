@@ -139,6 +139,8 @@ class Double extends Penjualan_Controller {
         if(!empty($order_id)) $res2 = $this->orders_model->trash($order_id);
         $res3 = $this->double_orders_model->solve($orders_double_id);
 
+        $this->self_assign($res_orders->order_id);
+
         if($follow_up && !empty($orders))
         {
             redirect('orders_v1/app/follow_up/'.$id);
@@ -158,5 +160,35 @@ class Double extends Penjualan_Controller {
                 'message' => 'Gagal memulihkan orders'
             ]);
         }
+    }
+
+    protected function self_assign($orders_id)
+    {
+        $this->load->model(['orders_model','orders_process_model','master_model']);
+
+        $res = $this->orders_model->get_byid_v1($orders_id);
+        $data = $res->first_row();
+        $profile = $this->session->userdata('profile');
+        $follow_up_status = $this->master_model->order_status(10)->first_row();
+
+
+        $label_status = isset($follow_up_status->label)?$follow_up_status->label:'Assign';
+        $order_status = [
+            'franchise_id' => $this->franchise->franchise_id,
+            'order_status_id' => 10,
+            'order_status' => $label_status
+        ];
+        $order_process = [
+            'order_id' => $orders_id,
+            'user_id' => $profile['user_id'],
+            'order_status_id' => 10,
+            'status' => $label_status,
+            'notes' => "<b>{$profile['first_name']} {$profile['last_name']}</b> mengambil orders dari double orders",
+            'event_postback_status' => 0,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->orders_model->upd($orders_id, $order_status);
+        $this->orders_process_model->add($order_process);
     }
 }

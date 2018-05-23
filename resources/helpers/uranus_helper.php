@@ -98,7 +98,7 @@ if (!function_exists('normalize_msisdn')) {
         {
             $numb = '0'.substr($numb, 2);
         }
-        $numb = preg_replace('/[^0-9]/', '', $numb);
+        $numb = trim(preg_replace('/[^0-9]/', '', $numb));
         return $numb;
     }
 }
@@ -151,7 +151,7 @@ if (!function_exists('clean_special_char'))
 {
 	function clean_special_char($string) {
         $string = str_replace(' ', '-', $string);
-        $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
-        return str_replace('-', ' ', $string);
+        $string = trim(preg_replace('/[^A-Za-z0-9\-]/', '', $string));
+        return trim(str_replace('-', ' ', $string));
 	}
 }
