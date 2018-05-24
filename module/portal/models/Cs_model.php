@@ -20,7 +20,8 @@ class Cs_model extends Portal_Model {
         $sql = "SELECT a.*
             FROM sso_user a
             WHERE
-                a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id = 5) $where";
+                a.user_id IN (SELECT user_id FROM sso_user_role WHERE role_id = 5) $where
+            ORDER BY first_name, first_name ASC";
         return $this->db->query($sql);
 	}
 }
