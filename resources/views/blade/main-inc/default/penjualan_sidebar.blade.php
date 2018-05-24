@@ -27,7 +27,7 @@
                             <a href="{{ site_url('orders_v1/pending') }}">
                                 <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>
                                 <span class="hide-menu">Pending Orders</span>
-                                <span class="badge badge-danger" id="count_pending">?</span>
+                                <span class="badge badge-warning" id="count_pending">?</span>
                             </a>
                         </li>
 @endif
@@ -36,7 +36,7 @@
                             <a href="{{ site_url('orders_v1/confirm_buy') }}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span class="hide-menu">Confirm Buy Orders</span>
-                                <span class="badge badge-danger" id="count_confirm_buy">?</span>
+                                <span class="badge badge-info" id="count_confirm_buy">?</span>
                             </a>
                         </li>
 @endif
@@ -45,7 +45,7 @@
                             <a href="{{ site_url('orders_v1/verify') }}">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span class="hide-menu">Verify Payment Orders</span>
-                                <span class="badge badge-danger" id="count_verify_pay">?</span>
+                                <span class="badge badge-info" id="count_verify_pay">?</span>
                             </a>
                         </li>
 @endif
@@ -54,7 +54,7 @@
                             <a href="{{ site_url('orders_v1/sale') }}">
                                 <i class="fa fa-money" style="font-size: 13px;"></i>
                                 <span class="hide-menu">Sale Orders</span>
-                                <span class="badge badge-danger" id="count_sale">?</span>
+                                <span class="badge badge-success" id="count_sale">?</span>
                             </a>
                         </li>
 @endif
