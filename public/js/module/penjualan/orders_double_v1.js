@@ -2,6 +2,9 @@ $(document).ready(function(){
 
     document.datatable_search_change_event2 = false;
 
+    var isEmpty_doubleOrdersTable = false,
+        isEmpty_doubleOrderFollowsTable = false;
+
     var numberer = 1;
     doubleOrdersTable = $('#doubleOrdersTable').on('preXhr.dt', function ( e, settings, data ){
             numberer = data.start + 1;
@@ -23,6 +26,23 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+
+            if(json.recordsFiltered == 0){
+                isEmpty_doubleOrdersTable = true;
+                $('#section_doubleOrdersTable').hide();
+            } else {
+                isEmpty_doubleOrdersTable = false;
+            }
+
+            if(
+                isEmpty_doubleOrdersTable == true &&
+                isEmpty_doubleOrderFollowsTable == true
+            ){
+                $('#section_empty').show()
+            } else {
+                $('#section_empty').hide()
+            }
+
         }).DataTable({
             serverSide: true,
             ajax: {
@@ -86,6 +106,23 @@ $(document).ready(function(){
                 });
             }
             document.datatable_search_change_event = true;
+
+            if(json.recordsFiltered == 0){
+                isEmpty_doubleOrderFollowsTable = true;
+                $('#section_doubleOrderFollowsTable').hide();
+            } else {
+                isEmpty_doubleOrderFollowsTable = false;
+            }
+
+            if(
+                isEmpty_doubleOrdersTable == true &&
+                isEmpty_doubleOrderFollowsTable == true
+            ){
+                $('#section_empty').show()
+            } else {
+                $('#section_empty').hide()
+            }
+
         }).DataTable({
             serverSide: true,
             ajax: {
