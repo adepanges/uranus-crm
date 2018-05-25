@@ -66,6 +66,7 @@ $(document).ready(function(){
                 { data: "account_name", orderable: false },
                 { data: "generated_invoice", orderable: false },
                 { data: "transaction_date", orderable: false },
+                { data: "transaction_type", orderable: false },
                 {
                     data: "transaction_amount", orderable: false,
                     render: function ( data, type, full, meta ) {

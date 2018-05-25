@@ -75,6 +75,7 @@
                                     <th>Account</th>
                                     <th>Invoice Number</th>
                                     <th>Trx Date</th>
+                                    <th>Trx Type</th>
                                     <th>Trx Amount</th>
                                     <th>Claim</th>
                                     <th>Commit</th>
@@ -120,6 +121,21 @@
                                     <input type="text" class="form-control" name="transaction_date" id="datepicker-autoclose1" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}" data-error="Hmm, tanggal transaksi harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Trx Type</label>
+                                    <div class="radio radio-success">
+                                        <div class="col-md-4">
+                                            <input type="radio" name="transaction_type" id="radio1" value="D">
+                                            <label for="radio1"> DEBIT</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="radio" name="transaction_type" id="radio2" value="K">
+                                            <label for="radio2"> KREDIT</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Trx Amount</label>

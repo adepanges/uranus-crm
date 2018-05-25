@@ -39,7 +39,7 @@ class App extends Keuangan_Controller {
         $data = [
             'franchise_id' => $franchise->franchise_id,
             'payment_method_id' => $this->input->post('payment_method_id'),
-            'transaction_type' => 'D',
+            'transaction_type' => $this->input->post('transaction_type'),
             'transaction_date' => $trx_date,
             'transaction_amount' => $this->input->post('transaction_amount'),
             'note' => $this->input->post('note'),
