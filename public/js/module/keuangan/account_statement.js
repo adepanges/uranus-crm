@@ -120,7 +120,8 @@ $(document).ready(function(){
 
     $('#btnSaveApp').click(function(e){
         if(formValidator('#appForm')){
-            var data = serialzeForm('#appForm');
+            var data = serialzeForm('#appForm'),
+                page_info = dataTable.page.info();;
 
             $('.preloader').fadeIn();
             $.ajax({
@@ -143,6 +144,9 @@ $(document).ready(function(){
                     dataTable.ajax.reload()
                     $('#componentModal').modal('toggle')
                 }
+
+                if(data.account_statement_id == 0) dataTable.page( 'last' ).draw( 'page' );
+                else dataTable.page( page_info.page ).draw( 'page' );
 
                 swal({
                     title: title,

@@ -40,7 +40,7 @@ class Account_statement_model extends Keuangan_Model {
     {
         $sql = "SELECT * FROM account_statement
             WHERE franchise_id = ? AND commit != 1
-            ORDER BY transaction_date ASC";
+            ORDER BY transaction_date ASC, seq_invoice ASC";
         return $this->db->query($sql, [(int) $franchise_id]);
     }
 
@@ -65,7 +65,7 @@ class Account_statement_model extends Keuangan_Model {
         $where = '';
         if($commited == 1)
         {
-            $where = "AND commit = 1 OR fix = 1";
+            $where = "AND (commit = 1 OR fix = 1)";
         } else if($commited == 2)
         {
             $where = "AND commit = 1";

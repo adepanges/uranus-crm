@@ -125,25 +125,10 @@ class App extends Keuangan_Controller {
     function commit_transaction()
     {
         $this->_restrict_access('account_statement_commit', 'rest');
-        $this->load->model(['account_statement_model','franchise_model']);
+        $this->load->model('account_statement_model');
 
-        $data = $this->account_statement_model->get_uncommit($this->franchise->franchise_id)->first_row();
-        $next_seq = 1;
-        $trx_date_unix = time();
-        if(!empty($data))
-        {
-            $trx_date_unix = strtotime($data->transaction_date);
-            $next_seq = (int) $data->seq_invoice;
-        }
-        $next_seq_expected = (int) $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix), 2);
-
-        if($next_seq_expected != $next_seq)
-        {
-            $this->_response_json([
-                'status' => 0,
-                'message' => 'Gagal commit invoice, nomor invoice tidak urut, klik tombol Sort'
-            ]);
-        }
+        // check urutan no invoice
+        $this->check_uncommit_invoice_validity();
 
         $res = $this->account_statement_model->commit_invoice_number($this->franchise->franchise_id);
         if($res)
@@ -159,6 +144,76 @@ class App extends Keuangan_Controller {
                 'status' => 0,
                 'message' => 'Gagal commit invoice'
             ]);
+        }
+    }
+
+    protected function check_uncommit_invoice_validity()
+    {
+        $this->load->model('account_statement_model');
+        $data = $this->account_statement_model->get_uncommit($this->franchise->franchise_id)->result();
+        $next_seq = 1;
+        $trx_date_unix = time();
+
+        if(!empty($data) && isset($data[0]))
+        {
+            $trx_date_unix = strtotime($data[0]->transaction_date);
+            $next_seq = (int) $data[0]->seq_invoice;
+        }
+        $previous_inv_date_unix = $trx_date_unix;
+
+        $previous_inv_rec = $this->account_statement_model->get_last_date_inv($this->franchise->franchise_id)->first_row();
+        if(!empty($previous_inv_rec)) $previous_inv_date_unix = strtotime($previous_inv_rec->transaction_date);
+
+        $seq_expected_year = date('Y', $trx_date_unix);
+        $next_seq_expected = (int) $this->account_statement_model->get_next_seq($this->franchise->franchise_id, $seq_expected_year, 2);
+
+        foreach ($data as $key => $value)
+        {
+            $transaction_date_unix = strtotime($value->transaction_date);
+            if($previous_inv_date_unix > $transaction_date_unix)
+            {
+                $this->_response_json([
+                    'status' => 0,
+                    'message' => 'Gagal commit invoice, tanggal tidak urut'
+                ]);
+            }
+            else
+            {
+                $previous_inv_date_unix = $value->transaction_date;
+            }
+
+
+            if(date('Y', $transaction_date_unix) == $seq_expected_year)
+            {
+                if($next_seq_expected == $value->seq_invoice)
+                {
+                    $next_seq_expected = $value->seq_invoice + 1;
+                }
+                else
+                {
+                    $this->_response_json([
+                        'status' => 0,
+                        'message' => 'Gagal commit invoice, nomor invoice tidak urut, silahkan klik sort'
+                    ]);
+                }
+            }
+            else
+            {
+                $seq_expected_year = date('Y', $transaction_date_unix);
+                $next_seq_expected = (int) $this->account_statement_model->get_next_seq($this->franchise->franchise_id, $seq_expected_year, 2);
+
+                if($next_seq_expected == $value->seq_invoice)
+                {
+                    $next_seq_expected = $value->seq_invoice + 1;
+                }
+                else
+                {
+                    $this->_response_json([
+                        'status' => 0,
+                        'message' => 'Gagal commit invoice, nomor invoice tidak urut, silahkan klik sort'
+                    ]);
+                }
+            }
         }
     }
 }
