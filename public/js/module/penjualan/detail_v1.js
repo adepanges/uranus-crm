@@ -933,11 +933,6 @@ $(document).ready(function(){
         $('#labelNoteOrders').hide();
     })
 
-    $('#fieldNoteOrders').focusout(function(){
-        $('#fieldNoteOrders').hide();
-        $('#labelNoteOrders').show();
-    })
-
     $('#fieldNoteOrders').keyup(function(){
         var data_saved = $(this).attr('data-saved'),
             val = btoa($(this).val());
@@ -972,6 +967,9 @@ $(document).ready(function(){
             } else {
                 $('#fieldNoteOrders').attr('data-saved', btoa($('#fieldNoteOrders').val()));
                 $('#fieldNoteOrders').trigger('keyup');
+
+                $('#fieldNoteOrders').hide();
+                $('#labelNoteOrders').show();
             }
 
             swal({
