@@ -27,14 +27,16 @@ class Auth_model extends SSO_Model {
     function get_role_by_userid($user_id)
     {
         $sql = "SELECT
-        a.*, b.name as role_name,
-        b.label as role_label,
-        c.name as franchise_name
+            a.*, b.name as role_name,
+            b.label as role_label,
+            c.name as franchise_name
         FROM sso_user_role a
         LEFT JOIN sso_role b ON a.role_id = b.role_id
         LEFT JOIN franchise c ON a.franchise_id = c.franchise_id
-        WHERE a.user_id = ?
-        AND a.status = 1 AND b.status = 1 AND c.status = 1";
+        WHERE
+            a.user_id = ?
+            AND a.status = 1 AND b.status = 1 AND c.status = 1
+        ORDER BY a.is_primary DESC, a.user_role_id ASC";
         return $this->db->query($sql, [
             $user_id
         ]);

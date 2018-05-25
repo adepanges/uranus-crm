@@ -6,7 +6,7 @@ class User_role_model extends SSO_Model {
         $datatable_param = NULL,
         $table = 'sso_user_role',
         $orderable_field = ['role_label','franchise_name','created_at',],
-        $fillable_field = ['user_id','role_id','franchise_id','status','created_at'],
+        $fillable_field = ['user_id','role_id','franchise_id','status','created_at','is_primary'],
         $searchable_field = ['role_label','franchise_name'];
 
     function get_datatable($user_id = 0)
@@ -38,6 +38,12 @@ class User_role_model extends SSO_Model {
     function upd($data, $user_role_id)
     {
         $this->db->where('user_role_id', $user_role_id);
+        return $this->db->update($this->table, $this->_sanity_field($data));
+    }
+
+    function upd_where($data, $where)
+    {
+        $this->db->where($where);
         return $this->db->update($this->table, $this->_sanity_field($data));
     }
 

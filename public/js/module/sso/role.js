@@ -40,6 +40,15 @@ $(document).ready(function(){
                     }
                 },
                 { data: "role_label" },
+                {
+                    data: "is_primary",
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        var text = '';
+                        if(data == 1) text = '<i class="fa fa-star" style="color: #75EBB1; font-size: 20px;"></i>';
+                        return text;
+                    }
+                },
                 { data: "franchise_name" },
                 { data: "created_at" },
                 {
@@ -53,6 +62,11 @@ $(document).ready(function(){
                         {
                             // hapus
                             button.push('<button onclick="delRole('+data+')" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5"><i class="icon-trash"></i></button>');
+                        }
+
+                        if(full.is_primary == 0)
+                        {
+                            button.push('<button onclick="primaryRole('+full.user_id+','+full.role_id+')" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-star"></i></button>');
                         }
 
                         return button.join('');
@@ -131,6 +145,46 @@ function delRole(id){
             $.ajax({
                 method: "POST",
                 url: document.app.site_url+'/user/role/del/'+id
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                roleTable.ajax.reload()
+                var title = 'Berhasil!';
+                if(!response.status) title = 'Gagal!';
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: 2000,
+                    showConfirmButton: true
+                });
+            });
+        }
+    });
+}
+
+function primaryRole(user_id, role_id){
+    swal({
+        title: "Are you sure?",
+        text: "Anda akan menjadikan role ini primary!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/user/role/set_primary',
+                data: {
+                    user_id: user_id,
+                    role_id: role_id
+                }
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();

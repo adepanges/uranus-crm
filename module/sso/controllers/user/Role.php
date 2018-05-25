@@ -121,4 +121,41 @@ class Role extends SSO_Controller {
             ]);
         }
     }
+
+    function set_primary()
+    {
+        $this->_restrict_access('sso_users_upd', 'rest');
+        $this->load->model('user_role_model');
+
+        $where = [
+            'user_id' => (int) $this->input->post('user_id'),
+            'role_id' => (int) $this->input->post('role_id')
+        ];
+
+        // reset
+        $this->user_role_model->upd_where([
+            'is_primary' => 0,
+        ],[
+            'user_id' => $where['user_id']
+        ]);
+
+        $res = $this->user_role_model->upd_where([
+            'is_primary' => 1,
+        ], $where);
+
+        if($res)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Role berhasil dihapus'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Role gagal dihapus'
+            ]);
+        }
+    }
 }

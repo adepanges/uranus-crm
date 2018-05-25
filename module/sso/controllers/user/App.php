@@ -8,7 +8,7 @@ class App extends SSO_Controller {
         $this->load->model('role_model');
 
         $role_active = $this->role_model->get_active(true)->result();
-        
+
         $this->_set_data([
             'title' => 'Management User',
             'active_role' => $role_active
