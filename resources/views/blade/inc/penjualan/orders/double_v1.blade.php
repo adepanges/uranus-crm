@@ -37,7 +37,15 @@
                 <!-- /.page title -->
             </div>
 
-            <div class="row">
+            <div class="row" id="section_empty">
+                <div class="col-md-12">
+                    <div class="white-box">
+                        <h2>Tidak ada double orders</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="section_doubleOrdersTable">
                 <div class="col-md-12">
                     <div class="white-box">
                         <h2>New Orders</h2>
@@ -58,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" id="section_doubleOrderFollowsTable">
                 <div class="col-md-12">
                     <div class="white-box">
                         <h2>Orders Follow Up</h2>
