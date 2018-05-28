@@ -28,6 +28,11 @@ class Customer_model extends Management_Model {
         return $this->db->where('customer_id', $id)->limit(1)->get($this->table)->first_row();
     }
 
+    function get_phone_byid($id)
+    {
+        return $this->db->where('customer_id', $id)->get('customer_phonenumber')->result();
+    }
+
     function del($id)
     {
         return $this->db->delete($this->table, ['customer_id' => ((int) $id)]);

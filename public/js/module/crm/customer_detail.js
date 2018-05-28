@@ -99,7 +99,40 @@ $(document).ready(function(){
                     title = 'Gagal!';
                     showConfirmButton = true;
                 } else {
-                    $('#appForm')[0].reset()
+                    document.location.reload()
+                }
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
+
+    $('#btnSavePhoneNumber').click(function(e){
+        if(formValidator('#phoneNumberForm')){
+            var data = serialzeForm('#phoneNumberForm');
+
+            $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/customer/app/save_phone',
+                data: data
+            })
+            .done(function( response ) {
+                $('.preloader').fadeOut();
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else {
                     document.location.reload()
                 }
 
@@ -117,42 +150,89 @@ $(document).ready(function(){
         formPopulate('#infoPribadiForm', customer_data)
     });
 
+    $('.checkPrimary').click(function(){
+        var customer_phonenumber_id = $(this).val();
+        swal({
+            title: "Are you sure?",
+            text: "Anda akan menjadikan nomor ini sebagai nomor primer!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "Ok",
+            cancelButtonText: "Batal",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $('.preloader').fadeIn();
+                $.ajax({
+                    method: "POST",
+                    url: document.app.site_url+'/customer/app/set_phone_primary',
+                    data: {
+                        customer_id: $('#customer_id').val(),
+                        customer_phonenumber_id: customer_phonenumber_id
+                    }
+                })
+                .done(function( response ) {
+                    $('.preloader').fadeOut();
+                    var title = 'Berhasil!',
+                        timer = 1000;
+                        showConfirmButton = false;
 
+                    if(!response.status) {
+                        var timer = 3000;
+                        title = 'Gagal!';
+                        showConfirmButton = true;
+                    } else {
+                        document.location.reload()
+                    }
+
+                    swal({
+                        title: title,
+                        text: response.message,
+                        timer: timer,
+                        showConfirmButton: showConfirmButton
+                    });
+                });
+            }
+        });
+    })
 });
 
-function add(){
-    $('#appForm')[0].reset();
-    formPopulate('#appForm', {
-        customer_id: 0
+function addPhoneNumber(){
+    $('#phoneNumberForm')[0].reset();
+    formPopulate('#phoneNumberForm', {
+        customer_phonenumber_id: 0,
+        customer_id: $('#customer_id').val()
     })
-    $('#appModal').modal({
+    $('#phoneNumberModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-function upd(id){
+function updPhoneNumber(id){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/customer/get/byid/'+id
+        url: document.app.site_url+'/customer/get/phone_byid/'+id
     })
     .done(function( response ) {
         $('.preloader').fadeOut();
-        formPopulate('#appForm', response)
+        formPopulate('#phoneNumberForm', response)
     });
 
-    $('#appModal').modal({
+    $('#phoneNumberModal').modal({
         backdrop: 'static',
         keyboard: false
     });
 }
 
-
-function del(id){
+function delPhoneNumber(id){
     swal({
         title: "Are you sure?",
-        text: "Anda akan menghapus customer ini!",
+        text: "Anda akan menghapus nomor ini!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
@@ -166,11 +246,11 @@ function del(id){
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
-                url: document.app.site_url+'/customer/del/index/'+id
+                url: document.app.site_url+'/customer/del/phone/'+id
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
-                dataTable.ajax.reload()
+                document.location.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 

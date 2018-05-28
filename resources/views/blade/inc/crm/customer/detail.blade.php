@@ -73,7 +73,7 @@
                                 <div class="row">
                                     <div class="col-md-6 p-30">
                                         <form id="infoPribadiForm" data-toggle="validator" data-delay="100" class="p-30">
-                                            <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}">
+                                            <input id="customer_id" type="hidden" name="customer_id" value="{{ $customer->customer_id }}">
                                             <div class="form-group">
                                                 <label for="recipient-name" class="control-label">Nama</label>
                                                 <input type="text" class="form-control" name="full_name"
@@ -109,23 +109,40 @@
                                         </form>
                                     </div>
                                     <div class="col-md-6 p-30">
-                                        <h3>Nomor HP</h3>
+                                        <h3>Nomor HP <button onclick="addPhoneNumber()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button></h3>
                                         <table class="table">
                                                 <tbody>
-                                                    <tr class="advance-table-row active">
-                                                        <td style="width: 10px;"></td>
-                                                        <td style="width: 40px;">
-                                                            <div class="checkbox checkbox-circle checkbox-info">
-                                                                <input id="checkbox7" checked="" type="checkbox">
-                                                                <label for="checkbox7"> </label>
-                                                            </div>
-                                                        </td>
-                                                        <td><b>082322254063</b></td>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="7" class="sm-pd"></td>
-                                                    <tr>
+                                                    @foreach ($phone_number as $key => $value)
+                                                        <?php
+                                                        $primary_active = '';
+                                                        $primary_checked = '';
+                                                        if($value->is_primary)
+                                                        {
+                                                            $primary_active = 'active';
+                                                            $primary_checked = 'checked';
+                                                        }
+                                                        ?>
+                                                        <tr class="advance-table-row {{ $primary_active }}">
+                                                            <td style="width: 10px;"></td>
+                                                            <td style="width: 40px;">
+                                                                <div class="checkbox checkbox-circle checkbox-info">
+                                                                    <input class="checkPrimary" value="{{ $value->customer_phonenumber_id }}" type="checkbox" {{ $primary_checked }}>
+                                                                    <label></label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <b>{{ $value->phonenumber }}</b>
+                                                                @if(!$value->is_primary)
+                                                                    <button onclick="delPhoneNumber({{ $value->customer_phonenumber_id }})" type="button" class="btn btn-danger btn-outline btn-circle btn-sm m-r-5 pull-right"><i class="icon-trash"></i></button>
+                                                                @endif
+                                                                <button onclick="updPhoneNumber({{ $value->customer_phonenumber_id }})" type="button" class="btn btn-warning btn-outline btn-circle btn-sm m-r-5 pull-right"><i class="ti-pencil-alt"></i></button>
+                                                            </td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="7" class="sm-pd"></td>
+                                                            <tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                     </div>
@@ -168,42 +185,27 @@
             </div>
             <!-- .row -->
 
-            <div class="modal fade" id="appModal" role="dialog" aria-labelledby="exampleModalLabel1"
+            <div class="modal fade" id="phoneNumberModal" role="dialog" aria-labelledby="exampleModalLabel1"
             style="z-index: 1041 !important;">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Customer</h4> </div>
+                            <h4 class="modal-title" id="exampleModalLabel1">Phone Number Customer</h4> </div>
                         <div class="modal-body">
-                            <form id="appForm" data-toggle="validator" data-delay="100">
+                            <form id="phoneNumberForm" data-toggle="validator" data-delay="100">
+                                <input type="hidden" name="customer_phonenumber_id">
                                 <input type="hidden" name="customer_id">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Nama</label>
-                                    <input type="text" class="form-control" name="full_name" data-error="Hmm, nama harap diisi" required>
+                                    <label for="recipient-name" class="control-label">Nomor Handphone</label>
+                                    <input type="text" class="form-control" name="phonenumber" data-error="Hmm, Nomor Handphone harap diisi" required>
                                     <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Email</label>
-                                    <input type="text" class="form-control" name="email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Jenis Kelamin</label>
-                                    <select class="form-control" name="gender">
-                                        <option value="N">Tidak ada</option>
-                                        <option value="L">Laki-laki</option>
-                                        <option value="P">Perempuan</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Tanggal Lahir</label>
-                                    <input type="text" class="form-control" name="birthdate" id="datepicker-autoclose" placeholder="yyyy-mm-dd">
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button id="btnSaveApp" type="button" class="btn btn-primary">Simpan</button>
+                            <button id="btnSavePhoneNumber" type="button" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
                 </div>

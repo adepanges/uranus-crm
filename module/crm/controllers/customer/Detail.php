@@ -10,12 +10,12 @@ class Detail extends Management_Controller {
         $this->load->model('customer_model');
 
         $customer = $this->customer_model->get_byid($id);
-
         if(empty($customer)) redirect('customer');
 
         $this->_set_data([
             'title' => 'Customer Detail',
-            'customer' => $customer
+            'customer' => $customer,
+            'phone_number' => $this->customer_model->get_phone_byid($id)
         ]);
 
         $this->blade->view('inc/crm/customer/detail', $this->data);
