@@ -11,7 +11,7 @@ class Cs_team_model extends Management_Model {
 
     function get_datatable()
     {
-        $sql = "SELECT
+        $sql_raw = "SELECT
             a.*, b.name AS franchise_name, CONCAT(c.first_name,' ',c.last_name) as username,
             CAST(d.jumlah_cs AS UNSIGNED) as jumlah_cs
         FROM management_team_cs a
@@ -21,8 +21,8 @@ class Cs_team_model extends Management_Model {
             SELECT team_cs_id, COUNT(*) AS jumlah_cs FROM management_team_cs_member GROUP BY team_cs_id
         ) d ON a.team_cs_id = d.team_cs_id";
 
-        $sql = $this->_combine_datatable_param($sql);
-        $sql_count = $this->_combine_datatable_param($sql, TRUE);
+        $sql = $this->_combine_datatable_param($sql_raw);
+        $sql_count = $this->_combine_datatable_param($sql_raw, TRUE);
         return [
             'row' => $this->db->query($sql)->result(),
             'total' => $this->db->query($sql_count)->row()->count

@@ -214,6 +214,8 @@ function sortInvoiceNumber(id){
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
 
+                dataTable.page( 'last' ).draw( 'page' );
+
                 swal({
                     title: title,
                     text: response.message,
@@ -249,6 +251,8 @@ function commitInvoiceNumber(id){
                 dataTable.ajax.reload()
                 var title = 'Berhasil!';
                 if(!response.status) title = 'Gagal!';
+
+                dataTable.page( 'last' ).draw( 'page' );
 
                 swal({
                     title: title,
