@@ -90,6 +90,7 @@ if (!function_exists('bind_string')) {
 if (!function_exists('normalize_msisdn')) {
     function normalize_msisdn($numb)
     {
+        $numb = str_replace("O", "0", strtoupper($numb));
         if(substr($numb, 0, 1) == '+')
         {
             $numb = substr($numb, 1);

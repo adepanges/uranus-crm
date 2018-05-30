@@ -40,7 +40,6 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
-                                    <th>Telephone</th>
                                     <th>Email</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Kota</th>

@@ -47,7 +47,6 @@ $(document).ready(function(){
                     }
                 },
                 { data: "full_name" },
-                { data: "telephone" },
                 { data: "email" },
                 { data: "gender" },
                 { data: "city" },
@@ -59,7 +58,7 @@ $(document).ready(function(){
                         var button = [];
 
                         button.push('<a href="'+document.app.site_url + '/customer/detail/index/' + data + '" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>');
-                        
+
                         if(document.app.access_list.crm_customer_upd)
                         {
                             // edit

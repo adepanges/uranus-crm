@@ -17,16 +17,24 @@ class V1 extends API_Controller {
 
             if(isset($json_data->customer_info))
             {
-                $json_data->customer_info->telephone = isset($json_data->customer_info->telephone)?normalize_msisdn($json_data->customer_info->telephone):'';
+                $telephone = isset($json_data->customer_info->telephone)?normalize_msisdn($json_data->customer_info->telephone):'';
 
-                $customer_info = $this->customer_model->get_by_msisdn($json_data->customer_info->telephone);
+                $customer_info = $this->customer_model->get_by_msisdn($telephone);
+
                 if(empty($customer_info)) {
                     $customer_info = $this->customer_model->add($json_data->customer_info);
+                    $customer_phonenumber = $this->customer_model->add_phonenumber([
+                        'customer_id' => $customer_info->customer_id,
+                        'phonenumber' => $telephone
+                    ]);
+
+                    $customer_info->telephone = $telephone;
                 }
                 else if(isset($customer_info->customer_id))
                 {
                     $this->customer_model->upd($json_data->customer_info, $customer_info->customer_id);
                     $customer_info = $this->customer_model->get_byid($customer_info->customer_id);
+                    $customer_info->telephone = $telephone;
                 }
             }
 
