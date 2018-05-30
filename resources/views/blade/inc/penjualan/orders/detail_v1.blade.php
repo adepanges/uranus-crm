@@ -274,11 +274,18 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Payment Method</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
+                                <?php
+                                    $payment_method = '';
+                                ?>
 @foreach ($master_payment_method as $key => $value)
-                                <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+                                <?php
+                                    if($value->payment_method_id == $orders->payment_method_id)
+                                    {
+                                        $payment_method = $value->name;
+                                    }
+                                ?>
 @endforeach
-                                    </select>
+                                    <input type="text" class="form-control" value="{{ $payment_method }}" readonly>
                                 </div>
                             </div>
                         </form>
@@ -502,7 +509,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Telephone</label>
-                                    <input type="text" class="form-control" name="telephone">
+                                    <input type="text" class="form-control" name="telephone" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Metode Follow Up</label>

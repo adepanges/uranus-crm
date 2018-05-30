@@ -5,7 +5,7 @@ class Customer_model extends API_Model {
 
     function get_by_msisdn($msisdn)
     {
-        return $this->db->query("SELECT a.phonenumber AS telephone, b.*
+        return $this->db->query("SELECT a.customer_phonenumber_id, a.phonenumber AS telephone, b.*
             FROM customer_phonenumber a
             LEFT JOIN customer b ON a.customer_id = b.customer_id
             WHERE a.phonenumber = ?", [trim($msisdn)])->first_row();
@@ -39,7 +39,7 @@ class Customer_model extends API_Model {
                 'customer_id','phonenumber','is_primary','created_at'
             ])
         );
-        return $this->get_byid($this->db->insert_id());
+        return $this->db->insert_id();
     }
 
     function upd($data = [], $id = 0)

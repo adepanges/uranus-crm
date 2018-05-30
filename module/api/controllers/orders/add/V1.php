@@ -20,14 +20,14 @@ class V1 extends API_Controller {
                 $telephone = isset($json_data->customer_info->telephone)?normalize_msisdn($json_data->customer_info->telephone):'';
 
                 $customer_info = $this->customer_model->get_by_msisdn($telephone);
+                $customer_phonenumber_id = $customer_info->customer_phonenumber_id;
 
                 if(empty($customer_info)) {
                     $customer_info = $this->customer_model->add($json_data->customer_info);
-                    $customer_phonenumber = $this->customer_model->add_phonenumber([
+                    $customer_phonenumber_id = $this->customer_model->add_phonenumber([
                         'customer_id' => $customer_info->customer_id,
                         'phonenumber' => $telephone
                     ]);
-
                     $customer_info->telephone = $telephone;
                 }
                 else if(isset($customer_info->customer_id))
@@ -36,6 +36,8 @@ class V1 extends API_Controller {
                     $customer_info = $this->customer_model->get_byid($customer_info->customer_id);
                     $customer_info->telephone = $telephone;
                 }
+
+                $customer_info->customer_phonenumber_id = $customer_phonenumber_id;
             }
 
             if(isset($json_data->customer_address))
@@ -55,6 +57,7 @@ class V1 extends API_Controller {
                 'orders_double_id' => $orders_double_id,
                 'product_package_id' => $product_package_id,
                 'customer_id' => (int) isset($customer_info->customer_id)?$customer_info->customer_id:0,
+                'customer_phonenumber_id' => (int) isset($customer_info->customer_phonenumber_id)?$customer_info->customer_phonenumber_id:0,
                 'customer_address_id' => (int) isset($customer_address->customer_address_id)?$customer_address->customer_address_id:0,
                 'payment_method_id' => (int) isset($json_data->payment_method_id)?$json_data->payment_method_id:1,
                 'logistic_id' => (int) isset($json_data->logistic_id)?$json_data->logistic_id:1,

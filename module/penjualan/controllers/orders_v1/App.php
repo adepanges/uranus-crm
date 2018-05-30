@@ -69,9 +69,29 @@ class App extends Penjualan_Controller {
         $this->load->model(['orders_model', 'customer_model']);
         $order_id = (int) $this->input->post('order_id');
 
+        $res = $this->orders_model->get_byid_v1($order_id);
+        $data_orders = $res->first_row();
+
+        if(empty($data_orders))
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah data'
+            ]);
+        }
+
+        $data_phonenumber = [];
+        $phonenumber = '';
+
+        if(isset($data_orders->customer_phonenumber_id))
+        {
+            $data_phonenumber = $this->customer_model->get_phonenumber_byid($data_orders->customer_phonenumber_id)->first_row();
+            $phonenumber = $data_phonenumber->phonenumber;
+        }
+
         $customer_info = [
             'full_name' => $this->input->post('full_name'),
-            'telephone' => $this->input->post('telephone')
+            'telephone' => $phonenumber
         ];
         $customer_address = [
             'address' => $this->input->post('address'),
