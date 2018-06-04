@@ -1,0 +1,7 @@
+prosedur migrasi db
+
+1. backup db
+2. sycn schema with query
+3. send data feature
+4. refresh access role
+5. test
