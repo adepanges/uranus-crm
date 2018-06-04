@@ -209,7 +209,6 @@ truncate `orders`;
 truncate `customer_address`;
 truncate `customer`;
 
-
 -- check size db
 SELECT table_schema "DB Name",
     ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB"
@@ -293,3 +292,9 @@ SELECT
 
 FROM time_dimension a
 WHERE a.db_date BETWEEN '2018-05-01 00:00:00' AND '2018-05-08 23:59:59'
+
+
+-- query insert primary no Telepon
+INSERT INTO `customer_phonenumber` (`customer_id`,`phonenumber`,`is_primary`)
+SELECT `customer_id`,`telephone` AS phonenumber, 1 AS is_primary FROM `customer`
+WHERE telephone IS NOT NULL
