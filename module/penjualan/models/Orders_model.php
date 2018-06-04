@@ -29,12 +29,22 @@ class Orders_model extends Penjualan_Model {
         if(isset($params['order_status_id']) && $params['order_status_id'] != 1)
         {
             $history_order_status_id = $params['order_status_id'];
-            if($params['order_status_id']>=7 && $params['role_id'] == 5)
+            if(
+                in_array($params['order_status_id'], [7,8,9]) &&
+                $params['role_id'] == 5
+            )
             {
+                // role cs
+                // view sale untuk memfilter yg hanya di verify pay oleh yg bersangkutan
                 $history_order_status_id = 6;
             }
-            else if($params['order_status_id']>=7 && $params['role_id'] == 3)
+            else if(
+                in_array($params['order_status_id'], [7,8,9]) &&
+                $params['role_id'] == 3
+            )
             {
+                // role finance
+                // view sale untuk memfilter yg hanya di sale oleh yg bersangkutan
                 $history_order_status_id = 7;
             }
 
@@ -70,7 +80,7 @@ class Orders_model extends Penjualan_Model {
             $where[] = "e.user_id IN (SELECT user_id FROM management_team_cs_member WHERE team_cs_id = {$params['tim_leader']->team_cs_id})";
         }
 
-        if($params['order_status_id'] < 7)
+        if($params['order_status_id'] < 7 || $params['order_status_id'] == 10)
         {
             $where[] = "a.order_status_id = {$params['order_status_id']}";
         }
@@ -96,7 +106,7 @@ class Orders_model extends Penjualan_Model {
                     break;
 
                 case 'orders_logistics':
-                    $where[] = "a.order_status_id > 7";
+                    $where[] = "(a.order_status_id > 7 AND a.order_status_id < 10)";
                     break;
             }
         }
@@ -120,6 +130,9 @@ class Orders_model extends Penjualan_Model {
             a.is_deleted = 0
             $where
             $ordering";
+
+        // echo $sql;
+        // exit;
 
         $sql = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param("SELECT a.*

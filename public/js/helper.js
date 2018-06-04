@@ -38,26 +38,18 @@ function formValidator(selector){
 }
 
 function formPopulate(selector, data) {
-    console.log(`form ${selector} populate this data > `);
-    console.log(data);
-
     var form = $(selector);
     $.each(data, function(key, value) {
         var ctrl = $('[name='+key+']', form);
         switch(ctrl.prop("type")) {
             case "radio": case "checkbox":
                 var check_val = (ctrl.prop('value') == value);
-
-                // console.log(check_val);
-                // console.log(ctrl.is(':checked'));
-
                 if(ctrl.prop("class") == 'js-switch' && check_val != ctrl.is(':checked')){
                     $(ctrl).parent().find('.switchery').trigger('click');
-                    console.log('changed');
                 } else {
-                    // ctrl.each(function() {
-                    //     if($(this).attr('value') == value) $(this).attr("checked",value);
-                    // });
+                    ctrl.each(function() {
+                        if($(this).attr('value') == value) $(this).prop("checked", true);
+                    });
                 }
                 break;
 
@@ -78,3 +70,11 @@ function formPopulate(selector, data) {
         ctrl.trigger('change');
     });
 }
+
+$(document).on('show.bs.modal', '.modal', function () {
+    var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(this).css('z-index', zIndex);
+    setTimeout(function() {
+        $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    }, 0);
+});

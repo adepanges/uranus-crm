@@ -3,6 +3,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Invoice_model extends Penjualan_Model {
 
+    function publish_v2($franchise_id, $order_id, $account_statement_id)
+    {
+        $this->load->model(['account_statement_model','orders_process_model']);
+        $account_statement = $this->account_statement_model->get_byid($account_statement_id);
+        $confirm_buy = $this->orders_process_model->get_by_status($order_id, 5);
+
+        $billed_date = (isset($confirm_buy->created_at) && !empty($confirm_buy->created_at))?$confirm_buy->created_at:$account_statement->transaction_date;
+
+        $orders = $this->get_orders_info($order_id);
+        $orders_cart = $this->get_cart($orders->order_id);
+
+        $invoice_data = [
+            'order_id' => $orders->order_id,
+            'account_statement_id' => $account_statement->account_statement_id,
+            'franchise_id' => $franchise_id,
+            'customer_id' => $orders->customer_id,
+            'customer_address_id' => $orders->customer_address_id,
+            'logistic_id' => $orders->logistic_id,
+            'logistic_name' =>  $orders->logistic_name,
+            'invoice_number' => $account_statement->generated_invoice,
+            'order_code' => $orders->order_code,
+            'customer' => $orders->customer_info,
+            'customer_address' => $orders->customer_address,
+            'order_cart' => json_encode($orders_cart),
+            'total_price' => $orders->total_price,
+            'transaction_amount' => $account_statement->transaction_amount,
+            'payment_method' => $orders->payment_method,
+            'billed_date' => $billed_date,
+            'paid_date' => $account_statement->transaction_date,
+            'publish_date' =>  date('Y-m-d H:i:s'),
+            'version' => 1
+        ];
+
+        $this->account_statement_model->upd(['claim' => 1], $account_statement_id);
+        return $this->db->insert('orders_invoices', $invoice_data);
+    }
+
     function publish_v1($order_id = 0, $paid_time = '', $invoice_number = '', $franchise_id = 0)
     {
         if(empty($paid_time))
@@ -16,8 +53,6 @@ class Invoice_model extends Penjualan_Model {
         }
 
         $orders = $this->get_orders_info($order_id);
-        $customer = $this->get_customer_info($orders->customer_id);
-        $customer_address = $this->get_customer_address($orders->customer_id, $orders->customer_address_id);
         $orders_cart = $this->get_cart($orders->order_id);
 
         $invoice_data = [
@@ -29,8 +64,8 @@ class Invoice_model extends Penjualan_Model {
             'logistic_name' =>  $orders->logistic_name,
             'invoice_number' => $invoice_number,
             'order_code' => $orders->order_code,
-            'customer' => json_encode($customer),
-            'customer_address' => json_encode($customer_address),
+            'customer' => $orders->customer,
+            'customer_address' => $orders->customer_address,
             'order_cart' => json_encode($orders_cart),
             'total_price' => $orders->total_price,
             'payment_method' => $orders->payment_method,
@@ -47,7 +82,7 @@ class Invoice_model extends Penjualan_Model {
     {
 
         $orders = $this->get_orders_info($order_id);
-        $customer = $this->get_customer_info($orders->customer_id);
+        $customer = $this->get_customer_info($orders->customer_id, $orders->customer_phonenumber_id);
         $customer_address = $this->get_customer_address($orders->customer_id, $orders->customer_address_id);
         $orders_cart = $this->get_cart($orders->order_id);
 
@@ -56,6 +91,8 @@ class Invoice_model extends Penjualan_Model {
             'invoice_number' => $data['invoice_number'],
             'customer' => json_encode($customer),
             'customer_address' => json_encode($customer_address),
+            'logistic_id' => $orders->logistic_id,
+            'logistic_name' => $orders->logistic_name,
             'order_cart' => json_encode($orders_cart),
             'total_price' => $orders->total_price,
             'payment_method' => $orders->payment_method,
@@ -115,11 +152,14 @@ class Invoice_model extends Penjualan_Model {
         ])->first_row();
     }
 
-    protected function get_customer_info($customer_id = 0)
+    protected function get_customer_info($customer_id = 0, $customer_phonenumber_id = 0)
     {
-        return $this->db->limit(1)->get_where('customer', [
-            'customer_id' => (int) $customer_id
-        ])->first_row();
+        return $this->db->query('SELECT a.*, b.phonenumber AS telephone
+            FROM customer a
+            LEFT JOIN customer_phonenumber b ON a.customer_id = b.customer_id
+            WHERE a.customer_id = ? AND b.customer_phonenumber_id = ?', [
+                (int) $customer_id, (int) $customer_phonenumber_id
+            ])->first_row();
     }
 
     protected function get_customer_address($customer_id = 0, $customer_address_id = 0)

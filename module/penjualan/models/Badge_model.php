@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Badge_model extends Penjualan_Model {
     protected
         $profile = [],
+        $role = [],
         $tim = [],
         $join_sale = '',
         $where_sale = '',
@@ -22,6 +23,7 @@ class Badge_model extends Penjualan_Model {
 
     function set_viewer_role($role)
     {
+        $this->role = $role;
         switch ($role['role_id']) {
             case 5:
                     $this->join = "LEFT JOIN orders_process fu ON a.order_id = fu.order_id AND fu.order_status_id = 2";
@@ -50,6 +52,26 @@ class Badge_model extends Penjualan_Model {
                 (a.orders_double_id IS NULL OR a.orders_double_id = 0)")->first_row();
     }
 
+    function assigned()
+    {
+        $where = '';
+        if($this->role['role_id'] == 6)
+        {
+            $where = "AND fu.user_id IN (SELECT user_id FROM management_team_cs_member WHERE team_cs_id = {$this->tim->team_cs_id})";
+        } else if($this->role['role_id'] == 5)
+        {
+            $where = "AND fu.user_id = {$this->profile['user_id']}";
+        }
+
+        return $this->db->query("SELECT count(*) as count
+            FROM orders a
+            LEFT JOIN orders_process fu ON a.order_id = fu.order_id AND fu.order_status_id = 10
+            WHERE
+                a.order_status_id = 10 AND
+                a.is_deleted = 0 AND
+                (a.orders_double_id IS NULL OR a.orders_double_id = 0) {$where}")->first_row();
+    }
+
     function double()
     {
         return $this->db->query("SELECT COUNT(a.orders_double_id) AS `count`
@@ -73,6 +95,7 @@ class Badge_model extends Penjualan_Model {
                     )
                 )")->first_row();
     }
+
 
     function pending()
     {

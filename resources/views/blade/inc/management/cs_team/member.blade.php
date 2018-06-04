@@ -52,6 +52,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-horizontal" role="form">
+                        <input type="hidden" id="fieldTeamCsId" value="{{ $cs_team->team_cs_id }}">
                         <div class="col-md-6 white-box">
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="state-success">Nama Tim</label>
@@ -104,7 +105,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Member Name</th>
-                                    <th>Created At</th>
+                                    <th>Email</th>
                                     <th>
                                         Action
                                         @if($access_list->management_cs_team_member_add)
@@ -120,26 +121,26 @@
             <!-- .row -->
 
             <div class="modal fade" id="memberModal" role="dialog" aria-labelledby="exampleModalLabel1">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Role</h4>
+                            <h4 class="modal-title" id="exampleModalLabel1">Custimer Service</h4>
                         </div>
                         <div class="modal-body">
-                            <form id="memberForm" data-toggle="validator" data-delay="100">
-                                <input type="hidden" name="team_cs_id">
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Member</label>
-                                    <select id="memberSelect" class="form-control" name="user_id" data-error="Hmm, User harap dipilih" required>
-                                    </select>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </form>
+                            <table id="lisCsTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Member Name</th>
+                                        <th>Email</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button id="btnSaveMemberModal" type="button" class="btn btn-primary">Simpan</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                         </div>
                     </div>
                 </div>

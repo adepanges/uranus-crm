@@ -119,7 +119,7 @@ function deleteBulk(){
         orders_base64 = btoa(orders.join(','));
         swal({
             title: "Apakah anda yakin?",
-            text: "Pesanan akan dihapus permanen",
+            text: el.length + " Pesanan akan dihapus permanen",
             type: "warning",
             showCancelButton: true,
             confirmButtonClass: "btn-danger",

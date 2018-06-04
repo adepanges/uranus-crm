@@ -24,6 +24,7 @@ class Get extends Penjualan_Controller {
             'confirm_buy' => 5,
             'verify' => 6,
             'sale' => 7,
+            'assigned' => 10
         ];
         $only_see_own = FALSE;
 
@@ -34,7 +35,7 @@ class Get extends Penjualan_Controller {
                 (
                     // CS
                     $this->role_active['role_id'] == 5 &&
-                    in_array($params['order_status_id'], [2,3,4,5,6,7])
+                    in_array($params['order_status_id'], [2,3,4,5,6,7,10])
                 )
                 ||
                 (
@@ -69,6 +70,7 @@ class Get extends Penjualan_Controller {
 
         $this->_response_json([
             'count_new' => (int) $this->badge_model->new()->count,
+            'count_assigned' => (int) $this->badge_model->assigned()->count,
             'count_double' => (int) $this->badge_model->double()->count,
             'count_pending' => (int) $this->badge_model->pending()->count,
             'count_confirm_buy' => (int) $this->badge_model->confirm_buy()->count,

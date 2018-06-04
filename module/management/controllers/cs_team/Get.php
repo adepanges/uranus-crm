@@ -29,4 +29,18 @@ class Get extends Management_Controller {
         }
         $this->_response_json($data);
     }
+
+    function cs()
+    {
+        $this->_restrict_access('management_cs_team_member_list', 'rest');
+        $this->load->model('cs_team_user');
+
+        $this->cs_team_user->set_datatable_param($this->_datatable_param());
+        $user_data = $this->cs_team_user->get_datatable();
+
+        $this->_response_json([
+            'recordsFiltered' => $user_data['total'],
+            'data' => $user_data['row']
+        ]);
+    }
 }

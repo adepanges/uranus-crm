@@ -12,8 +12,8 @@ $(document).ready(function(){
             $('.row .white-box').unblock();
             if(!document.datatable_search_change_event)
             {
-                $("div.dataTables_filter input").unbind();
-                $("div.dataTables_filter input").keyup( function (e) {
+                $("#MemberTable_filter input").unbind();
+                $("#MemberTable_filter input").keyup( function (e) {
                     if (e.keyCode == 13) {
                         memberTable.search( this.value ).draw();
                     }
@@ -40,7 +40,7 @@ $(document).ready(function(){
                     }
                 },
                 { data: "username" },
-                { data: "created_at" },
+                { data: "email" },
                 {
                     data: 'team_cs_member_id',
                     width: "12%",
@@ -60,44 +60,70 @@ $(document).ready(function(){
             ]
         });
 
+    document.datatable_search_cs_window = false;
+
+    var numbererCs = 1;
+    lisCsTable = $('#lisCsTable').on('preXhr.dt', function ( e, settings, data ){
+            numbererCs = data.start + 1;
+            $('#lisCsTable_wrapper').block({
+                message: '<h3>Please Wait...</h3>',
+                css: {
+                    border: '1px solid #fff'
+                }
+            });
+        }).on('xhr.dt', function ( e, settings, json, xhr ){
+            $('#lisCsTable_wrapper').unblock();
+            if(!document.datatable_search_cs_window)
+            {
+                $("#lisCsTable_filter input").unbind();
+                $("#lisCsTable_filter input").keyup( function (e) {
+                    if (e.keyCode == 13) {
+                        lisCsTable.search( this.value ).draw();
+                    }
+                });
+            }
+            document.datatable_search_cs_window = true;
+        }).DataTable({
+            language: {
+                infoFiltered: ""
+            },
+            serverSide: true,
+            bInfo: false,
+            ajax: {
+                url: document.app.site_url + '/cs_team/get/cs',
+                type: 'POST'
+            },
+            columns: [
+                {
+                    name: 'Number',
+                    width: "5%",
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        return numbererCs++;
+                    }
+                },
+                { data: "full_name" },
+                { data: "email" },
+                {
+                    data: 'user_id',
+                    width: "12%",
+                    orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        var button = [];
+                        if(typeof full.team_cs_id == 'object')
+                        {
+                            button.push('<button onclick="addMemberToTeam('+data+')" type="button" class="btn btn-success btn-outline btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>');
+                        }
+
+                        return button.join('');
+                    }
+                }
+            ]
+        });
+
 
     $('#memberModal').on('shown.bs.modal', function () {
       initMemberTim();
-    })
-
-    $('#btnSaveMemberModal').click(function(e){
-        if(formValidator('#memberForm')){
-            var data = serialzeForm('#memberForm');
-            $('.preloader').fadeIn();
-            $.ajax({
-                method: "POST",
-                url: document.app.site_url+'/cs_team/member/add',
-                data: data
-            })
-            .done(function( response ) {
-                $('.preloader').fadeOut();
-                var title = 'Berhasil!',
-                    timer = 1000;
-                    showConfirmButton = false;
-
-                if(!response.status) {
-                    var timer = 3000;
-                    title = 'Gagal!';
-                    showConfirmButton = true;
-                } else {
-                    $('#memberForm')[0].reset()
-                    memberTable.ajax.reload()
-                    $('#memberModal').modal('toggle')
-                }
-
-                swal({
-                    title: title,
-                    text: response.message,
-                    timer: timer,
-                    showConfirmButton: showConfirmButton
-                });
-            });
-        }
     })
 });
 
@@ -139,13 +165,44 @@ function initMemberTim(){
 }
 
 function addMember(){
-    $('#memberForm')[0].reset();
-    formPopulate('#memberForm', {
-        team_cs_id: cs_team.team_cs_id
-    });
+    lisCsTable.ajax.reload();
     $('#memberModal').modal({
         backdrop: 'static',
         keyboard: false
+    });
+}
+
+function addMemberToTeam(user_id){
+    $('.preloader').fadeIn();
+    $.ajax({
+        method: "POST",
+        url: document.app.site_url+'/cs_team/member/add',
+        data: {
+            team_cs_id: $('#fieldTeamCsId').val(),
+            user_id: user_id
+        }
+    })
+    .done(function( response ) {
+        $('.preloader').fadeOut();
+        var title = 'Berhasil!',
+            timer = 1000;
+            showConfirmButton = false;
+
+        if(!response.status) {
+            var timer = 3000;
+            title = 'Gagal!';
+            showConfirmButton = true;
+        } else {
+            memberTable.ajax.reload()
+            lisCsTable.ajax.reload()
+        }
+
+        swal({
+            title: title,
+            text: response.message,
+            timer: timer,
+            showConfirmButton: showConfirmButton
+        });
     });
 }
 

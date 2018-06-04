@@ -12,6 +12,7 @@ class Orders_model extends API_Model {
                 shipping_code,
                 order_code,
                 customer_id,
+                customer_phonenumber_id,
                 customer_address_id,
                 customer_info,
                 customer_address,
@@ -32,6 +33,7 @@ class Orders_model extends API_Model {
                 '' AS shipping_code,
                 ? AS order_code,
                 ? AS customer_id,
+                ? AS customer_phonenumber_id,
                 ? AS customer_address_id,
                 ? AS customer_info,
                 ? AS customer_address,
@@ -53,13 +55,14 @@ class Orders_model extends API_Model {
             LEFT JOIN product_package d ON d.product_package_id = ?
             WHERE a.order_status_id = ?
             LIMIT 1";
-            
+
         return $this->db->query($sql, [
             'orders_double_id' => $orders['orders_double_id'],
             'version' => $orders['version'],
             'created_at' => $orders['created_at'],
             'order_code' => $orders['order_code'],
             'customer_id' => (int) $orders['customer_id'],
+            'customer_phonenumber_id' => (int) $orders['customer_phonenumber_id'],
             'customer_address_id' => (int) $orders['customer_address_id'],
             'customer_info' => $orders['customer_info'],
             'customer_address' => $orders['customer_address'],

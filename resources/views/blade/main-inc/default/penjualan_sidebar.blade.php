@@ -13,12 +13,12 @@
                             </a>
                         </li>
 @endif
-@if($access_list->penjualan_orders_double)
+@if($access_list->penjualan_orders_assigned)
                         <li>
-                            <a href="{{ site_url('orders_v1/double') }}">
-                                <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>
-                                <span class="hide-menu">Double Orders</span>
-                                <span class="badge badge-warning" id="count_double">?</span>
+                            <a href="{{ site_url('orders_v1/assigned') }}">
+                                <i class="ti-shopping-cart"></i>
+                                <span class="hide-menu">Assigned Orders</span>
+                                <span class="badge badge-danger" id="count_assigned_order">?</span>
                             </a>
                         </li>
 @endif
@@ -54,19 +54,28 @@
                             <a href="{{ site_url('orders_v1/sale') }}">
                                 <i class="fa fa-money" style="font-size: 13px;"></i>
                                 <span class="hide-menu">Sale Orders</span>
-                                <span class="badge badge-info" id="count_sale">?</span>
+                                <span class="badge badge-success" id="count_sale">?</span>
                             </a>
                         </li>
 @endif
 
                         <li> <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart-outline fa-fw" data-icon="v" style="font-size: 13px;"></i> <span class="hide-menu"> Other <span class="fa arrow"></span> </span></a>
                         <ul class="nav nav-second-level">
+                            @if($access_list->penjualan_orders_double)
+                                <li>
+                                    <a href="{{ site_url('orders_v1/double') }}">
+                                        <i class="mdi mdi-briefcase-download" style="font-size: 13px;"></i>
+                                        <span class="hide-menu">Double Orders</span>
+                                        <span class="badge badge-danger" id="count_double">?</span>
+                                    </a>
+                                </li>
+                            @endif
                             @if($access_list->penjualan_orders_cancel)
                                 <li>
                                     <a href="{{ site_url('orders_v1/cancel') }}">
                                         <i class="mdi mdi-cart-off" style="font-size: 13px;"></i>
                                         <span class="hide-menu">Cancel Orders</span>
-                                        <span class="badge badge-info" id="count_cancel">?</span>
+                                        <span class="badge badge-danger" id="count_cancel">?</span>
                                     </a>
                                 </li>
                             @endif
@@ -75,7 +84,7 @@
                                     <a href="{{ site_url('orders_v1/trash') }}">
                                         <i class="fa fa-trash" style="font-size: 13px;"></i>
                                         <span class="hide-menu">Trash Orders</span>
-                                        <span class="badge badge-info" id="count_trash">?</span>
+                                        <span class="badge badge-danger" id="count_trash">?</span>
                                     </a>
                                 </li>
                             @endif

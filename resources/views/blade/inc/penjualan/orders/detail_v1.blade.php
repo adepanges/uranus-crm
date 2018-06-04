@@ -112,7 +112,7 @@
 @endif
 
 
-@if($orders->order_status_id == 1 && $access_list->penjualan_orders_action_follow_up)
+@if($orders->order_status_id == 10 && $access_list->penjualan_orders_action_follow_up)
                 <div class="col-md-2 pull-right">
                     <button onclick="followUp({{ $orders->order_id }})" class="btn btn-primary btn-rounded form-control">
                         <i class="mdi mdi-briefcase-upload"></i>
@@ -274,11 +274,18 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Payment Method</label>
                                 <div class="col-sm-8">
-                                    <select class="form-control input-sm" name="payment_method" {{ $attr_readonly }}>
+                                <?php
+                                    $payment_method = '';
+                                ?>
 @foreach ($master_payment_method as $key => $value)
-                                <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+                                <?php
+                                    if($value->payment_method_id == $orders->payment_method_id)
+                                    {
+                                        $payment_method = $value->name;
+                                    }
+                                ?>
 @endforeach
-                                    </select>
+                                    <input type="text" class="form-control" value="{{ $payment_method }}" readonly>
                                 </div>
                             </div>
                         </form>
@@ -502,7 +509,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Telephone</label>
-                                    <input type="text" class="form-control" name="telephone">
+                                    <input type="text" class="form-control" name="telephone" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Metode Follow Up</label>
@@ -660,49 +667,72 @@
             </div>
 
             <div class="modal fade" id="saleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title" id="exampleModalLabel1">Sale Information</h4>
+                            <h4 class="modal-title" id="exampleModalLabel1">Account Statement Information</h4>
                         </div>
                         <div class="modal-body">
-                            <form id="saleForm" data-toggle="validator" data-delay="100">
-                                <input type="hidden" name="order_id" value="{{ $orders->order_id }}">
-                                <div class="form-group">
-                                    <label class="control-label">Payment Method</label>
-                                    <select class="form-control" name="payment_method_id">
-@foreach ($master_payment_method as $key => $value)
-                                        <option
-                                            value="{{ $value->payment_method_id }}"
-                                            {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}
-                                            >
-                                            {{ $value->name }}
-                                        </option>
-@endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Transfer Date</label>
-                                    <input type="text" class="form-control" name="paid_date" id="datepicker-autoclose1" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}">
-                                </div>
+                            <div class="row white-box" id="filterSection">
+                                <input type="hidden" name="total_price" value="{{ $orders->total_price }}">
 
-                                <div class="form-group">
-                                    <label class="control-label">Nomor Invoice</label>
-                                    <div class="input-group m-b-30">
-                                        <input type="hidden" name="invoice_first" value="{{ $franchise->code }}/{{ date('Ymd') }}/">
-                                        <span class="input-group-addon" id="basic-addon1">{{ $franchise->code }}/{{ date('Ymd') }}/</span>
-                                        <input type="text" class="form-control" name="invoice_number" placeholder="000001" aria-describedby="basic-addon1"  data-error="Hmm, nomor invoice harap diisi" required>
-                                        <div class="help-block with-errors"></div>
+                                <div class="col-md-1">
+                                    <b>Trx Date</b>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="input-daterange input-group" id="date-range">
+                                        <input type="text" class="form-control" name="start" value="{{ date('Y-m-01') }}">
+                                        <span class="input-group-addon bg-info b-0 text-white">to</span>
+                                        <input type="text" class="form-control" name="end" value="{{ date('Y-m-d') }}">
                                     </div>
                                 </div>
-                            </form>
+
+                                <div class="col-md-3">
+                                    <select class="form-control" name="payment_method_id">
+                                        <option value="0">All</option>
+                                    @foreach ($master_payment_method as $key => $value)
+                                        <option value="{{ $value->payment_method_id }}" {{ ($value->payment_method_id == $orders->payment_method_id)?'selected':'' }}>{{ $value->name }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <button class="btn btn-rounded form-control" onclick="dataTableAccountStatement.ajax.reload()">
+                                        <i class="fa fa-search"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="white-box">
+                                        <table id="dataTableAccountStatement" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Account</th>
+                                                    <th>Invoice Number</th>
+                                                    <th>Trx Date</th>
+                                                    <th>Trx Amount</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            *) <i>Jika transaksi tidak ditemukan silahkan buat baru di modul keuangan, atau klik tombol dibawah</i><br>
+                            <button class="btn" onclick="openAccountStatement()">Account Statement</button>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                            <button id="btnSaveSaleModal" type="button" class="btn btn-primary">Lanjutkan</button>
                         </div>
                     </div>
                 </div>

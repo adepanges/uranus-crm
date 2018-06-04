@@ -28,7 +28,8 @@ class Penjualan_Controller extends Dermeva_Controller {
             ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'del_package_on_chart') ||
             ($this->uri->segment(2) == 'app' && $this->uri->segment(3) == 'addon_shopping_info') ||
             ($this->uri->segment(1) == 'product' && $this->uri->segment(2) == 'get') ||
-            ($this->uri->segment(2) == 'detail' && $this->uri->segment(3) == 'save_note')
+            ($this->uri->segment(2) == 'detail' && $this->uri->segment(3) == 'save_note') ||
+            ($this->uri->segment(2) == 'account_statement' && $this->uri->segment(3) == 'get_useable')
             )
         {
             $check_condition = FALSE;

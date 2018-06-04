@@ -5,7 +5,10 @@ class Customer_model extends API_Model {
 
     function get_by_msisdn($msisdn)
     {
-        return $this->db->get_where('customer', ['telephone' => trim($msisdn)])->first_row();
+        return $this->db->query("SELECT a.customer_phonenumber_id, a.phonenumber AS telephone, b.*
+            FROM customer_phonenumber a
+            LEFT JOIN customer b ON a.customer_id = b.customer_id
+            WHERE a.phonenumber = ?", [trim($msisdn)])->first_row();
     }
 
     function get_byid($customer_id)
@@ -18,8 +21,25 @@ class Customer_model extends API_Model {
         $data = (array) $data;
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['status'] = 1;
-        $this->db->insert('customer', $this->_sanity_field($data, ['full_name','telephone','created_at','status']));
+        if(isset($data['full_name'])) $data['full_name'] = clean_special_char($data['full_name']);
+
+        $this->db->insert('customer', $this->_sanity_field($data, ['full_name','created_at','status']));
         return $this->get_byid($this->db->insert_id());
+    }
+
+    function add_phonenumber($data = [])
+    {
+        $data = (array) $data;
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['is_primary'] = 1;
+        if(isset($data['phonenumber'])) $data['phonenumber'] = normalize_msisdn($data['phonenumber']);
+
+        $this->db->insert('customer_phonenumber',
+            $this->_sanity_field($data, [
+                'customer_id','phonenumber','is_primary','created_at'
+            ])
+        );
+        return $this->db->insert_id();
     }
 
     function upd($data = [], $id = 0)
@@ -27,8 +47,10 @@ class Customer_model extends API_Model {
         $data = (array) $data;
         $data['status'] = 1;
         $data['updated_at'] = date('Y-m-d H:i:s');
+        if(isset($data['full_name'])) $data['full_name'] = clean_special_char($data['full_name']);
+
         $this->db->where('customer_id', $id);
-        return $this->db->update('customer', $this->_sanity_field($data, ['full_name','telephone','created_at','status']));
+        return $this->db->update('customer', $this->_sanity_field($data, ['full_name','created_at','status']));
     }
 
 

@@ -104,6 +104,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Role Name</th>
+                                    <th>Primary</th>
                                     <th>Franchise</th>
                                     <th>Created At</th>
                                     <th>

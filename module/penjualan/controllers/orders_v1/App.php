@@ -7,8 +7,21 @@ class App extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_new');
         $this->session->set_userdata('orders_state', 'orders_v1/app');
+
+        $this->load->model('cs_team_model');
+
+        $leader_tim = $this->session->userdata('tim_leader');
+        $cs_team = [];
+        if(in_array($this->role_active['role_id'], [1,2]))
+        {
+            $cs_team = $this->cs_team_model->get_active($this->franchise->franchise_id)->result();
+        } else if($this->role_active['role_id'] == 6 && !empty($leader_tim)) {
+            $cs_team[] = (object) $leader_tim;
+        }
+
         $this->_set_data([
-            'title' => 'New Orders'
+            'title' => 'New Orders',
+            'cs_team' => $cs_team
         ]);
 
         $this->blade->view('inc/penjualan/orders/app_v1', $this->data);
@@ -56,9 +69,29 @@ class App extends Penjualan_Controller {
         $this->load->model(['orders_model', 'customer_model']);
         $order_id = (int) $this->input->post('order_id');
 
+        $res = $this->orders_model->get_byid_v1($order_id);
+        $data_orders = $res->first_row();
+
+        if(empty($data_orders))
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah data'
+            ]);
+        }
+
+        $data_phonenumber = [];
+        $phonenumber = '';
+
+        if(isset($data_orders->customer_phonenumber_id))
+        {
+            $data_phonenumber = $this->customer_model->get_phonenumber_byid($data_orders->customer_phonenumber_id)->first_row();
+            $phonenumber = $data_phonenumber->phonenumber;
+        }
+
         $customer_info = [
             'full_name' => $this->input->post('full_name'),
-            'telephone' => $this->input->post('telephone')
+            'telephone' => $phonenumber
         ];
         $customer_address = [
             'address' => $this->input->post('address'),
@@ -123,8 +156,8 @@ class App extends Penjualan_Controller {
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
-        if(!$res->num_rows() || !in_array($data->order_status_id, [1,3])) redirect('orders_v1');
-        if($data->order_status_id > 1)
+        if(!$res->num_rows() || !in_array($data->order_status_id, [10])) redirect('orders_v1');
+        if($data->order_status_id != 10)
         {
             $check_followup_cs = $this->orders_model->validate_followup_cs($data->order_id, $this->profile['user_id']);
             if($check_followup_cs->num_rows() == 0)

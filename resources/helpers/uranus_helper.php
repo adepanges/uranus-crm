@@ -90,6 +90,7 @@ if (!function_exists('bind_string')) {
 if (!function_exists('normalize_msisdn')) {
     function normalize_msisdn($numb)
     {
+        $numb = str_replace("O", "0", strtoupper($numb));
         if(substr($numb, 0, 1) == '+')
         {
             $numb = substr($numb, 1);
@@ -98,6 +99,7 @@ if (!function_exists('normalize_msisdn')) {
         {
             $numb = '0'.substr($numb, 2);
         }
+        $numb = trim(preg_replace('/[^0-9]/', '', $numb));
         return $numb;
     }
 }
@@ -143,5 +145,14 @@ if (!function_exists('terbilang'))
 			$hasil = trim(penyebut($nilai));
 		}
 		return $hasil;
+	}
+}
+
+if (!function_exists('clean_special_char'))
+{
+	function clean_special_char($string) {
+        $string = str_replace(' ', '-', $string);
+        $string = trim(preg_replace('/[^A-Za-z0-9\-]/', '', $string));
+        return trim(str_replace('-', ' ', $string));
 	}
 }
