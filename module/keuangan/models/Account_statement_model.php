@@ -8,7 +8,7 @@ class Account_statement_model extends Keuangan_Model {
         $table = 'account_statement',
         $orderable_field = [],
         $fillable_field = ['franchise_id','payment_method_id','seq_invoice','generated_invoice','commit','transaction_type','transaction_date','transaction_amount','note','is_use','user_id','updated_at','created_at','fix'],
-        $searchable_field = ['name'];
+        $searchable_field = ['account_name','generated_invoice','transaction_amount','note'];
 
     function get_datatable($params)
     {

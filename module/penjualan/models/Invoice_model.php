@@ -82,7 +82,7 @@ class Invoice_model extends Penjualan_Model {
     {
 
         $orders = $this->get_orders_info($order_id);
-        $customer = $this->get_customer_info($orders->customer_id);
+        $customer = $this->get_customer_info($orders->customer_id, $orders->customer_phonenumber_id);
         $customer_address = $this->get_customer_address($orders->customer_id, $orders->customer_address_id);
         $orders_cart = $this->get_cart($orders->order_id);
 
@@ -91,6 +91,8 @@ class Invoice_model extends Penjualan_Model {
             'invoice_number' => $data['invoice_number'],
             'customer' => json_encode($customer),
             'customer_address' => json_encode($customer_address),
+            'logistic_id' => $orders->logistic_id,
+            'logistic_name' => $orders->logistic_name,
             'order_cart' => json_encode($orders_cart),
             'total_price' => $orders->total_price,
             'payment_method' => $orders->payment_method,
@@ -150,11 +152,14 @@ class Invoice_model extends Penjualan_Model {
         ])->first_row();
     }
 
-    protected function get_customer_info($customer_id = 0)
+    protected function get_customer_info($customer_id = 0, $customer_phonenumber_id = 0)
     {
-        return $this->db->limit(1)->get_where('customer', [
-            'customer_id' => (int) $customer_id
-        ])->first_row();
+        return $this->db->query('SELECT a.*, b.phonenumber AS telephone
+            FROM customer a
+            LEFT JOIN customer_phonenumber b ON a.customer_id = b.customer_id
+            WHERE a.customer_id = ? AND b.customer_phonenumber_id = ?', [
+                (int) $customer_id, (int) $customer_phonenumber_id
+            ])->first_row();
     }
 
     protected function get_customer_address($customer_id = 0, $customer_address_id = 0)
