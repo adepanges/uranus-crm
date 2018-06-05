@@ -38,4 +38,11 @@ class Customer_model extends Penjualan_Model {
             'customer_phonenumber_id' => (int) $id
         ]);
     }
+
+    function get_by_phonenumber($phonenumber)
+    {
+        return $this->db->get_where('customer_phonenumber', [
+            'phonenumber' => $phonenumber
+        ]);
+    }
 }

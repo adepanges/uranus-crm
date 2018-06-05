@@ -81,12 +81,24 @@ class App extends Penjualan_Controller {
         }
 
         $data_phonenumber = [];
-        $phonenumber = '';
+        $phonenumber = $this->input->post('telephone');
+        $customer_phonenumber_id = 0;
 
-        if(isset($data_orders->customer_phonenumber_id))
+        if(
+            isset($data_orders->customer_phonenumber_id) &&
+            !empty($data_orders->customer_phonenumber_id) &&
+            $data_orders->customer_phonenumber_id != 0
+
+        )
         {
             $data_phonenumber = $this->customer_model->get_phonenumber_byid($data_orders->customer_phonenumber_id)->first_row();
             $phonenumber = $data_phonenumber->phonenumber;
+            $customer_phonenumber_id = $data_orders->customer_phonenumber_id;
+        }
+        else
+        {
+            $data_phonenumber = $this->customer_model->get_by_phonenumber($phonenumber)->first_row();
+            $customer_phonenumber_id = $data_phonenumber->customer_phonenumber_id;
         }
 
         $customer_info = [
@@ -111,7 +123,8 @@ class App extends Penjualan_Controller {
             'customer_info' => json_encode($customer_info),
             'customer_address' => json_encode($customer_address),
             'customer_id' => (int) $this->input->post('customer_id'),
-            'customer_address_id' => (int) $this->input->post('customer_address_id')
+            'customer_address_id' => (int) $this->input->post('customer_address_id'),
+            'customer_phonenumber_id' => (int) $customer_phonenumber_id
         ];
         if($orders['customer_id']) $res2 = $this->customer_model->upd($orders['customer_id'], $customer_info);
         else
