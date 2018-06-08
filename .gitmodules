@@ -1,0 +1,3 @@
+[submodule "public/plugins/table-dragger"]
+	path = public/plugins/table-dragger
+	url = https://github.com/sindu12jun/table-dragger
