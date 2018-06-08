@@ -47,4 +47,15 @@ class Get extends Keuangan_Controller {
         }
         $this->_response_json($data);
     }
+
+    public function by_id_inv($id_inv = 0)
+    {
+        $this->_restrict_access('account_statement_list', 'rest');
+        $this->load->model('account_statement_model');
+
+        $id_inv = trim(base64_decode($id_inv));
+        $data = $this->account_statement_model->get_by_id_inv($id_inv);
+
+        $this->_response_json($data);
+    }
 }

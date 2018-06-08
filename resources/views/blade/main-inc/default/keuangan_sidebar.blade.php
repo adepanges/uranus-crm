@@ -11,6 +11,26 @@
                             </a>
                         </li>
 @endif
+                        <li> <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-bank"></i> <span class="hide-menu"> Back Statement <span class="fa arrow"></span> </span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{{ site_url('bank_statement/bca') }}">
+                                        <img src="{{ base_url('images/bank/icon-bca.png') }}" width="100">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ site_url('bank_statement/mandiri') }}">
+                                        <img src="{{ base_url('images/bank/icon-mandiri.png') }}" width="100">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ site_url('bank_statement/bri') }}">
+                                        <img src="{{ base_url('images/bank/icon-bri.png') }}" width="100">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </div>
             </div>
