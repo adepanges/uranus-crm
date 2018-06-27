@@ -21,7 +21,7 @@ class Account_statement_model extends Keuangan_Model {
             WHERE
                 a.franchise_id = {$params['franchise_id']} AND
                 a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
-            ORDER BY a.account_statement_seq";
+            ORDER BY a.transaction_date, a.account_statement_seq";
 
         $sql_row = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);

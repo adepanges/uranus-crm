@@ -35,10 +35,10 @@
 
             <div class="row white-box">
                 <div class="col-sm-4">
-                    <img src="http://dermeva.localhost/images/bank/icon-bca.png" width="200">
+                    <img src="{{ base_url('images/bank/icon-bca.png') }}" width="200">
                 </div>
                 <div class="col-sm-8">
-                    <h1>BCA Account Statement</h1>
+                    <h1>BCA Bank Statement</h1>
                 </div>
             </div>
 
@@ -55,9 +55,25 @@
                 </div>
 
                 <div class="col-md-2">
-                    <button class="btn btn-rounded form-control" onclick="dataTable.ajax.reload()">
+                    <button class="btn btn-rounded form-control" onclick="loadBankStatement()">
                         <i class="fa fa-search"></i>
                         <span>Filter</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row white-box">
+                <div class="col-md-2 pull-right">
+                    <button class="btn form-control btn-danger" onclick="fixBalance(2)">
+                        <i class="fa fa-sort-amount-asc"></i>
+                        <span>Fix Balance</span>
+                    </button>
+                </div>
+
+                <div class="col-md-2 pull-right">
+                    <button class="btn form-control btn-warning" onclick="fixSequence(2)">
+                        <i class="fa fa-sort-amount-asc"></i>
+                        <span>Fix Sequence</span>
                     </button>
                 </div>
             </div>
@@ -73,22 +89,13 @@
                                 <th></th>
                                 <th>Trx Date</th>
                                 <th>Invoice</th>
+                                <th>Note</th>
                                 <th>Debit (-)</th>
                                 <th>Credit (+)</th>
                                 <th>Balance</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="advance-table-row">
-                                <td style="width: 10px;"></td>
-                                <td style="width: 10px;"><i class="fa fa-arrows-v handle"></i></td>
-                                <td style="width: 10px;"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

@@ -92,12 +92,7 @@
                                     <th>Credit (+)</th>
                                     <th>Claim</th>
                                     <th>Commit</th>
-                                    <th>
-                                        Action
-                                        @if($access_list->account_statement_add)
-                                            <button onclick="add()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
-                                        @endif
-                                    </th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>

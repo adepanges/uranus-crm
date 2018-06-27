@@ -68,3 +68,45 @@ code.catch {
 #sortableStatement tbody tr {
     margin-bottom: 4px;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.word-wrap {
+    word-wrap: break-word;
+}
+
+.tooltip-content {
+    width: auto !important;
+}
+
+.table-row-danger {
+    border: 2px solid #FF9191 !important;
+    z-index: 1000;
+}
+
+.table-row-warning {
+    border: 2px solid #FFCF8A !important;
+    z-index: 1000;
+}
+
+table tbody td {
+    color: #000;
+}
+
+.datepicker {
+    z-index: 10000 !important;
+}
+
+.font-color-red {
+    color: #F00;
+}
+
+.font-color-green {
+    color: #0cb762;
+}
+
+.font-color-green {
+    color: #0cb762;
+}

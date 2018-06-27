@@ -11,7 +11,7 @@
                             </a>
                         </li>
 @endif
-                        <li> <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-bank"></i> <span class="hide-menu"> Back Statement <span class="fa arrow"></span> </span></a>
+                        <li> <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-bank"></i> <span class="hide-menu"> Bank Statement <span class="fa arrow"></span> </span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="{{ site_url('bank_statement/bca') }}">
