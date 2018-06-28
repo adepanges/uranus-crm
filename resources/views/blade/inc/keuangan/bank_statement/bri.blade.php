@@ -35,15 +35,15 @@
 
             <div class="row white-box">
                 <div class="col-sm-4">
-                    <img src="{{ base_url('images/bank/icon-bca.png') }}" width="200">
+                    <img src="{{ base_url('images/bank/icon-bri.png') }}" width="200">
                 </div>
                 <div class="col-sm-8">
-                    <h1>BCA Bank Statement</h1>
+                    <h1>BRI Bank Statement</h1>
                 </div>
             </div>
 
             <script type="text/javascript">
-                document.app.uri_bank = 'bca';
+                document.app.uri_bank = 'bri';
             </script>
 
             <div class="row white-box" id="filterSection">
@@ -68,14 +68,14 @@
 
             <div class="row white-box">
                 <div class="col-md-2 pull-right">
-                    <button class="btn form-control btn-danger" onclick="fixBalance(2)">
+                    <button class="btn form-control btn-danger" onclick="fixBalance(3)">
                         <i class="fa fa-sort-amount-asc"></i>
                         <span>Fix Balance</span>
                     </button>
                 </div>
 
                 <div class="col-md-2 pull-right">
-                    <button class="btn form-control btn-warning" onclick="fixSequence(2)">
+                    <button class="btn form-control btn-warning" onclick="fixSequence(3)">
                         <i class="fa fa-sort-amount-asc"></i>
                         <span>Fix Sequence</span>
                     </button>

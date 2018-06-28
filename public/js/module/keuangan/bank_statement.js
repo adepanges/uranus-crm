@@ -11,7 +11,7 @@ function loadBankStatement(){
     $('.preloader').fadeIn();
     $.ajax({
         method: "POST",
-        url: document.app.site_url+'/bank_statement/get/bca',
+        url: document.app.site_url+'/bank_statement/get/'+document.app.uri_bank,
         data: {
             date_start: $('#date-range [name=start]').val(),
             date_end: $('#date-range [name=end]').val()
@@ -57,7 +57,7 @@ function generateTableTransaction(data_transaction, expected_balance, expected_s
             }
 
             // find expected_sequence
-            if(expected_sequence == 0 && rec.account_statement_seq != 0) expected_sequence = parseInt(rec.account_statement_seq);
+            if(expected_sequence == null && rec.account_statement_seq != 0) expected_sequence = parseInt(rec.account_statement_seq);
             else expected_sequence++;
 
             if(typeof inv == 'object') inv = '';

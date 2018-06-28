@@ -25,6 +25,36 @@ class Bank_statement_model extends Keuangan_Model {
         return $this->db->query($sql)->result();
     }
 
+    function get_bri($params)
+    {
+        $params['franchise_id'] = (int) $params['franchise_id'];
+
+        $sql = "SELECT a.*
+            FROM account_statement a
+            WHERE
+                franchise_id = {$params['franchise_id']} AND
+                payment_method_id = 3 AND
+                a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
+            ORDER BY a.transaction_date, a.account_statement_seq ASC";
+
+        return $this->db->query($sql)->result();
+    }
+
+    function get_mandiri($params)
+    {
+        $params['franchise_id'] = (int) $params['franchise_id'];
+
+        $sql = "SELECT a.*
+            FROM account_statement a
+            WHERE
+                franchise_id = {$params['franchise_id']} AND
+                payment_method_id = 4 AND
+                a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
+            ORDER BY a.transaction_date, a.account_statement_seq ASC";
+
+        return $this->db->query($sql)->result();
+    }
+
     function get($account_statement_id)
     {
         return $this->db->limit(1)->get_where("account_statement", [
