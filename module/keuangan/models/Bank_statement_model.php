@@ -97,6 +97,26 @@ class Bank_statement_model extends Keuangan_Model {
         ]);
     }
 
+    function upd_sequence_on_it_inc($payment_method_id, $account_statement_id, $target_account_statement_seq)
+    {
+        $this->db->where('payment_method_id', $payment_method_id);
+        $this->db->where('account_statement_id !=', $account_statement_id);
+        $this->db->where('account_statement_seq', $target_account_statement_seq);
+        return $this->db->update('account_statement', [
+            'account_statement_seq' => $target_account_statement_seq + 1
+        ]);
+    }
+
+    function upd_sequence_on_it_dec($payment_method_id, $account_statement_id, $target_account_statement_seq)
+    {
+        $this->db->where('payment_method_id', $payment_method_id);
+        $this->db->where('account_statement_id !=', $account_statement_id);
+        $this->db->where('account_statement_seq', $target_account_statement_seq);
+        return $this->db->update('account_statement', [
+            'account_statement_seq' => $target_account_statement_seq - 1
+        ]);
+    }
+
     function upd_balance($account_statement_id, $account_statement_seq, $balance)
     {
         $this->db->where('account_statement_id', $account_statement_id);

@@ -115,7 +115,7 @@ class App extends Keuangan_Controller {
 
     function upd_sequence()
     {
-        $patams = [
+        $params = [
             'account_statement_id' => (int) $this->input->post('account_statement_id'),
             'account_statement_seq' => (int) $this->input->post('current_account_statement_seq')
         ];
@@ -123,7 +123,7 @@ class App extends Keuangan_Controller {
 
         $this->load->model('bank_statement_model');
 
-        $transaction = $this->bank_statement_model->get($patams['account_statement_id']);
+        $transaction = $this->bank_statement_model->get($params['account_statement_id']);
         if(empty($transaction))
         {
             $this->_response_json([
@@ -132,7 +132,17 @@ class App extends Keuangan_Controller {
             ]);
         }
 
-        $res = $this->bank_statement_model->upd_sequence($patams['account_statement_id'], $patams['account_statement_seq'], $target_account_statement_seq);
+        if($target_account_statement_seq > $params['account_statement_seq'])
+        {
+            $this->bank_statement_model->upd_sequence_on_it_dec($transaction->payment_method_id, $params['account_statement_id'], $target_account_statement_seq);
+        }
+        else
+        {
+            $this->bank_statement_model->upd_sequence_on_it_inc($transaction->payment_method_id, $params['account_statement_id'], $target_account_statement_seq);
+        }
+
+
+        $res = $this->bank_statement_model->upd_sequence($params['account_statement_id'], $params['account_statement_seq'], $target_account_statement_seq);
 
         if($res)
         {
