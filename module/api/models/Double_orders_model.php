@@ -26,12 +26,10 @@ class Double_orders_model extends API_Model {
     function get_existing_orders_not_yet_sale_from_customer($customer_id)
     {
         $this->db->select('order_id');
-        return $this->db->get_where('orders', [
-            'order_status_id <' => 7,
-            'order_status_id !=' => 4,
-            'is_deleted !=' => 1,
-            'customer_id' => $customer_id
-        ]);
+        $this->db->where('is_deleted !=', 1);
+        $this->db->where('customer_id', $customer_id);
+        $this->db->where('(order_status_id < 7 OR order_status_id = 10) AND order_status_id <> 4', NULL, FALSE);
+        return $this->db->get('orders');
     }
 
     function set_orders_double($orders_double_id = 0, $order_id = [])
