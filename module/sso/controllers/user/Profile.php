@@ -145,10 +145,11 @@ class Profile extends SSO_Controller {
     }
 
     public function ref($ref_link = ''){
-        if(!empty($link))
+        if(!empty($ref_link))
         {
             $ref_link = base64_decode($ref_link);
             $this->session->set_userdata('ref_link', $ref_link);
+            redirect('user/profile');
         }
         else
         {

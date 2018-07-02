@@ -26,6 +26,12 @@
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                     <h2 class="page-title">Profile</h2>
                 </div>
+
+                @if(!empty($ref_link))
+                <div class="pull-right col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                    <a href="{{ $ref_link }}" class="btn btn-warning form-control">Kembali</a>
+                </div>
+                @endif
             </div>
 
 
