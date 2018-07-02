@@ -2,6 +2,7 @@
 
 resources/cache/blade/*
 !resources/cache/blade/index.html
+resources/cache/*
 
 module/*/cache/*
 !module/*/cache/index.html

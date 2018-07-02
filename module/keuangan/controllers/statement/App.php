@@ -38,6 +38,8 @@ class App extends Keuangan_Controller {
 
         $data = [
             'franchise_id' => $franchise->franchise_id,
+            'parent_statement_id' => (int) $this->input->post('parent_statement_id'),
+            'is_sales' => (int) $this->input->post('is_sales'),
             'payment_method_id' => $this->input->post('payment_method_id'),
             'transaction_type' => $this->input->post('transaction_type'),
             'transaction_date' => $trx_date,
@@ -60,8 +62,12 @@ class App extends Keuangan_Controller {
             $next_seq = $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix));
             $inv_seq_number = str_pad($next_seq, 7, "0", STR_PAD_LEFT);
 
-            $data['seq_invoice'] = $next_seq;
-            $data['generated_invoice'] = $franchise->code."/".date('Ymd', $trx_date_unix)."/".$inv_seq_number;
+            if($data['is_sales'] == 1 && $data['parent_statement_id'] == 0)
+            {
+                $data['seq_invoice'] = $next_seq;
+                $data['generated_invoice'] = $franchise->code."/".date('Ymd', $trx_date_unix)."/".$inv_seq_number;
+            }
+
             $data['created_at'] = date('Y-m-d H:i:s');
 
             $res = $this->account_statement_model->add($data);

@@ -66,11 +66,18 @@ $(document).ready(function(){
                 { data: "account_name", orderable: false },
                 { data: "generated_invoice", orderable: false },
                 { data: "transaction_date", orderable: false },
-                { data: "transaction_type", orderable: false },
                 {
                     data: "transaction_amount", orderable: false,
                     render: function ( data, type, full, meta ) {
-                        return rupiah(data);
+                        if(full.transaction_type == 'D') return rupiah(data);
+                        else return '';
+                    }
+                },
+                {
+                    data: "transaction_amount", orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        if(full.transaction_type == 'K') return rupiah(data);
+                        else return '';
                     }
                 },
                 {
@@ -143,7 +150,8 @@ $(document).ready(function(){
                 } else {
                     $('#appForm')[0].reset()
                     dataTable.ajax.reload()
-                    $('#componentModal').modal('toggle')
+                    $('#componentModal').modal('toggle');
+                    $('#opsiKreditModal').modal('hide');
                 }
 
                 if(data.account_statement_id == 0) dataTable.page( 'last' ).draw( 'page' );
@@ -160,11 +168,100 @@ $(document).ready(function(){
     })
 });
 
-function add(){
+function findParentTrx(){
+    var id_inv = btoa($('#find_id_inv').val());
+
+    $('#appForm').block({
+        message: '<h3>Please Wait...</h3>',
+        css: {
+            border: '1px solid #fff'
+        }
+    });
+    $.ajax({
+        method: "POST",
+        url: document.app.site_url+'/statement/get/by_id_inv/'+id_inv
+    })
+    .done(function( response ) {
+        var el = '';
+        $('#appForm').unblock();
+
+        if(response)
+        {
+            el = `<div class="panel panel-default">
+                <input type="hidden" name="parent_statement_id" value="${response.account_statement_id}">
+                <div class="panel-heading">
+                    <span>${response.generated_invoice}</span>
+                    <div class="panel-action">
+                        <a href="javascript:void(0)" data-perform="panel-dismiss"><i class="ti-close"></i></a>
+                    </div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                ${response.transaction_date}
+                            </div>
+                            <div class="col-md-4">
+                                ${response.transaction_type}
+                            </div>
+                            <div class="col-md-4">
+                                `+rupiah(response.transaction_amount)+`
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+        $('#parent_trx').html(el);
+    });
+}
+
+function modalKredit(){
+    $('#opsiKreditModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#parent_trx').empty();
+}
+
+function addDebit(){
+    $('#parent_trx').empty();
     $('#appForm')[0].reset();
     formPopulate('#appForm', {
         account_statement_id: 0,
-        transaction_date: last_date_commited_trx
+        transaction_date: last_date_commited_trx,
+        is_sales: 0,
+        transaction_type: 'D'
+    })
+    $('#componentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function addPenjualan(){
+    $('#parent_trx').empty();
+    $('#appForm')[0].reset();
+    formPopulate('#appForm', {
+        account_statement_id: 0,
+        transaction_date: last_date_commited_trx,
+        is_sales: 1,
+        transaction_type: 'K'
+    })
+    $('#componentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function addNonPenjualan(){
+    $('#parent_trx').empty();
+    $('#appForm')[0].reset();
+    formPopulate('#appForm', {
+        account_statement_id: 0,
+        transaction_date: last_date_commited_trx,
+        is_sales: 0,
+        transaction_type: 'K'
     })
     $('#componentModal').modal({
         backdrop: 'static',
@@ -174,6 +271,7 @@ function add(){
 
 function upd(id){
     $('.preloader').fadeIn();
+    $('#parent_trx').empty();
     $.ajax({
         method: "POST",
         url: document.app.site_url+'/statement/get/byid/'+id
@@ -181,6 +279,10 @@ function upd(id){
     .done(function( response ) {
         $('.preloader').fadeOut();
         formPopulate('#appForm', response)
+
+        $('#find_id_inv').val(response.parent_ivoice_number);
+        findParentTrx();
+
     });
 
     $('#componentModal').modal({

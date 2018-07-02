@@ -4,3 +4,4 @@ sudo ln -s ../../resources/libraries .
 sudo ln -s ../../resources/logs/ .
 sudo ln -s ../../resources/third_party .
 sudo ln -s ../../resources/views .
+sudo ln -s ../../resources/cache .

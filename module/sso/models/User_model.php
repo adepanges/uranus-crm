@@ -67,6 +67,14 @@ class User_model extends SSO_Model {
         return $this->db->insert($this->table, $this->_sanity_field($data));
     }
 
+    function check_password($user_id, $password)
+    {
+        return $this->db->limit(1)->get_where($this->table,[
+            'user_id' => (int) $user_id,
+            'password' => md5($password)
+        ])->first_row();
+    }
+
     function check_unique_data($data, $self_id = 0)
     {
         if(!empty($data))

@@ -31,6 +31,19 @@
 @endsection
 
 @section('content')
+            <div class="row white-box">
+                <div class="col-sm-12 col-md-6">
+                    <button class="col-md-12 btn btn-danger" onclick="addDebit()">
+                        <h1 style="text-align: center;"><i class="fa fa-arrow-up"></i> DEBIT</h1>
+                    </button>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <button class="col-md-12 btn btn-success" onclick="modalKredit()">
+                        <h1 style="text-align: center;"><i class="fa fa-arrow-down"></i> KREDIT</h1>
+                    </button>
+                </div>
+            </div>
+
             <div class="row white-box" id="filterSection">
                 <div class="col-md-1">
                     <b>Trx Date</b>
@@ -75,16 +88,11 @@
                                     <th>Account</th>
                                     <th>Invoice Number</th>
                                     <th>Trx Date</th>
-                                    <th>Trx Type</th>
-                                    <th>Trx Amount</th>
+                                    <th>Debit (-)</th>
+                                    <th>Credit (+)</th>
                                     <th>Claim</th>
                                     <th>Commit</th>
-                                    <th>
-                                        Action
-                                        @if($access_list->account_statement_add)
-                                            <button onclick="add()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
-                                        @endif
-                                    </th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -93,6 +101,33 @@
                 </div>
             </div>
             <!-- .row -->
+
+            <div class="modal fade" id="opsiKreditModal" role="dialog" aria-labelledby="exampleModalLabel1"
+            style="z-index: 1041 !important;">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1"></h4>
+                        </div>
+                        <div class="modal-body" style="height: 120px;">
+                            <div class="col-sm-12 col-md-6">
+                                <button class="col-md-12 btn btn-success" onclick="addPenjualan()">
+                                    <h1 style="text-align: center;">Penjualan</h1>
+                                </button>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <button class="col-md-12 btn" onclick="addNonPenjualan()">
+                                    <h1 style="text-align: center;">Non Penjualan</h1>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="modal fade" id="componentModal" role="dialog" aria-labelledby="exampleModalLabel1"
             style="z-index: 1041 !important;">
@@ -105,6 +140,9 @@
                         <div class="modal-body">
                             <form id="appForm" data-toggle="validator" data-delay="100">
                                 <input type="hidden" name="account_statement_id">
+                                <input type="hidden" name="is_sales">
+                                <input type="hidden" name="transaction_type">
+
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Account</label>
                                     <select class="form-control" name="payment_method_id" data-error="Hmm, sumber dana harap diisi" required>
@@ -118,25 +156,9 @@
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Trx Date</label>
-                                    <input type="text" class="form-control" name="transaction_date" id="datepicker-autoclose1" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}" data-error="Hmm, tanggal transaksi harap diisi" required>
+                                    <input type="text" class="form-control" name="transaction_date" id="datepicker-autoclose1" placeholder="yyyy-mm-dd" value="{{ date('Y-m-d') }}" data-error="Hmm, tanggal transaksi harap diisi" autocomplete="off" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
-
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Trx Type</label>
-                                    <div class="radio radio-success">
-                                        <div class="col-md-4">
-                                            <input type="radio" name="transaction_type" id="radio1" value="D">
-                                            <label for="radio1"> DEBIT</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="radio" name="transaction_type" id="radio2" value="K">
-                                            <label for="radio2"> KREDIT</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Trx Amount</label>
                                     <div class="input-group m-b-30">
@@ -152,6 +174,22 @@
                                     <textarea class="form-control" name="note"></textarea>
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Parent Trx</label>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input autocomplete="off" type="text" class="form-control" id="find_id_inv" placeholder="Masukan id atau nomor invoice">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-info form-control" onclick="findParentTrx()">Find</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="parent_trx">
+                                </div>
+
+                                <br>
                             </form>
                         </div>
                         <div class="modal-footer">
