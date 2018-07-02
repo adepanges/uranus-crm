@@ -110,3 +110,8 @@ table tbody td {
 .font-color-green {
     color: #0cb762;
 }
+
+.link-to-profile:hover {
+    text-decoration: underline;
+    text-decoration-color: #337ab7;
+}

@@ -47,7 +47,9 @@ SELECT
         ) OR
         c.name IN (
             'report_simple',
-            'report_simple_list'
+            'report_simple_list',
+            'sso_user_profile',
+            'sso_user_profile_save'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -70,6 +72,11 @@ SELECT
                 'penjualan_orders_trash_delete',
                 'penjualan_orders_trash_pulihkan'
             )
+        )
+        OR
+        c.name IN (
+            'sso_user_profile',
+            'sso_user_profile_save'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a
@@ -95,7 +102,9 @@ SELECT
         'penjualan_orders_trash_delete',
         'penjualan_orders_trash_pulihkan',
         'report_simple',
-        'report_simple_list'
+        'report_simple_list',
+        'sso_user_profile',
+        'sso_user_profile_save'
     ) THEN 1 ELSE 0 END AS flag
 FROM modules a
 LEFT JOIN module_menu b ON a.module_id = b.module_id AND b.status = 1
@@ -111,7 +120,9 @@ SELECT
             'penjualan_orders_detail',
             'penjualan_orders_list',
             'penjualan_orders_sale',
-            'penjualan_orders_update_customer_info'
+            'penjualan_orders_update_customer_info',
+            'sso_user_profile',
+            'sso_user_profile_save'
         )
     THEN 1 ELSE 0 END AS flag
 FROM modules a

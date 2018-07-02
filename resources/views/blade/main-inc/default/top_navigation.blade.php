@@ -30,8 +30,10 @@
                                 <div class="dw-user-box">
                                     <div class="u-img"><img src="{{ base_url('images/users/7.jpg') }}" alt="user" /></div>
                                     <div class="u-text">
-                                        <h4>{{ "{$profile['first_name']} {$profile['last_name']}" }}</h4>
-                                        <p class="text-muted">{{ $profile['email'] }}</p>
+                                        <a class="link-to-profile" href="{{ base_url('sso.php/user/profile/ref/'.current_url()) }}">
+                                            <h4>{{ "{$profile['first_name']} {$profile['last_name']}" }}</h4>
+                                            <p class="text-muted">{{ $profile['email'] }}</p>
+                                        </a>
                                     </div>
                                 </div>
                             </li>
