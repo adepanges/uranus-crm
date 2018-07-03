@@ -7,7 +7,7 @@ class Detail extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_detail');
         $id = (int) $id;
-        $this->load->model(['orders_model','master_model','orders_process_model','logistics_process_model']);
+        $this->load->model(['orders_model','master_model','orders_process_model','logistics_process_model','reason_model']);
 
         $res = $this->orders_model->get_byid_v1($id);
         $orders = $res->first_row();
@@ -43,8 +43,8 @@ class Detail extends Penjualan_Controller {
             }
         }
 
-        $reason_cancel = ['Tidak jadi beli','Tidak merasa pesan','Nomor palsu'];
-        $reason_pending = ['Sudah di WhatsApp','Nomor WhatsApp tidak keluar','Tidak diangkat','Minta dihubungi lagi nanti'];
+        $reason_cancel = $this->reason_model->get_cancel();
+        $reason_pending = $this->reason_model->get_pending();
 
         if($orders->order_status_id == 4)
         {
