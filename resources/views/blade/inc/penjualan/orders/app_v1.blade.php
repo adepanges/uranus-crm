@@ -29,6 +29,10 @@
 @endsection
 
 @section('content')
+            <script type="text/javascript">
+                document.app.conf_assigned_to_cs = {{ (int) $conf_assigned_to_cs }};
+            </script>
+
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">

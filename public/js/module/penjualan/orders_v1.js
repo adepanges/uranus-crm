@@ -123,12 +123,10 @@ $(document).ready(function(){
                             button.push(`<a href="${document.app.site_url}/orders_v1/detail/index/${data}" type="button" class="btn btn-info btn-outline btn-circle btn-sm m-r-5"><i class="fa fa-eye"></i></a>`);
                         }
 
-                        /*
-                        if(document.app.access_list.penjualan_orders_action_follow_up)
+                        if(!document.app.conf_assigned_to_cs)
                         {
                             button.push(`<button onclick="followUp(${data})" type="button" class="btn btn-primary btn-outline btn-circle btn-sm m-r-5"><i class="mdi mdi-briefcase-upload"></i></button>`);
                         }
-                        */
 
                         if(document.app.access_list.penjualan_orders_to_trash)
                         {
