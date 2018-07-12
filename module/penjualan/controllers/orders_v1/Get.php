@@ -15,7 +15,8 @@ class Get extends Penjualan_Controller {
             'tim_leader' => $this->session->userdata('tim_leader'),
             'date_start' => $this->input->post('date_start'),
             'date_end' => $this->input->post('date_end'),
-            'filter_sale' => $this->input->post('filter_sale')
+            'filter_sale' => $this->input->post('filter_sale'),
+            'filter_cs_id' => (int) $this->input->post('filter_cs_id')
         ];
         $status = [
             'new' => 1,
@@ -47,6 +48,12 @@ class Get extends Penjualan_Controller {
         )
         {
             $only_see_own = TRUE;
+        }
+
+        if($params['filter_cs_id'] != 0)
+        {
+            $only_see_own = TRUE;
+            $params['user_id'] = $params['filter_cs_id'];
         }
 
         $params['date_start'] = !empty($params['date_start'])?$params['date_start']:date('Y-m-01');

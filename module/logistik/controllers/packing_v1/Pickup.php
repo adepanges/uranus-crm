@@ -7,11 +7,24 @@ class Pickup extends Logistik_Controller {
     {
         $this->_restrict_access('logistik_packing_alredy');
         $this->session->set_userdata('packing_state', 'packing_v1/pickup');
-        $this->load->model('master_model');
+        $this->load->model(['master_model','cs_model']);
+
+        $tl = $this->session->userdata('tim_leader');
+        $team_cs_id = 0;
+        if(!empty($tl) && isset($tl->team_cs_id))
+        {
+            $team_cs_id = $tl->team_cs_id;
+        }
+
+
         $this->_set_data([
             'title' => 'Pesanan Sudah di Packing',
             'master_logistics' => $this->master_model->logistics()->result(),
-            'packing_state' => 'packing_v1/pickup'
+            'packing_state' => 'packing_v1/pickup',
+            'list_cs' => $this->cs_model->get_active([
+                'role_id' => $this->role_active['role_id'],
+                'team_cs_id' => $team_cs_id
+            ])->result()
         ]);
 
         $this->blade->view('inc/logistik/packing/pickup_v1', $this->data);

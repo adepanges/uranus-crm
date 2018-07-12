@@ -36,6 +36,7 @@ class Orders_model extends Penjualan_Model {
             {
                 // role cs
                 // view sale untuk memfilter yg hanya di verify pay oleh yg bersangkutan
+                // pada menu sale
                 $history_order_status_id = 6;
             }
             else if(
@@ -45,16 +46,18 @@ class Orders_model extends Penjualan_Model {
             {
                 // role finance
                 // view sale untuk memfilter yg hanya di sale oleh yg bersangkutan
+                // pada menu sale
                 $history_order_status_id = 7;
             }
 
             $join[] = "LEFT JOIN (SELECT
-                z.order_id, z.order_status_id, z.user_id, zo.username
+                z.order_id, z.order_status_id, z.user_id, zo.username, z.created_at
                 FROM orders_process z
                 LEFT JOIN sso_user zo ON z.user_id = zo.user_id
                 WHERE z.order_status_id = {$history_order_status_id}
-                GROUP BY z.order_id, z.order_status_id, z.user_id, zo.username) d ON a.order_id = d.order_id";
+                GROUP BY z.order_id) d ON a.order_id = d.order_id";
             $select[] = 'd.username';
+            $select[] = 'd.created_at as action_date';
         }
 
         if(
@@ -80,19 +83,29 @@ class Orders_model extends Penjualan_Model {
             $where[] = "e.user_id IN (SELECT user_id FROM management_team_cs_member WHERE team_cs_id = {$params['tim_leader']->team_cs_id})";
         }
 
-        if($params['order_status_id'] < 7 || $params['order_status_id'] == 10)
+        // filter tanggal action dan cs yg bersanguktan
+        if(in_array($params['order_status_id'], [1,2,3,4,5,6,10]))
         {
             $where[] = "a.order_status_id = {$params['order_status_id']}";
+
+            // filter tanggal
+            if($params['order_status_id'] == 1)
+            {
+                $where[] = "a.created_at BETWEEN ".$params['date_start'] ." AND ". $params['date_end'];
+            }
+            else
+            {
+                $where[] = "d.created_at BETWEEN ".$params['date_start'] ." AND ". $params['date_end'];
+            }
         }
         else
         {
+            $where[] = "a.order_status_id >= {$params['order_status_id']}";
             // select nama cs yg sale produk
             $select[] = "(SELECT ho.username
                 FROM orders_process h
                 LEFT JOIN sso_user ho ON h.user_id = ho.user_id
                 WHERE h.order_status_id = 6 and h.order_id = a.order_id LIMIT 1) as cs_sale";
-
-            $where[] = "a.order_status_id >= {$params['order_status_id']}";
 
             // filter tanggal sale dan tampilkan
             $join[] = "LEFT JOIN orders_process j ON a.order_id = j.order_id and j.order_status_id = 7";
