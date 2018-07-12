@@ -7,4 +7,4 @@ sleep 5
 ((counter++))
 done
 echo All done
-# */1 * * * * /srv/users/serverpilot/apps/admincreathinkernet/resources/bash/network_postback.sh
+# */1 * * * * /srv/users/serverpilot/apps/appshapnetwork/resources/bash/network_postback.sh

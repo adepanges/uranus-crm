@@ -1,4 +1,8 @@
 $(document).ready(function(){
+    jQuery('#date-range').datepicker({
+        toggleActive: true,
+        format: 'yyyy-mm-dd'
+    });
 
     $('#logistics_checklist_bulk').click(function(){
         if($(this).is(':checked')){
