@@ -7,8 +7,21 @@ class Confirm_buy extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_confirm_buy');
         $this->session->set_userdata('orders_state', 'orders_v1/confirm_buy');
+
+        $this->load->model('cs_model');
+        $tl = $this->session->userdata('tim_leader');
+        $team_cs_id = 0;
+        if(!empty($tl) && isset($tl->team_cs_id))
+        {
+            $team_cs_id = $tl->team_cs_id;
+        }
+
         $this->_set_data([
-            'title' => 'Confirm Buy Orders'
+            'title' => 'Confirm Buy Orders',
+            'list_cs' => $this->cs_model->get_active([
+                'role_id' => $this->role_active['role_id'],
+                'team_cs_id' => $team_cs_id
+            ])->result()
         ]);
 
         $this->blade->view('inc/penjualan/orders/confirm_buy_v1', $this->data);

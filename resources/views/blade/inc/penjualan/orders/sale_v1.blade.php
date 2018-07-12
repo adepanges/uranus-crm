@@ -7,6 +7,7 @@
         <link href="{{ base_url('plugins/bower_components/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ base_url('plugins/bower_components/datatables-bootstrap/Buttons-1.5.1/css/buttons.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ base_url('plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ base_url('plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('load_js')
@@ -47,25 +48,31 @@
                         <input type="text" class="form-control" name="end" value="{{ date('Y-m-d') }}">
                     </div>
                 </div>
+
+                @if(isset($list_cs) && !empty($list_cs))
                 <div class="col-md-2">
-                    <select class="form-control" name="filter_sale">
-                        <option value="orders_all">All</option>
-                        <option value="orders_sale">Sale</option>
-                        <option value="orders_logistics">Logistics</option>
+                    <select class="form-control" name="filter_cs_id">
+                        <option value="0">All</option>
+                        @foreach ($list_cs as $key => $value)
+                        <option value="{{ $value->user_id }}">{{ $value->first_name.' '.$value->last_name }}</option>
+                        @endforeach
                     </select>
                 </div>
+                @else
+                <input type="hidden" name="filter_cs_id" value="0">
+                @endif
 
-                <div class="col-md-2">
-                    <button class="btn btn-rounded form-control" onclick="ordersTable.ajax.reload()">
-                        <i class="fa fa-search"></i>
-                        <span>Filter</span>
+                <div class="col-md-2 pull-right">
+                        <button onclick="cetakExcel()" class="btn btn-warning btn-rounded form-control">
+                        <i class="fa fa-print"></i>
+                        <span>Cetak Excel</span>
                     </button>
                 </div>
 
                 <div class="col-md-2 pull-right">
-                    <button onclick="cetakExcel()" class="btn btn-warning btn-rounded form-control">
-                        <i class="fa fa-print"></i>
-                        <span>Cetak Excel</span>
+                    <button class="btn btn-rounded form-control" onclick="ordersTable.ajax.reload()">
+                        <i class="fa fa-search"></i>
+                        <span>Filter</span>
                     </button>
                 </div>
             </div>
@@ -76,17 +83,20 @@
                         <table id="ordersTable" class="table">
                             <thead>
                                 <tr>
-                                    <th><input id="penjualan_checklist_bulk" type="checkbox"></th>
-                                    <th>No</th>
-                                    <th>Tanggal Order</th>
-                                    <th>Tanggal Sale</th>
-                                    <th>Order ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Contact</th>
-                                    <th>Product Package</th>
-                                    <th>Total Price</th>
-                                    <th>Info</th>
-                                    <th>Action</th>
+                                    <th rowspan="2"><input id="penjualan_checklist_bulk" type="checkbox"></th>
+                                    <th rowspan="2">No</th>
+                                    <th colspan="2" style="text-align: center;">Tanggal</th>
+                                    <th rowspan="2">Order ID</th>
+                                    <th rowspan="2">Customer Name</th>
+                                    <th rowspan="2">Contact</th>
+                                    <th rowspan="2">Product Package</th>
+                                    <th rowspan="2">Total Price</th>
+                                    <th rowspan="2">Info</th>
+                                    <th rowspan="2">Action</th>
+                                </tr>
+                                <tr>
+                                    <th style="width: 80px;">Orders</th>
+                                    <th style="width: 80px;">Action</th>
                                 </tr>
                             </thead>
                         </table>

@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    jQuery('#date-range').datepicker({
+        toggleActive: true,
+        format: 'yyyy-mm-dd'
+    });
+
     $('#logistics_checklist_bulk').click(function(){
         if($(this).is(':checked')){
             $('.logistics_checklist').prop('checked', true);
@@ -16,6 +21,11 @@ $(document).ready(function(){
                     border: '1px solid #fff'
                 }
             });
+
+            data.date_start = $('#date-range [name=start]').val();
+            data.date_end = $('#date-range [name=end]').val();
+            data.filter_cs_id = $('#filterSection [name=filter_cs_id]').val();
+            
         }).on('xhr.dt', function ( e, settings, json, xhr ){
             $('.row .white-box').unblock();
             if(!document.datatable_search_change_event)
@@ -53,7 +63,20 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
-                { data: "created_at", orderable: false},
+                {
+                    data: "created_at", orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        var data = data.split(' ');
+                        return data[0];
+                    }
+                },
+                {
+                    data: "sale_date", orderable: false,
+                    render: function ( data, type, full, meta ) {
+                        var data = data.split(' ');
+                        return data[0];
+                    }
+                },
                 { data: "order_code", orderable: false},
                 {
                     data: 'customer_info',
@@ -70,7 +93,8 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
                         button.push(`<span class="label label-warning label-rouded">${full.logistic_name}</span>`)
-                        return button.join('');
+                        button.push(`<span class="label label-info label-rouded">${full.username}</span>`)
+                        return button.join('<br>');
                     }
                 },
                 {

@@ -8,7 +8,7 @@ class App extends Penjualan_Controller {
         $this->_restrict_access('penjualan_orders_new');
         $this->session->set_userdata('orders_state', 'orders_v1/app');
 
-        $this->load->model('cs_team_model');
+        $this->load->model(['cs_team_model','setting_franchise']);
 
         $leader_tim = $this->session->userdata('tim_leader');
         $cs_team = [];
@@ -21,7 +21,8 @@ class App extends Penjualan_Controller {
 
         $this->_set_data([
             'title' => 'New Orders',
-            'cs_team' => $cs_team
+            'cs_team' => $cs_team,
+            'conf_assigned_to_cs' => $this->setting_franchise->get($this->franchise->franchise_id, 'ASSIGNED_TO_CS')
         ]);
 
         $this->blade->view('inc/penjualan/orders/app_v1', $this->data);
@@ -164,13 +165,24 @@ class App extends Penjualan_Controller {
     {
         $this->_restrict_access('penjualan_orders_action_follow_up');
         $id = (int) $id;
-        $this->load->model(['orders_model','orders_process_model','master_model']);
+        $this->load->model(['orders_model','orders_process_model','master_model','setting_franchise']);
         $res = $this->orders_model->get_byid_v1($id);
         $data = $res->first_row();
         $profile = $this->session->userdata('profile');
 
-        if(!$res->num_rows() || !in_array($data->order_status_id, [10])) redirect('orders_v1');
-        if($data->order_status_id != 10)
+        $allowed_order_status_id = [10];
+        if(!$this->setting_franchise->get($this->franchise->franchise_id, 'ASSIGNED_TO_CS'))
+        {
+            $allowed_order_status_id[] = 1;
+        }
+
+        if(
+            !$res->num_rows() ||
+            !in_array($data->order_status_id, $allowed_order_status_id)
+        ) redirect('orders_v1');
+
+
+        if(!in_array($data->order_status_id, $allowed_order_status_id))
         {
             $check_followup_cs = $this->orders_model->validate_followup_cs($data->order_id, $this->profile['user_id']);
             if($check_followup_cs->num_rows() == 0)

@@ -7,10 +7,22 @@ class Shipping extends Logistik_Controller {
     {
         $this->_restrict_access('logistik_packing_alredy');
         $this->session->set_userdata('packing_state', 'packing_v1/shipping');
-        $this->load->model('master_model');
+        $this->load->model('cs_model');
+
+        $tl = $this->session->userdata('tim_leader');
+        $team_cs_id = 0;
+        if(!empty($tl) && isset($tl->team_cs_id))
+        {
+            $team_cs_id = $tl->team_cs_id;
+        }
+
         $this->_set_data([
             'title' => 'Pesanan Sudah di Packing',
-            'packing_state' => 'packing_v1/shipping'
+            'packing_state' => 'packing_v1/shipping',
+            'list_cs' => $this->cs_model->get_active([
+                'role_id' => $this->role_active['role_id'],
+                'team_cs_id' => $team_cs_id
+            ])->result()
         ]);
 
         $this->blade->view('inc/logistik/packing/shipping_v1', $this->data);

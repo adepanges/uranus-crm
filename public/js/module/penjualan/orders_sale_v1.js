@@ -25,6 +25,7 @@ $(document).ready(function(){
             data.date_start = $('#date-range [name=start]').val();
             data.date_end = $('#date-range [name=end]').val();
             data.filter_sale  = $('#filterSection [name=filter_sale]').val();
+            data.filter_cs_id = $('#filterSection [name=filter_cs_id]').val();
 
         }).on('xhr.dt', function ( e, settings, json, xhr ){
             $('.row .white-box').unblock();

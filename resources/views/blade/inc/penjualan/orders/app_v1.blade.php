@@ -29,6 +29,10 @@
 @endsection
 
 @section('content')
+            <script type="text/javascript">
+                document.app.conf_assigned_to_cs = {{ (int) $conf_assigned_to_cs }};
+            </script>
+
             <div class="row bg-title">
                 <!-- .page title -->
                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -36,17 +40,29 @@
                 <!-- /.page title -->
             </div>
 
-            <div class="row white-box">
-                <div class="col-md-2 pull-right">
-                    <button onclick="ordersTable.ajax.reload()" class="btn btn-primary btn-rounded form-control">
-                        <i class="fa fa-refresh"></i>
-                        <span>Refresh</span>
-                    </button>
+            <div class="row white-box" id="filterSection">
+                <div class="col-md-1">
+                    <b>Order Date</b>
                 </div>
+                <div class="col-md-3">
+                    <div class="input-daterange input-group" id="date-range">
+                        <input type="text" class="form-control" name="start" value="{{ date('Y-m-d') }}">
+                        <span class="input-group-addon bg-info b-0 text-white">to</span>
+                        <input type="text" class="form-control" name="end" value="{{ date('Y-m-d') }}">
+                    </div>
+                </div>
+
                 <div class="col-md-2 pull-right">
-                    <button onclick="assignOrders()" class="btn btn-rounded form-control">
+                    <button onclick="assignOrders()" class="btn btn-primary btn-rounded form-control">
                         <i class="fa fa-child"></i>
                         <span>Assign Orders</span>
+                    </button>
+                </div>
+
+                <div class="col-md-2 pull-right">
+                    <button class="btn btn-rounded form-control" onclick="ordersTable.ajax.reload()">
+                        <i class="fa fa-search"></i>
+                        <span>Filter</span>
                     </button>
                 </div>
             </div>

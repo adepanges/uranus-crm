@@ -20,9 +20,31 @@ class Orders_model extends Logistik_Model {
         if(!isset($params['order_status_id'])) $params['order_status_id'] = 7;
         if(!isset($params['logistics_status_id'])) $params['logistics_status_id'] = 1;
 
+        if(
+            isset($params['date_start']) && !empty($params['date_start'])
+        ) $params['date_start'] = $this->db->escape($params['date_start'].' 00:00:00');
+        if(
+            isset($params['date_end']) && !empty($params['date_end'])
+        ) $params['date_end'] = $this->db->escape($params['date_end'].' 23:59:59');
+
         foreach ($params as $key => $value) {
-            $where[] = "a.$key = $value";
+            if(!in_array($key, ['date_start', 'date_end', 'filter_cs_id'])) $where[] = "a.$key = $value";
+            else if($key == 'filter_cs_id' && $value != 0) $where[] = "d.user_id = $value";
         }
+
+        // filter tanggal sale dan tampilkan
+        $join[] = "LEFT JOIN orders_process j ON a.order_id = j.order_id and j.order_status_id = 7";
+        $select[] = 'j.created_at AS sale_date';
+        $where[] = "j.created_at BETWEEN ".$params['date_start'] ." AND ". $params['date_end'];
+
+        // select nama cs yg berhasil sale
+        $join[] = "LEFT JOIN (SELECT
+            z.order_id, z.order_status_id, z.user_id, zo.username
+            FROM orders_process z
+            LEFT JOIN sso_user zo ON z.user_id = zo.user_id
+            WHERE z.order_status_id = 6
+            GROUP BY z.order_id) d ON a.order_id = d.order_id";
+        $select[] = 'd.username';
 
         if(empty($select)) $select = ''; else $select = ", ".implode(", ",$select);
         if(empty($join)) $join = ''; else $join = implode(" \n",$join);
