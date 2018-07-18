@@ -44,7 +44,7 @@ class App extends Keuangan_Controller {
             'transaction_type' => $this->input->post('transaction_type'),
             'transaction_date' => $trx_date,
             'transaction_amount' => $this->input->post('transaction_amount'),
-            'note' => $this->input->post('note'),
+            'note' => trim($this->input->post('note')),
             'user_id' => $this->profile['user_id'],
             'updated_at' => date('Y-m-d H:i:s')
         ];
@@ -62,7 +62,11 @@ class App extends Keuangan_Controller {
             $next_seq = $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix));
             $inv_seq_number = str_pad($next_seq, 7, "0", STR_PAD_LEFT);
 
-            if($data['is_sales'] == 1 && $data['parent_statement_id'] == 0)
+            if(
+                $data['is_sales'] == 1 &&
+                $data['parent_statement_id'] == 0 &&
+                $data['transaction_type'] == 'K'
+            )
             {
                 $data['seq_invoice'] = $next_seq;
                 $data['generated_invoice'] = $franchise->code."/".date('Ymd', $trx_date_unix)."/".$inv_seq_number;
@@ -220,6 +224,58 @@ class App extends Keuangan_Controller {
                     ]);
                 }
             }
+        }
+    }
+
+    public function check()
+    {
+        $account_statement_id = (int) $this->input->post('account_statement_id');
+
+        $this->load->model('account_statement_model');
+
+        $payment_method_id = $this->input->post('payment_method_id');
+        $amount = $this->input->post('transaction_amount');
+        $type = $this->input->post('transaction_type');
+        $note = $this->input->post('note');
+        $date = $this->input->post('transaction_date');
+
+        $res = $this->account_statement_model->check(
+            $this->franchise->franchise_id,
+            $payment_method_id,$amount,$type,$note,$date
+        );
+
+        $this->_response_json([
+            'data' => $res
+        ]);
+    }
+
+    public function change_date()
+    {
+        $account_statement_id = (int) $this->input->post('account_statement_id');
+        $this->load->model('account_statement_model');
+
+        $trx_date = !empty($this->input->post('transaction_date'))?$this->input->post('transaction_date'):date('Y-m-d');
+        $trx_date_unix = strtotime($trx_date);
+
+        $data = [
+            'transaction_date' => $trx_date,
+        ];
+
+        $res = $this->account_statement_model->upd($data, $account_statement_id);
+
+        if($res)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil menyimpan data'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal menyimpan data'
+            ]);
         }
     }
 }
