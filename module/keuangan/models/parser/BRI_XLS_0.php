@@ -1,17 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class BCA_CSV_0 extends Keuangan_Model {
+use Symfony\Component\DomCrawler\Crawler;
+
+class BRI_XLS_0 extends Keuangan_Model {
     protected
         $file = '',
         $parsed_data = [],
         $data = [],
         $column = [],
         $expected_column = [
-            "TANGGAL_TRANSAKSI",
-            "KETERANGAN",
-            "CABANG",
-            "JUMLAH",
+            "TANGGAL",
+            "TRANSAKSI",
+            "DEBET",
+            "KREDIT",
             "SALDO",
         ],
         $expected_data = [
@@ -36,51 +38,47 @@ class BCA_CSV_0 extends Keuangan_Model {
 
     function parse()
     {
-        $row = 0;
-        if (($handle = fopen($this->file, "r")) !== FALSE) {
-            while (($data = fgetcsv($handle, 0, ",")) !== FALSE) {
-                $row++;
+        $handle = fopen($this->file, "r");
+        $html = fread($handle, filesize($this->file));
+
+        $crawler = new Crawler($html);
+
+        $nodeHeader = $crawler->filter('#tabel-saldo thead th')->each(function (Crawler $node, $i) {
+            $value = $this->normaliza_column_name(trim($node->text()));
+            $this->column[$i] = $value;
+        });
+
+        $nodeBody = $crawler->filter('#tabel-saldo tbody tr')->each(function (Crawler $node, $i) {
+            if($i > 0)
+            {
                 $data_parsed = [];
-
-                if(!empty($data))
+                $nodeTr = $node->filter('td')->each(function (Crawler $nodeTd, $iTd) use(&$data_parsed)
                 {
-                    if($row == 7)
+                    $value = $this->clean_white_space(trim($nodeTd->text()));
+                    if(
+                        isset($this->column[$iTd]) &&
+                        !empty($value)
+                    )
                     {
-                        foreach ($data as $key => $value)
+                        if(!isset($data_parsed[$this->column[$iTd]]))
                         {
-                            $value = $this->normaliza_column_name(trim($value));
-                            if(!empty($value)) $this->column[$key] = $value;
+                            $data_parsed[$this->column[$iTd]] = $value;
+                        }
+                        else
+                        {
+                            $data_parsed[$this->column[$iTd]] .= ', '.$value;
                         }
                     }
-
-                    foreach ($data as $key => $value)
+                    else
                     {
-                        $value = $this->clean_white_space(trim($value));
-                        if(
-                            isset($this->column[$key]) &&
-                            !empty($value)
-                        )
-                        {
-                            if(!isset($data_parsed[$this->column[$key]]))
-                            {
-                                $data_parsed[$this->column[$key]] = $value;
-                            }
-                            else
-                            {
-                                $data_parsed[$this->column[$key]] .= ', '.$value;
-                            }
-                        }
+                        $data_parsed[$this->column[$iTd]] = '';
                     }
 
-                }
+                });
 
-                if($row > 7)
-                {
-                    $this->data[] = $data_parsed;
-                }
+                $this->data[] = $data_parsed;
             }
-            fclose($handle);
-        }
+        });
 
         foreach ($this->expected_column as $key => $value)
         {
@@ -90,7 +88,6 @@ class BCA_CSV_0 extends Keuangan_Model {
             }
         }
 
-
         $this->_process_parsed_data();
     }
 
@@ -98,55 +95,50 @@ class BCA_CSV_0 extends Keuangan_Model {
     {
         // dd($this->expected_field);
         $check_validation = FALSE;
+        $count = count($this->data);
 
         foreach ($this->data as $key => $value) {
             $tmp_parsed = $this->expected_data;
+
+            if ($key >= ($count - 2)) {
+                continue;
+            }
 
             $cr = 0;
             $db = 0;
             $note = [];
 
-            if(isset($value['JUMLAH']))
+            if(isset($value['KREDIT'])) $cr = (double) str_replace('.','', $value['KREDIT']);
+            if(isset($value['DEBET'])) $db = (double) str_replace('.','', $value['DEBET']);
+
+            if(!empty($cr))
             {
-                $amount_type = explode(' ', $value['JUMLAH']);
-                if(isset($amount_type[0]))
-                {
-                    $tmp_parsed['transaction_amount'] = (double) trim(str_replace(',','', $amount_type[0]));
-                }
-
-                if(isset($amount_type[1]))
-                {
-                    $type = trim(strtoupper($amount_type[1]));
-                    switch ($type) {
-                        case 'CR':
-                            $tmp_parsed['transaction_type'] = 'K';
-                            $tmp_parsed['is_sales'] = 1;
-                            break;
-
-                        case 'DB':
-                            $tmp_parsed['transaction_type'] = 'D';
-                            break;
-                    }
-                }
-
-                if(isset($value['KETERANGAN'])) $note[] = 'KET: '.$value['KETERANGAN'];
-
-                $tmp_parsed['note'] = implode(', ', $note);
-
-                $time = date_parse_from_format('d/m/y',$value['TANGGAL_TRANSAKSI']);
-
-                if($time['error_count'] > 0)
-                {
-                    $time = 0;
-                }
-                else
-                {
-                    $time = mktime($time['hour'],$time['minute'],$time['second'],$time['month'],$time['day'],$time['year']);
-                }
-
-                $tmp_parsed['transaction_date'] = date('Y-m-d', $time);
-                $this->parsed_data[] = $tmp_parsed;
+                $tmp_parsed['transaction_amount'] = $cr;
+                $tmp_parsed['transaction_type'] = 'K';
+                $tmp_parsed['is_sales'] = 1;
             }
+            else if(!empty($db))
+            {
+                $tmp_parsed['transaction_amount'] = $db;
+                $tmp_parsed['transaction_type'] = 'D';
+            }
+
+            if(isset($value['TRANSAKSI'])) $note[] = 'INFO: '.$value['TRANSAKSI'];
+
+            $tmp_parsed['note'] = implode(', ', $note);
+            $time = date_parse_from_format('d/m/y',$value['TANGGAL']);
+
+            if($time['error_count'] > 0)
+            {
+                $time = 0;
+            }
+            else
+            {
+                $time = mktime($time['hour'],$time['minute'],$time['second'],$time['month'],$time['day'],$time['year']);
+            }
+
+            $tmp_parsed['transaction_date'] = date('Y-m-d', $time);
+            $this->parsed_data[] = $tmp_parsed;
         }
     }
 }

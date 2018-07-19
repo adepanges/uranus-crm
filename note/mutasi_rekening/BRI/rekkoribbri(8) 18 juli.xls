@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id"><head>
+<title>Mutasi Rekening</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Pragma" CONTENT="no-cache">
+<meta http-equiv="Expires" CONTENT="-1">  
+<meta name="Keywords" content="keyword">
+<meta name="Description" content="description">
+<script type="text/javascript" src="js/css-filter.js"></script>
+<script type="text/javascript" src="js/split-deskripsi.js"></script>
+<script type="text/javascript" src="js/ki.js"></script>
+<script type="text/javascript" src="js/css.js"></script>
+<script type="text/javascript" src="js/ajax.js"></script>
+<script language="JavaScript" src="js/input-validation.js"></script>
+
+
+<script language="JavaScript">
+<!--
+if ( navigator.appName == "Netscape" )
+{
+      document.captureEvents(Event.MOUSEUP)
+      document.captureEvents(Event.KEYPRESS)
+}
+      
+document.onmouseup = reset;
+document.onkeypress = reset;
+
+function reset ( e )
+{
+   parent.reset( e );
+}
+//-->
+</script>
+<script language="JavaScript">
+<!--
+if (self.location==top.location)
+   window.location = 'login/logout';
+
+var submitting = false;
+function checkForm(form)
+{
+	if (form.ACCOUNT_NO.value == "") {
+		alert ("REKENING ASAL harus diisi");
+		form.ACCOUNT_NO.focus();
+		return false;
+	}
+	
+	var start_day = form.DDAY1.options[form.DDAY1.selectedIndex].value;
+	var start_mon = form.DMON1.options[form.DMON1.selectedIndex].value;
+	var start_year = form.DYEAR1.options[form.DYEAR1.selectedIndex].value;
+	
+	var end_day = form.DDAY2.options[form.DDAY2.selectedIndex].value;
+	var end_mon = form.DMON2.options[form.DMON2.selectedIndex].value;
+	var end_year = form.DYEAR2.options[form.DYEAR2.selectedIndex].value;
+	
+	var select_month = form.MONTH.options[form.MONTH.selectedIndex].value;
+	var select_year = form.YEAR.options[form.YEAR.selectedIndex].value;
+
+	var limit_day = 19;
+	var limit_mon = 01;
+	var limit_year = 2018;
+	
+	var current_date = new Date();
+	var start_date = new Date(start_year,(start_mon - 1),start_day);
+	var end_date = new Date(end_year,(end_mon - 1),end_day);
+	var limit_date =  new Date(limit_year, (limit_mon - 1), limit_day);
+	var diff = (end_date-start_date)/60/60/24/1000;
+	
+	if (form.VIEW_TYPE[0].checked) {
+		if (!checkday(parseInt(start_year,10), parseInt(start_mon,10), parseInt(start_day, 10))) {		
+			alert("TANGGAL DARI tidak valid");
+			return false;
+		}
+		if (!checkday(parseInt(end_year,10), parseInt(end_mon,10), parseInt(end_day, 10))) {		
+			alert("TANGGAL KE tidak valid");
+			return false;
+		}
+		if (end_date < start_date) {
+			alert("Tanggal AWAL tidak boleh melebihi Tanggal AKHIR.");
+			return false;
+		}
+		if (end_date > current_date) {
+			alert("Tanggal AKHIR tidak boleh melebihi tanggal hari ini.");
+			return false;
+		}
+		
+		if(start_mon != end_mon){
+			alert("BULAN AWAL dan BULAN AKHIR harus sama.");
+			return false;
+		}else{
+			if(start_year != end_year){
+				alert("TAHUN AWAL dan TAHUN AKHIR harus sama.");
+				return false;
+			}
+		}
+				
+		if (diff > 30) {
+			alert("Selisih Tanggal AWAL dan Tanggal AKHIR tidak boleh melebihi 1 bulan");
+			return false;
+		}
+	} else{
+		if((select_month >  '0707' && select_year == '2018') ||  select_year > '2018'){
+			alert("Periode Bulan Tidak Valid");
+			return false;
+		}
+	}
+	
+	form.FROM_DATE.value = start_year+"-"+start_mon+"-"+start_day;  
+	form.TO_DATE.value = end_year+"-"+end_mon+"-"+end_day;
+	
+	return true;
+}
+
+function submitForm()
+{	
+	if(submitting) { 
+	 	alert('Transaksi sedang diproses.\nHarap tunggu.'); 
+	 	document.getElementById('frm1').submitButton.disabled = true; 
+	 	return false; 
+	} else if(checkForm(document.getElementById('frm1'))) { 
+	 	submitting = true;
+        showLoading();
+		document.getElementById('download').value = "";
+	 	document.getElementById('frm1').submit();
+	 	return true; 
+	} else { 
+	 	return false; 
+	}
+}
+
+function download2()
+{	
+	if(submitting) { 
+	 	alert('Transaksi sedang diproses.\nHarap tunggu.'); 
+	 	document.getElementById('frm1').submitButton.disabled = true; 
+	 	return false; 
+	} else if(checkForm(document.getElementById('frm1'))) {
+		document.getElementById('download').value = "download";
+	 	document.getElementById('frm1').submit();
+	 	return true; 
+	} else { 
+	 	return false; 
+	}
+}
+
+
+
+function getScreenWidthSaldo(){
+    var width = window.parent.innerWidth || parent.document.documentElement.clientWidth || parent.document.body.clientWidth;
+    if (width <= 500){
+        window.parent.scroll(0,parent.document.body.scrollHeight);
+        showLoading();
+        changeDescription();
+        removeLoading();
+    }
+}
+//-->
+</script>
+
+<script language="JavaScript">
+<!--
+$(function() {
+	$("#buttonPrint").click( function() {
+		$('#divToPrint').jqprint({ operaSupport: true });
+		return false;
+	});
+ });
+ -->
+</script>
+</head>
+<body onload="getScreenWidthSaldo();">
+	<div class="form-wrap" id="form-wrap" >
+		<form action="https://ib.bri.co.id/ib-bri/Br11600d.html" method="post" accept-charset="utf-8" name="AccountStatement" id="frm1" class="form" target="content"><div style="display:none">
+<input type="hidden" name="csrf_token_newib" value="3c526bd08079941c953e63aea1cbf3d4" />
+</div>
+            
+
+			<div id="divToPrint">
+				<div class="flatwrap">
+					<div class="flatwrap-head" style="margin-bottom: 1px;">
+						<div class="icon-pagelines">
+						</div>
+						<h4 style="margin-top: 7px">
+							Rincian Rekening Koran
+						</h4>
+						<div class="flatwrap-control">
+							<div class="pointerDown"></div>
+						</div>
+					</div>
+						<table class="info1 rekkor" style="margin: 0 auto; margin-bottom: 5px; padding-left: 0px;">
+							<tr>
+								<td>Yth. Bapak/Ibu</td>
+								<td>HERBAL ANUGRAH PRIMA</td>
+							</tr>
+							<tr>
+								<td>No. Rekening</td>
+								<td>&nbsp;039801000532569</td>
+							</tr>
+							<tr>
+								<td>Mata Uang</td>
+								<td>IDR</td>
+							</tr>
+							<tr>
+								<td>Periode</td>
+								<td>
+									18-Jul-2018 s.d 18-Jul-2018								</td>
+							</tr>
+							<tr>
+								<td>Tertanggal</td>
+								<td>19/07/2018</td>
+							</tr>
+						</table>
+						<hr class="faded"/>
+
+                    <div onload="removeLoading();" class="rekkor-box">
+						<table id="tabel-saldo" class="box" style="width: 97%; margin: 0 auto;">
+							<thead style="background-color: #f9f0c7">
+								<tr>
+									<th style="text-align: left;">tanggal</th>
+									<th style="text-align: left;">transaksi</th>
+									<th style="text-align: right;">debet</th>
+									<th style="text-align: right;">kredit</th>
+									<th style="text-align: right;">Saldo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>&nbsp;</td>
+									<td class="fieldText">Saldo Awal</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td class="fieldValue" align="right">48.126.679,00</td>
+								</tr>
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-1 style="text-align: left;">TRANSFER  EDC  IDA RODIAH      TO PT. HERBAL ANUG  FROM080001012320535 TO039801000532569EDC</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.478,00</td>
+																			<td style="text-align: right;">48.677.157,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-2 style="text-align: left;">TRANSAKSI KREDIT DARI BANK LAIN 6271100010300150#000000005712#ATM #TRFLA TRF BERSAMA FROM BASUNI LA   039801000532569ATM 6271100010300150</br></td>
+																			<td></td>
+																												<td style="text-align: right;">1.100.879,00</td>
+																			<td style="text-align: right;">49.778.036,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-3 style="text-align: left;">TRANSFER  IBNK ANTRAN PUSUMA  TO PT. HERBAL ANUGRA  FROM031501000146566 TO039801000532569IBN</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.271,00</td>
+																			<td style="text-align: right;">50.328.307,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-4 style="text-align: left;">TRANSFER  FROM456201013527538 TO039801000532569MP </br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.550,00</td>
+																			<td style="text-align: right;">50.878.857,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-5 style="text-align: left;">TRANSAKSI KREDIT DARI BANK LAIN 4893853010575227#000000009685#ATM #TRFLA TRF BERSAMA FROM AAN SUPRIATNA LA   039801000532569ATM 4893853010575227</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.008,00</td>
+																			<td style="text-align: right;">51.428.865,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-6 style="text-align: left;">TRANSFER  ATM  MATNUR HARYONO TO PT. HERBAL ANUGRR  FROM087201004346504 TO039801000532569ATM</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.254,00</td>
+																			<td style="text-align: right;">51.979.119,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-7 style="text-align: left;">TRANSFER  ATM  MAWARDI        TO PT. HERBAL ANUGR  FROM026001017059503 TO039801000532569ATM</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.000,00</td>
+																			<td style="text-align: right;">52.529.119,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-8 style="text-align: left;">TRANSFER  ATM  JOHN DAVID, SH TO PT. HERBAL ANUGR  FROM014101011224508 TO039801000532569ATM</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.569,00</td>
+																			<td style="text-align: right;">53.079.688,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-9 style="text-align: left;">TRANSFER  SMS  PRANOTO        TO PT. HERBAL ANUGRA  FROM509501015169538 TO039801000532569SMS</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.133,00</td>
+																			<td style="text-align: right;">53.629.821,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-10 style="text-align: left;">SETORAN TANPA BUKU NASABAH BRI  </br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.000,00</td>
+																			<td style="text-align: right;">54.179.821,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-11 style="text-align: left;">SETORAN TANPA BUKU ASPANDIAR  </br></td>
+																			<td></td>
+																												<td style="text-align: right;">555.000,00</td>
+																			<td style="text-align: right;">54.734.821,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-12 style="text-align: left;">TRANSAKSI KREDIT DARI BANK LAIN 6038442020115249#000000003116#ATM #TRFLA TRF BERSAMA FROM RAHMAN PUTRA LA   039801000532569ATM 6038442020115249</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.567,00</td>
+																			<td style="text-align: right;">55.285.388,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-13 style="text-align: left;">TRANSFER  SMS  AMIN           TO PT. HERBAL ANUGRA  FROM025801000079561 TO039801000532569SMS</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.000,00</td>
+																			<td style="text-align: right;">55.835.388,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-14 style="text-align: left;">TRANSFER  ATM  FERY AFRIANSYA TO PT. HERBAL ANUGR  FROM816401000764535 TO039801000532569ATM</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.740,00</td>
+																			<td style="text-align: right;">56.386.128,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-15 style="text-align: left;">SETORAN TANPA BUKU FAHRUDDIN-039801000532569  T:0264054:NEWBRINETSWEB</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.820,00</td>
+																			<td style="text-align: right;">56.936.948,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-16 style="text-align: left;">SETORAN TANPA BUKU MON HELAN  </br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.990,00</td>
+																			<td style="text-align: right;">57.487.938,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-17 style="text-align: left;">TRANSFER  ATM  SUPRAYANTO     TO PT. HERBAL ANUGRM  FROM147201001037509 TO039801000532569ATM</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.057,00</td>
+																			<td style="text-align: right;">58.037.995,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-18 style="text-align: left;">TRANSFER  ATM  HEPPI HANAFIAH TO PT. HERBAL ANUGRl  FROM000501005471503 TO039801000532569ATM</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.907,00</td>
+																			<td style="text-align: right;">58.588.902,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-19 style="text-align: left;">TRANSAKSI KREDIT DARI BANK LAIN ATMLTRBCA 00106 000111933 03980100053256 TRF PRIMA FROM RUSBETO</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.270,00</td>
+																			<td style="text-align: right;">59.139.172,00</td>
+									 
+								</tr>
+								
+								
+                                 
+								<tr>
+									<td style="text-align: left;">18/07/18</td>
+									<td id=desc-20 style="text-align: left;">TRANSFER  SMS  ABIDIN MARRU   TO PT. HERBAL ANUGRA  FROM489001003218534 TO039801000532569SMS</br></td>
+																			<td></td>
+																												<td style="text-align: right;">550.345,00</td>
+																			<td style="text-align: right;">59.689.517,00</td>
+									 
+								</tr>
+								
+																
+								<tr>
+									<td>&nbsp;</td>
+									<td class="fieldText">Total Mutasi</td>
+									<td class="fieldValue" align="right" valign="top">&nbsp;&nbsp;
+										0,00									</td>
+									<td class="fieldValue" align="right" valign="top">&nbsp;&nbsp;
+										11.562.838,00									</td>
+									<td class="fieldValue" align="right">&nbsp;</td>
+								</tr>
+								
+								<tr>
+									<td>&nbsp;</td>
+									<td class="fieldText" valign="top">Saldo Akhir</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td class="fieldValue" align="right" valign="top">&nbsp;&nbsp;
+										59.689.517,00									</td>
+								</tr>
+								<!-- <tr>
+									<td colspan="5" style="text-align: center; font-size: 11px; color: gray;">
+										LOAD MORE + 
+									</td> 
+								</tr> -->
+								
+							</tbody>
+						</table>
+						<p>
+							<b>&nbsp;&nbsp; Catatan :</b>
+						</p>
+						<ul>
+							<li>Data mutasi rekening ini adalah posisi data 06 Jul 2018 08:15:53</li>
+							
+						</ul>
+                    </div>
+					
+					<div class="form-footer">
+						<div class="buttons">
+							<input name="Back" value="Kembali" onclick="history.back()" class="reset" type="button">
+							<input name="Close" value="Tutup" onclick="document.location='defaultpg/default_page'" class="reset" type="button">
+							<input class="button" name="Print" value="Cetak" id="buttonPrint" type="button">   
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
