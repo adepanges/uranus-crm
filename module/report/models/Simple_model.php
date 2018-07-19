@@ -23,7 +23,7 @@ class Simple_model extends Report_Model {
         switch ($params['by_date']) {
             case 'orders':
                 $join_other = "LEFT JOIN orders p ON p.order_id = z.order_id";
-                $where = "(p.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
+                $where = "(p.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND p.is_deleted <> 1 AND";
                 $join_where_sale = $where;
                 break;
 
@@ -31,6 +31,7 @@ class Simple_model extends Report_Model {
                 // $join = "LEFT JOIN orders_process fu ON fu.order_id = z.order_id and fu.order_status_id = 2";
                 // $join_where = "(fu.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
                 // $join_where_sale = $join_where;
+                $join_where = "(p.is_deleted <> 1) AND";
                 $join_other = "";
                 $where = "(z.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
                 $where_sale = "(w.created_at BETWEEN {$params['date_start']} AND {$params['date_end']}) AND";
@@ -151,13 +152,13 @@ class Simple_model extends Report_Model {
         $sql = "SELECT COUNT(DISTINCT p.order_id) AS total_sale, SUM(p.total_price) AS total_price, SUM(cart.qty_total) AS product_total
             FROM orders p
             LEFT JOIN (
-                       SELECT order_id, SUM(qty) AS qty_total
-                       FROM orders_cart
-                       WHERE product_id IS NOT NULL AND product_id != 0 GROUP BY order_id
+               SELECT order_id, SUM(qty) AS qty_total
+               FROM orders_cart
+               WHERE product_id IS NOT NULL AND product_id != 0 GROUP BY order_id
             ) cart ON cart.order_id = p.order_id
             LEFT JOIN orders_process fu ON p.order_id = fu.order_id and fu.order_status_id = 2
             $join
-            WHERE $where p.order_status_id >= 7";
+            WHERE $where (p.order_status_id >= 7 AND p.order_status_id != 10)";
 
         // echo $sql;
         // exit;

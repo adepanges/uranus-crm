@@ -105,6 +105,13 @@ $(document).ready(function(){
                     render: function ( data, type, full, meta ) {
                         var button = [];
 
+                        if(full.note != ''){
+                            button.push(`<span class="mytooltip tooltip-effect-5">
+                            <span class="tooltip-item">i</span> <span class="tooltip-content clearfix">
+                              <span class="tooltip-text">${full.note}</span> </span>
+                            </span>`);
+                        }
+
                         if(full.commit != 1)
                         {
                             if(document.app.access_list.account_statement_upd)
@@ -156,6 +163,45 @@ $(document).ready(function(){
 
                 if(data.account_statement_id == 0) dataTable.page( 'last' ).draw( 'page' );
                 else dataTable.page( page_info.page ).draw( 'page' );
+
+                swal({
+                    title: title,
+                    text: response.message,
+                    timer: timer,
+                    showConfirmButton: showConfirmButton
+                });
+            });
+        }
+    })
+
+    $('#btnSaveImportForm').click(function(e){
+        if(formValidator('#importForm')){
+            var data = new FormData($('#importForm')[0]);
+
+            // $('.preloader').fadeIn();
+            $.ajax({
+                method: "POST",
+                url: document.app.site_url+'/statement/import',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false
+            })
+            .done(function( response ) {
+                // $('.preloader').fadeOut();
+
+
+                var title = 'Berhasil!',
+                    timer = 1000;
+                    showConfirmButton = false;
+
+                if(!response.status) {
+                    var timer = 3000;
+                    title = 'Gagal!';
+                    showConfirmButton = true;
+                } else if(response.data.key_cache){
+                    document.location = document.app.site_url+'/statement/import/process/'+$('#importForm [name=payment_method_id]').val()+'/'+response.data.key_cache;
+                }
 
                 swal({
                     title: title,
@@ -264,6 +310,15 @@ function addNonPenjualan(){
         transaction_type: 'K'
     })
     $('#componentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function importData()
+{
+    $('#importForm')[0].reset();
+    $('#importModal').modal({
         backdrop: 'static',
         keyboard: false
     });

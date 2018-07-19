@@ -21,7 +21,7 @@ class Account_statement_model extends Keuangan_Model {
             WHERE
                 a.franchise_id = {$params['franchise_id']} AND
                 a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
-            ORDER BY a.transaction_date, a.account_statement_seq";
+            ORDER BY a.transaction_date, a.seq_invoice";
 
         $sql_row = $this->_combine_datatable_param($sql);
         $sql_count = $this->_combine_datatable_param($sql, TRUE);
@@ -127,5 +127,20 @@ class Account_statement_model extends Keuangan_Model {
             WHERE franchise_id = ? AND commit = 1
             ORDER BY transaction_date DESC LIMIT 1";
         return $this->db->query($sql, [(int) $franchise_id]);
+    }
+
+    function check($franchise_id, $payment_method_id,$amount,$type,$note,$date)
+    {
+        $this->db->where([
+            'franchise_id' => $franchise_id,
+            'payment_method_id' => $payment_method_id,
+            'transaction_amount' => (double) trim($amount),
+            'transaction_type' => trim($type),
+            'note' => trim($note)
+        ]);
+
+        // if(!empty($date)) $this->db->where('transaction_date', $date);
+
+        return $this->db->get('account_statement')->first_row();
     }
 }

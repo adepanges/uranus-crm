@@ -148,7 +148,7 @@ class Orders_model extends Penjualan_Model {
         // exit;
 
         $sql = $this->_combine_datatable_param($sql);
-        $sql_count = $this->_combine_datatable_param("SELECT a.*
+        $sql_count = $this->_combine_datatable_param("SELECT a.order_id
             FROM orders a
             $join
             WHERE

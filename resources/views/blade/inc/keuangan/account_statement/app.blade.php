@@ -65,6 +65,12 @@
             </div>
 
             <div class="row white-box" id="actionSection">
+                <div class="col-lg-3 col-md-4 col-sm-5">
+                    <button class="btn btn-success form-control" onclick="importData()">
+                        <i class="fa fa-arrow-up"></i> Import
+                    </button>
+                </div>
+
                 <div class="col-lg-3 col-md-4 col-sm-5 pull-right">
                     <button class="btn btn-danger btn-rounded form-control" onclick="commitInvoiceNumber()">
                         <span>Commit All Transaction</span>
@@ -101,6 +107,42 @@
                 </div>
             </div>
             <!-- .row -->
+
+            <div class="modal fade" id="importModal" role="dialog" aria-labelledby="exampleModalLabel1"
+            style="z-index: 1041 !important;">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="importForm"  method="post" enctype="multipart/form-data" data-toggle="validator" data-delay="100">
+                                <div class="form-group">
+                                    <label class="control-label">Account</label>
+                                    <select class="form-control" name="payment_method_id" data-error="Hmm, sumber dana harap diisi" required>
+                                        <option value="">Pilih</option>
+                                        @foreach ($account as $key => $value)
+                                        <option value="{{ $value->payment_method_id }}">{{ $value->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">File</label>
+                                    <input type="file" class="form-control" name="file" data-error="Hmm, file harap dipilih" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                            <button id="btnSaveImportForm" type="button" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="modal fade" id="opsiKreditModal" role="dialog" aria-labelledby="exampleModalLabel1"
             style="z-index: 1041 !important;">

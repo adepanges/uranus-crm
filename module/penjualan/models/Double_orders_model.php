@@ -11,7 +11,7 @@ class Double_orders_model extends Penjualan_Model {
 
     function get_datatable()
     {
-        $sql = "SELECT
+        $sql_raw = "SELECT
             	a.*
             FROM orders_double a
             WHERE a.status = 1 AND (SELECT order_status_id
@@ -20,8 +20,8 @@ class Double_orders_model extends Penjualan_Model {
             is_deleted = 0 AND orders_double_id = a.orders_double_id
             ORDER BY order_status_id DESC LIMIT 1) < 2";
 
-        $sql = $this->_combine_datatable_param($sql);
-        $sql_count = $this->_combine_datatable_param($sql, TRUE);
+        $sql = $this->_combine_datatable_param($sql_raw);
+        $sql_count = $this->_combine_datatable_param($sql_raw, TRUE);
         return [
             'row' => $this->db->query($sql)->result(),
             'total' => $this->db->query($sql_count)->row()->count

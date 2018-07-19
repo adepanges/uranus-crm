@@ -40,7 +40,7 @@ class Account_statement_model extends Penjualan_Model {
             WHERE
                 a.franchise_id = {$params['franchise_id']} AND
                 a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}' AND
-                a.commit = 1 AND a.claim != 1 $where
+                a.commit = 1 AND a.claim != 1 AND a.seq_invoice != 0 $where
             ORDER BY $order a.transaction_date ASC, a.seq_invoice ASC";
 
         $sql = $this->_combine_datatable_param($sql);
