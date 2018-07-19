@@ -85,7 +85,8 @@ class App extends Keuangan_Controller {
             $res = FALSE;
             if(!empty($transaction))
             {
-                $balance_before = $this->bank_statement_model->get_balance_before($this->franchise->franchise_id, $payment_method_id, $transaction->account_statement_seq);
+                $balance_before = $this->bank_statement_model->get_balance_before_seq($this->franchise->franchise_id, $payment_method_id, $transaction->account_statement_seq);
+
                 if($transaction->transaction_type == 'K') $balance = $balance_before + $transaction->transaction_amount;
                 else if($transaction->transaction_type == 'D') $balance = $balance_before - $transaction->transaction_amount;
                 $res = $this->bank_statement_model->upd_balance($transaction->account_statement_id, $transaction->account_statement_seq, $balance);

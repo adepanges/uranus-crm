@@ -10,7 +10,7 @@ class Bank_statement_model extends Keuangan_Model {
         $fillable_field = [],
         $searchable_field = [];
 
-    function get_bca($params)
+    function get_query($payment_method_id, $params)
     {
         $params['franchise_id'] = (int) $params['franchise_id'];
 
@@ -18,41 +18,11 @@ class Bank_statement_model extends Keuangan_Model {
             FROM account_statement a
             WHERE
                 franchise_id = {$params['franchise_id']} AND
-                payment_method_id = 2 AND
+                payment_method_id = ? AND
                 a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
             ORDER BY a.transaction_date, a.account_statement_seq ASC";
 
-        return $this->db->query($sql)->result();
-    }
-
-    function get_bri($params)
-    {
-        $params['franchise_id'] = (int) $params['franchise_id'];
-
-        $sql = "SELECT a.*
-            FROM account_statement a
-            WHERE
-                franchise_id = {$params['franchise_id']} AND
-                payment_method_id = 3 AND
-                a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
-            ORDER BY a.transaction_date, a.account_statement_seq ASC";
-
-        return $this->db->query($sql)->result();
-    }
-
-    function get_mandiri($params)
-    {
-        $params['franchise_id'] = (int) $params['franchise_id'];
-
-        $sql = "SELECT a.*
-            FROM account_statement a
-            WHERE
-                franchise_id = {$params['franchise_id']} AND
-                payment_method_id = 4 AND
-                a.transaction_date BETWEEN '{$params['date_start']}' AND '{$params['date_end']}'
-            ORDER BY a.transaction_date, a.account_statement_seq ASC";
-
-        return $this->db->query($sql)->result();
+        return $this->db->query($sql, [$payment_method_id])->result();
     }
 
     function get($account_statement_id)
@@ -62,27 +32,40 @@ class Bank_statement_model extends Keuangan_Model {
         ])->first_row();
     }
 
-    function get_balance_before($franchise_id = 0, $payment_method_id = 0, $account_statement_seq)
+    function get_balance_before($franchise_id = 0, $payment_method_id = 0, $date)
     {
         $res = $this->db->query("SELECT a.*
             FROM account_statement a
             WHERE
                 franchise_id = {$franchise_id} AND
                 payment_method_id = {$payment_method_id} AND
-                account_statement_seq < {$account_statement_seq}
+                transaction_date < '$date 00:00:00'
             ORDER BY a.account_statement_seq DESC LIMIT 1")->first_row();
 
         return (!empty($res) && isset($res->balance))?$res->balance:0;
     }
 
-    function get_sequence_smallest($franchise_id = 0, $payment_method_id = 0, $smallest_sequence)
+    function get_balance_before_seq($franchise_id = 0, $payment_method_id = 0, $seq)
     {
         $res = $this->db->query("SELECT a.*
             FROM account_statement a
             WHERE
                 franchise_id = {$franchise_id} AND
                 payment_method_id = {$payment_method_id} AND
-                account_statement_seq < {$smallest_sequence}
+                account_statement_seq < $seq
+            ORDER BY a.account_statement_seq DESC LIMIT 1")->first_row();
+
+        return (!empty($res) && isset($res->balance))?$res->balance:0;
+    }
+
+    function get_sequence_smallest($franchise_id = 0, $payment_method_id = 0, $date)
+    {
+        $res = $this->db->query("SELECT a.*
+            FROM account_statement a
+            WHERE
+                franchise_id = {$franchise_id} AND
+                payment_method_id = {$payment_method_id} AND
+                transaction_date < '$date 00:00:00'
             ORDER BY a.account_statement_seq DESC LIMIT 1")->first_row();
 
         return (!empty($res) && isset($res->account_statement_seq))?$res->account_statement_seq:0;
