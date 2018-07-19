@@ -14,8 +14,8 @@
 		"php": ">=7.0.0",
 		"xiaoler/blade": "^5.4",
         "mashape/unirest-php": "^3.0",
-        "phpoffice/phpspreadsheet": "^1.2",
-        "symfony/dom-crawler": "^4.1"
+        "symfony/dom-crawler": "^4.1",
+        "symfony/css-selector": "^4.1"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 7.x"

@@ -34,14 +34,29 @@ class Get extends Keuangan_Controller {
         return $params;
     }
 
-	public function bca()
-	{
+    function bca()
+    {
+        $this->get_data(2);
+    }
+
+    function bri()
+    {
+        $this->get_data(3);
+    }
+
+    function mandiri()
+    {
+        $this->get_data(4);
+    }
+
+    protected function get_data($payment_method_id)
+    {
         $this->_restrict_access('account_statement_list', 'rest');
         $this->load->model('bank_statement_model');
 
         $params = $this->_init_params();
 
-        $data = $this->bank_statement_model->get_bca($params);
+        $data = $this->bank_statement_model->get_query($payment_method_id, $params);
 
         $balance_before = 0;
         $sequence_before = 0;
@@ -51,8 +66,11 @@ class Get extends Keuangan_Controller {
             isset($data[0]) &&
             isset($data[0]->account_statement_seq))
         {
-            $sequence_before = $this->bank_statement_model->get_sequence_smallest($this->franchise->franchise_id, 2, $data[0]->account_statement_seq);
-            $balance_before = $this->bank_statement_model->get_balance_before($this->franchise->franchise_id, 2, $data[0]->account_statement_seq);
+            $date = $data[0]->transaction_date;
+
+            $sequence_before = $this->bank_statement_model->get_sequence_smallest($this->franchise->franchise_id, $payment_method_id, $date);
+
+            $balance_before = $this->bank_statement_model->get_balance_before($this->franchise->franchise_id, $payment_method_id, $date);
         }
 
         $this->_response_json([
@@ -60,61 +78,5 @@ class Get extends Keuangan_Controller {
             'balance_before' => $balance_before,
             'sequence_before' => $sequence_before
         ]);
-	}
-
-    public function bri()
-	{
-        $this->_restrict_access('account_statement_list', 'rest');
-        $this->load->model('bank_statement_model');
-
-        $params = $this->_init_params();
-
-        $data = $this->bank_statement_model->get_bri($params);
-
-        $balance_before = 0;
-        $sequence_before = 0;
-
-        if(
-            !empty($data) &&
-            isset($data[0]) &&
-            isset($data[0]->account_statement_seq))
-        {
-            $sequence_before = $this->bank_statement_model->get_sequence_smallest($this->franchise->franchise_id, 3, $data[0]->account_statement_seq);
-            $balance_before = $this->bank_statement_model->get_balance_before($this->franchise->franchise_id, 3, $data[0]->account_statement_seq);
-        }
-
-        $this->_response_json([
-            'data' => $data,
-            'balance_before' => $balance_before,
-            'sequence_before' => $sequence_before
-        ]);
-	}
-
-    public function mandiri()
-	{
-        $this->_restrict_access('account_statement_list', 'rest');
-        $this->load->model('bank_statement_model');
-
-        $params = $this->_init_params();
-
-        $data = $this->bank_statement_model->get_mandiri($params);
-
-        $balance_before = 0;
-        $sequence_before = 0;
-
-        if(
-            !empty($data) &&
-            isset($data[0]) &&
-            isset($data[0]->account_statement_seq))
-        {
-            $sequence_before = $this->bank_statement_model->get_sequence_smallest($this->franchise->franchise_id, 4, $data[0]->account_statement_seq);
-            $balance_before = $this->bank_statement_model->get_balance_before($this->franchise->franchise_id, 4, $data[0]->account_statement_seq);
-        }
-
-        $this->_response_json([
-            'data' => $data,
-            'balance_before' => $balance_before,
-            'sequence_before' => $sequence_before
-        ]);
-	}
+    }
 }
