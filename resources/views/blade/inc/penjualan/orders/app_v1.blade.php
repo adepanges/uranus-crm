@@ -54,12 +54,14 @@
                     </div>
                 </div>
 
+@if( in_array($role_active->role_id, [1,2,6]) )
                 <div class="col-md-2 pull-right">
                     <button onclick="assignOrders()" class="btn btn-primary btn-rounded form-control">
                         <i class="fa fa-child"></i>
                         <span>Assign Orders</span>
                     </button>
                 </div>
+@endif
 
                 <div class="col-md-2 pull-right">
                     <button class="btn btn-rounded form-control" onclick="ordersTable.ajax.reload()">
@@ -106,7 +108,17 @@
                                 <button onclick="findCS()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
                             </h4>
                             <div class="row">
-                                <div id="list_cs" class="col-md-11 container-fluid">
+                                <div id="list_cs" class="col-md-11 container-fluid container_opsi">
+
+                                </div>
+                            </div>
+                            <hr>
+                            <h4>
+                                List Package
+                                <button onclick="findPackage()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
+                            </h4>
+                            <div class="row">
+                                <div id="list_package" class="col-md-11 container-fluid container_opsi">
 
                                 </div>
                             </div>
@@ -173,6 +185,34 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Lengkap</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="findPackageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel1">Find Package to Assign</h4> </div>
+                        <div class="modal-body">
+                            <table id="listPackageTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode</th>
+                                        <th>Nama</th>
+                                        <th>Harga</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

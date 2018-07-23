@@ -31,7 +31,7 @@ class Orders_model extends Penjualan_Model {
             $history_order_status_id = $params['order_status_id'];
             if(
                 in_array($params['order_status_id'], [7,8,9]) &&
-                $params['role_id'] == 5
+                in_array($params['role_id'], [1,5])
             )
             {
                 // role cs
@@ -318,6 +318,18 @@ class Orders_model extends Penjualan_Model {
     function del($id = 0)
     {
         return $this->db->delete('orders', ['order_id' => (int) $id]);
+    }
+
+    function clear_kode_unik($order_id)
+    {
+        $this->db->where([
+            'order_id' => (int) $order_id,
+            'product_name' => 'Kode Unik',
+            'product_id' => NULL,
+            'product_merk' => NULL,
+            'price_type' => 'RETAIL',
+        ]);
+        return $this->db->delete('orders_cart');
     }
 
     function addon_cart($params)

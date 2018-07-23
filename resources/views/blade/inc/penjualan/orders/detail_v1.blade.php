@@ -291,6 +291,10 @@
                         </form>
                     </div>
 
+<?php
+    $kode_unik = 0;
+?>
+
 @foreach ($orders_cart_package as $key => $value)
     <?php
         $del_package = '';
@@ -324,6 +328,8 @@
                         <br>
     @foreach ($value['cart'] as $key_cart => $value_cart)
         <?php
+            if($value_cart->product_name == 'Kode Unik') $kode_unik = (int) $value_cart->price;
+
             $btn_del = '';
             if($show_btn_del && !$value_cart->is_package) $btn_del = '<span class="delete_cart" onclick="deleteCart('.$value_cart->cart_id.')">[ x ]</span>';
         ?>
@@ -356,6 +362,23 @@
                         <div class="col-md-2" style="border-bottom: 1px dotted #000;"><h2>&nbsp</h2></div>
                         <div class="col-md-5"><h2>{{ rupiah($orders->total_price) }}</h2></div>
                     </div>
+
+@if(
+    (
+        $orders->order_status_id == 6 &&
+        $role_active->role_id == 3
+    ) ||
+    in_array($role_active->role_id, [1,2])
+)
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3"><h3>Kode Unik</h3></div>
+                        <div class="col-md-3"><input id="inputKodeUnik" type="number" class="input input-lg form-control" value="{{ $kode_unik }}" autofocus></div>
+                        <div class="col-md-3"><button onclick="saveKodeUnik()" class="btn btn-lg">Simpan</button></div>
+                    </div>
+@endif
+
+                    <br>
                     <div class="row">
 @if(
     (

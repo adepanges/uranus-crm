@@ -66,6 +66,7 @@ $(document).ready(function(){
                 { data: "account_name", orderable: false },
                 { data: "generated_invoice", orderable: false },
                 { data: "transaction_date", orderable: false },
+                { data: "note", orderable: false },
                 {
                     data: "transaction_amount", orderable: false,
                     render: function ( data, type, full, meta ) {
@@ -104,13 +105,6 @@ $(document).ready(function(){
                     orderable: false,
                     render: function ( data, type, full, meta ) {
                         var button = [];
-
-                        if(full.note != ''){
-                            button.push(`<span class="mytooltip tooltip-effect-5">
-                            <span class="tooltip-item">i</span> <span class="tooltip-content clearfix">
-                              <span class="tooltip-text">${full.note}</span> </span>
-                            </span>`);
-                        }
 
                         if(full.commit != 1)
                         {

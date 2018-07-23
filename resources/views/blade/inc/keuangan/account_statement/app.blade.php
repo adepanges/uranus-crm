@@ -91,14 +91,15 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Account</th>
-                                    <th>Invoice Number</th>
-                                    <th>Trx Date</th>
-                                    <th>Debit (-)</th>
-                                    <th>Credit (+)</th>
-                                    <th>Claim</th>
-                                    <th>Commit</th>
-                                    <th>Action</th>
+                                    <th style="width: 70px;">Account</th>
+                                    <th style="width: 150px;">Invoice Number</th>
+                                    <th style="width: 80px;">Trx Date</th>
+                                    <th style="width: 150px;">Info</th>
+                                    <th style="width: 140px;">Debit (-)</th>
+                                    <th style="width: 140px;">Credit (+)</th>
+                                    <th style="width: 50px;">Claim</th>
+                                    <th style="width: 50px;">Commit</th>
+                                    <th style="width: 50px;">Action</th>
                                 </tr>
                             </thead>
                         </table>

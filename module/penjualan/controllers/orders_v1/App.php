@@ -258,6 +258,47 @@ class App extends Penjualan_Controller {
         else redirect('orders_v1/detail/index/'.$id.'?FAIL');
     }
 
+    function upd_kode_unik()
+    {
+        $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');
+        $this->load->model(['orders_model']);
+        $order_id = (int) $this->input->post('order_id');
+
+        $params = [
+            'order_id' => $order_id,
+            'product_id' => NULL,
+            'product_merk' => NULL,
+            'product_name' => 'Kode Unik',
+            'qty' => 1,
+            'is_package' => 0,
+            'price' => (int) $this->input->post('kode_unik'),
+            'weight' => 0,
+            'price_type' => 'RETAIL',
+            'version' => 1,
+        ];
+
+        $this->orders_model->clear_kode_unik($order_id);
+        $res1 = $this->orders_model->addon_cart($params);
+        $res2 = $this->orders_model->upd($order_id, [
+            'total_price' => $this->orders_model->get_latest_price_cart($order_id)
+        ]);
+
+        if($res1 && $res2)
+        {
+            $this->_response_json([
+                'status' => 1,
+                'message' => 'Berhasil mengubah data'
+            ]);
+        }
+        else
+        {
+            $this->_response_json([
+                'status' => 0,
+                'message' => 'Gagal mengubah data'
+            ]);
+        }
+    }
+
     function addon_shopping_info()
     {
         $this->_restrict_access('penjualan_orders_update_shopping_info', 'rest');

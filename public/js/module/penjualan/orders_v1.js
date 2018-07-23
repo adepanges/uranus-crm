@@ -198,6 +198,66 @@ $(document).ready(function(){
             ]
         });
 
+    var numbererListPackage = 1;
+    listPackageTable = $('#listPackageTable').on('preXhr.dt', function ( e, settings, data ){
+        numbererListPackage = data.start + 1;
+        $('.row .white-box').block({
+            message: '<h3>Please Wait...</h3>',
+            css: {
+                border: '1px solid #fff'
+            }
+        });
+        data.team_cs_id = $('#filter_team_cs').val();
+    }).on('xhr.dt', function ( e, settings, json, xhr ){
+        $('.row .white-box').unblock();
+        $("#listPackageTable_filter").hide();
+    }).DataTable({
+        serverSide: true,
+        ajax: {
+            url: document.app.site_url + '/product/get_package',
+            type: 'POST'
+        },
+        language: {
+            infoFiltered: ""
+        },
+        columns: [
+            {
+                name: 'Number',
+                width: "5%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    return numbererListPackage++;
+                }
+            },
+            { data: "code" },
+            { data: "name" },
+            { data: "price",
+                render: function ( data, type, full, meta ) {
+                    return rupiah(data);
+                }
+            },
+            {
+                data: 'product_package_id',
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    var button = [], found = false;
+
+                    $('#list_package [name=product_id]').each(function(){
+                        if(data == $(this).val()) found = true;
+                    })
+
+                    if(!found)
+                    {
+                        full = btoa(JSON.stringify(full));
+                        button.push(`<button onclick="addPackagetoList('${full}')" class="btn btn-success btn-rounded"><i class="fa fa-plus"></i></button>`);
+                    }
+
+                    return button.join('');
+                }
+            }
+        ]
+    });
+
     $('#list_cs').on('click','button.close',function(){
         $(this).parent('.white-box').remove();
     })
@@ -295,6 +355,7 @@ function assignOrders(){
         keyboard: false
     });
 }
+
 function addCStoList(data){
     data = JSON.parse(atob(data));
     var el = `<div class="col-md-4 col-md-6 col-md-xs-12 white-box">
@@ -308,9 +369,28 @@ function addCStoList(data){
     listCSTable.ajax.reload();
 }
 
+function addPackagetoList(data){
+    data = JSON.parse(atob(data));
+    var el = `<div class="col-md-4 col-md-6 col-md-xs-12 white-box">
+        <input type="hidden" name="product_id" value="${data.product_id}">[${data.code}] ${data.name}<button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>`;
+    $('#list_package').append(el);
+    listPackageTable.ajax.reload();
+}
+
 function findCS(){
     listCSTable.ajax.reload();
     $('#findCSModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function findPackage(){
+    // listCSTable.ajax.reload();
+    $('#findPackageModal').modal({
         backdrop: 'static',
         keyboard: false
     });
