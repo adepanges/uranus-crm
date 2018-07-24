@@ -45,6 +45,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>ID</th>
                                     <th>Code</th>
                                     <th>Name</th>
                                     <th>Tipe Harga</th>

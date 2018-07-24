@@ -44,6 +44,7 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
+                { data: 'product_package_id' },
                 { data: "code" },
                 { data: "name" },
                 { data: "price_type" },
