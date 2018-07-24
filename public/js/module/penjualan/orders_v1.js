@@ -242,7 +242,7 @@ $(document).ready(function(){
                 render: function ( data, type, full, meta ) {
                     var button = [], found = false;
 
-                    $('#list_package [name=product_id]').each(function(){
+                    $('#list_package [name=product_package_id]').each(function(){
                         if(data == $(this).val()) found = true;
                     })
 
@@ -258,7 +258,7 @@ $(document).ready(function(){
         ]
     });
 
-    $('#list_cs').on('click','button.close',function(){
+    $('.container_opsi').on('click','button.close',function(){
         $(this).parent('.white-box').remove();
     })
 
@@ -266,7 +266,8 @@ $(document).ready(function(){
         var user_id = [],
             order_id = [],
             type = $('#assignOrdersModal [name=type_assign]:checked').val(),
-            total_orders = $('#assignOrdersModal [name=total_orders]').val();
+            total_orders = $('#assignOrdersModal [name=total_orders]').val(),
+            product_package_id = [];
 
 
         if($('#list_cs [name=user_id]').length == 0)
@@ -295,6 +296,10 @@ $(document).ready(function(){
             })
         }
 
+        $('#list_package [name=product_package_id]').each(function(){
+            product_package_id.push($(this).val());
+        })
+
         swal({
             title: "Apakah anda yakin?",
             text: "Anda akan assign ke masing masing cs yg dipilih!",
@@ -316,7 +321,8 @@ $(document).ready(function(){
                         user_id: btoa(JSON.stringify(user_id)),
                         order_id: btoa(JSON.stringify(order_id)),
                         type: type,
-                        total_orders: total_orders
+                        total_orders: total_orders,
+                            product_package_id: btoa(JSON.stringify(product_package_id))
                     }
                 })
                 .done(function( response ) {
@@ -337,6 +343,13 @@ $(document).ready(function(){
                 });
             }
         });
+    });
+
+    $('input[type=radio][name=type_assign]').change(function(){
+        var type_assign = $(this).val();
+
+        if(type_assign == 'bulk') $('#sectionPackage').fadeIn();
+        else $('#sectionPackage').fadeOut();
     });
 });
 
@@ -372,7 +385,7 @@ function addCStoList(data){
 function addPackagetoList(data){
     data = JSON.parse(atob(data));
     var el = `<div class="col-md-4 col-md-6 col-md-xs-12 white-box">
-        <input type="hidden" name="product_id" value="${data.product_id}">[${data.code}] ${data.name}<button type="button" class="close" aria-label="Close">
+        <input type="hidden" name="product_package_id" value="${data.product_package_id}">[${data.code}] ${data.name}<button type="button" class="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>`;
@@ -389,7 +402,7 @@ function findCS(){
 }
 
 function findPackage(){
-    // listCSTable.ajax.reload();
+    listPackageTable.ajax.reload();
     $('#findPackageModal').modal({
         backdrop: 'static',
         keyboard: false

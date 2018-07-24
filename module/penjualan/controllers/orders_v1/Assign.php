@@ -7,6 +7,7 @@ class Assign extends Penjualan_Controller {
     {
         $order_id = (array) json_decode(base64_decode($this->input->post('order_id')));
         $user_id = (array) json_decode(base64_decode($this->input->post('user_id')));
+        $product_package_id = (array) json_decode(base64_decode($this->input->post('product_package_id')));
         $type = $this->input->post('type');
         $total = (int) $this->input->post('total_orders');
 
@@ -28,9 +29,11 @@ class Assign extends Penjualan_Controller {
         $this->load->model('assign_model');
 
         $data_orders = [];
-        switch($type){
+        switch($type)
+        {
             case 'selected':
-                if(empty($order_id)) {
+                if(empty($order_id))
+                {
                     $this->_response_json([
                         'status' => 0,
                         'message' => 'Orders belum dipilih'
@@ -40,7 +43,7 @@ class Assign extends Penjualan_Controller {
             break;
 
             case 'bulk':
-                $data_orders = $this->assign_model->get_orders_active($total)->result();
+                $data_orders = $this->assign_model->get_orders_active($total, $product_package_id)->result();
             break;
         }
 

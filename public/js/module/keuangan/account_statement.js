@@ -63,10 +63,10 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
-                { data: "account_name", orderable: false },
-                { data: "generated_invoice", orderable: false },
-                { data: "transaction_date", orderable: false },
-                { data: "note", orderable: false },
+                { data: "account_name", width: "8%", orderable: false },
+                { data: "generated_invoice", width: "16%", orderable: false },
+                { data: "transaction_date", width: "10%", orderable: false },
+                { data: "note",  width: "15%", orderable: false },
                 {
                     data: "transaction_amount", orderable: false,
                     render: function ( data, type, full, meta ) {
@@ -206,6 +206,55 @@ $(document).ready(function(){
             });
         }
     })
+
+    $('.opsi-penjualan').click(function(){
+        $('.opsi-penjualan').removeClass('btn-info');
+        $(this).addClass('btn-info');
+
+        var state = $(this).attr('data');
+
+        if(state == 'penjualan')
+        {
+            $('#section-nomor-invoice').fadeIn();
+            $('#appForm [name=is_sales]').val(1);
+        }
+        else
+        {
+            $('#section-nomor-invoice').fadeOut();
+            $('#appForm [name=is_sales]').val(0);
+        }
+    });
+
+    $('#appForm [name=is_sales]').change(function(){
+        var is_sales = $(this).val();
+
+        if(is_sales == 1 && !$('.opsi-penjualan[data=penjualan]').hasClass('btn-info'))
+        {
+            $('.opsi-penjualan[data=penjualan]').click();
+        } else if(is_sales == 0 && !$('.opsi-penjualan[data=non-penjualan]').hasClass('btn-info'))
+        {
+            $('#section-nomor-invoice').hide();
+            $('.opsi-penjualan[data=non-penjualan]').click();
+        }
+    });
+
+    $('#componentModal').on('shown.bs.modal', function() {
+        $('#appForm [name=transaction_type]').trigger('change');
+    })
+
+    $('#appForm [name=transaction_type]').change(function(){
+        var transaction_type = $(this).val();
+
+        if(transaction_type == 'K')
+        {
+            $('#section-opsi-penjualan').show();
+        }
+        else
+        {
+            $('#section-nomor-invoice').hide();
+            $('#section-opsi-penjualan').hide();
+        }
+    })
 });
 
 function findParentTrx(){
@@ -279,28 +328,13 @@ function addDebit(){
     });
 }
 
-function addPenjualan(){
+function addKredit(){
     $('#parent_trx').empty();
     $('#appForm')[0].reset();
     formPopulate('#appForm', {
         account_statement_id: 0,
         transaction_date: last_date_commited_trx,
         is_sales: 1,
-        transaction_type: 'K'
-    })
-    $('#componentModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-}
-
-function addNonPenjualan(){
-    $('#parent_trx').empty();
-    $('#appForm')[0].reset();
-    formPopulate('#appForm', {
-        account_statement_id: 0,
-        transaction_date: last_date_commited_trx,
-        is_sales: 0,
         transaction_type: 'K'
     })
     $('#componentModal').modal({

@@ -57,11 +57,11 @@ class App extends Keuangan_Controller {
             ]);
         }
 
+        $next_seq = $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix));
+        $inv_seq_number = str_pad($next_seq, 7, "0", STR_PAD_LEFT);
+
         if(!$account_statement_id)
         {
-            $next_seq = $this->account_statement_model->get_next_seq($this->franchise->franchise_id, date('Y', $trx_date_unix));
-            $inv_seq_number = str_pad($next_seq, 7, "0", STR_PAD_LEFT);
-
             if(
                 $data['is_sales'] == 1 &&
                 $data['parent_statement_id'] == 0 &&
@@ -83,6 +83,38 @@ class App extends Keuangan_Controller {
             $res = FALSE;
             if(isset($check->commit) && $check->commit != 1)
             {
+                if(
+                    (
+                        $check->is_sales == 0 &&
+                        $check->parent_statement_id == 0 &&
+                        $check->transaction_type == 'K'
+                    )
+                    &&
+                    (
+                        $data['is_sales'] == 1 &&
+                        $data['parent_statement_id'] == 0 &&
+                        $data['transaction_type'] == 'K'
+                    )
+                )
+                {
+                    $data['seq_invoice'] = $next_seq;
+                    $data['generated_invoice'] = $franchise->code."/".date('Ymd', $trx_date_unix)."/".$inv_seq_number;
+                }
+                else if(
+                    (
+                        $check->is_sales == 1 && $check->transaction_type == 'K'
+                    )
+                    &&
+                    (
+                        $data['is_sales'] == 0 &&
+                        $data['parent_statement_id'] == 0
+                    )
+                )
+                {
+                    $data['seq_invoice'] = 0;
+                    $data['generated_invoice'] = NULL;
+                }
+
                 $res = $this->account_statement_model->upd($data, $account_statement_id);
             }
         }

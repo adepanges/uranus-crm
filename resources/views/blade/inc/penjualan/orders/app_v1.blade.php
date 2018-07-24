@@ -102,7 +102,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             <h4 class="modal-title" id="exampleModalLabel1">Assign Orders</h4> </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="height: 400px; overflow-y: auto;">
                             <h4>
                                 List CS
                                 <button onclick="findCS()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
@@ -113,16 +113,19 @@
                                 </div>
                             </div>
                             <hr>
-                            <h4>
-                                List Package
-                                <button onclick="findPackage()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
-                            </h4>
-                            <div class="row">
+
+                            <div class="row" id="sectionPackage" style="display: none;">
+                                <h4>
+                                    List Package
+                                    <button onclick="findPackage()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
+                                </h4>
+
                                 <div id="list_package" class="col-md-11 container-fluid container_opsi">
 
                                 </div>
+                                <hr>
                             </div>
-                            <hr>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="radio" name="type_assign" value="selected" checked> Selected<br><br>
