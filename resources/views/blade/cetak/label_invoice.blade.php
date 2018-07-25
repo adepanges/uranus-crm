@@ -29,15 +29,15 @@
 
     .side.label-pengiriman {
         font-size: 12px;
-        border-right: 1mm dotted #000;
+        /* border-right: 1mm dotted #000; */
     }
 
     .side.botl {
-        border-top: 1mm dotted #000;
-        border-right: 1mm dotted #000;
+        /* border-top: 1mm dotted #000; */
+        /* border-right: 1mm dotted #000; */
     }
     .side.botr {
-        border-top: 1mm dotted #000;
+        /* border-top: 1mm dotted #000; */
     }
 
     .side img {
