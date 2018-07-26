@@ -82,13 +82,16 @@ $(document).ready(function(){
 
     $('#btnSaveCompanySetting').click(function(e){
         if(formValidator('#companySettingForm')){
-            var data = serialzeForm('#companySettingForm');
+            var data = new FormData($('#companySettingForm')[0]);
 
             $('.preloader').fadeIn();
             $.ajax({
                 method: "POST",
                 url: document.app.site_url+'/franchise/app/save',
-                data: data
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false
             })
             .done(function( response ) {
                 $('.preloader').fadeOut();
@@ -113,6 +116,23 @@ $(document).ready(function(){
                     showConfirmButton: showConfirmButton
                 });
             });
+        }
+    })
+
+    $('#companySettingForm input[type=file][name=logo]').change(function(){
+        var input = this;
+        if (input.files && input.files[0])
+        {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              $('#logo-preview img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+            $('#logo-preview').fadeIn();
+        }
+        else
+        {
+            $('#logo-preview').fadeOut();
         }
     })
 });

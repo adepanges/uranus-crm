@@ -20,9 +20,11 @@ class Cetak extends Penjualan_Controller {
         if(isset($data->customer_address)) $data->customer_address = json_decode($data->customer_address);
         if(isset($data->order_cart)) $data->order_cart = $this->orders_model->parse_cart_v1(json_decode($data->order_cart));
 
-        $this->blade->view('cetak/invoice', [
+        $this->_set_data([
             'invoice' => $data
         ]);
+
+        $this->blade->view('cetak/invoice', $this->data);
     }
 
     public function excel($id = '')

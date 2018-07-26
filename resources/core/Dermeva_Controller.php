@@ -18,12 +18,19 @@ class Dermeva_Controller extends CI_Controller {
             'access_list' => (object) $this->session->userdata('access_list'),
             'role_active' => (object) $this->session->userdata('role_active'),
             'franchise' => (object) $this->session->userdata('franchise'),
-            'logout_link' => $this->config->item('sso_link').'/auth/log/out'
+            'logout_link' => $this->config->item('sso_link').'/auth/log/out',
+            'franchise_logo' => base_url('images/logo/dermeva_logo_205x41.png')
         ];
+
 
         $this->profile = $this->session->userdata('profile');
         $this->role_active = $this->session->userdata('role_active');
         $this->franchise = $this->session->userdata('franchise');
+
+        if(isset($this->franchise->logo) && !empty($this->franchise->logo))
+        {
+            $this->data['franchise_logo'] = base_url('images/logo/franchise/'.$this->franchise->logo);
+        }
 
         $this->_check_active_user();
 

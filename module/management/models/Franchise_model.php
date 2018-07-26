@@ -6,7 +6,7 @@ class Franchise_model extends Management_Model {
         $datatable_param = NULL,
         $table = 'franchise',
         $orderable_field = ['code','name','status'],
-        $fillable_field = ['code','name','nama_badan','address','tax_number','status'],
+        $fillable_field = ['code','name','nama_badan','address','tax_number','status','logo'],
         $searchable_field = ['code','name'];
 
     function get_datatable()

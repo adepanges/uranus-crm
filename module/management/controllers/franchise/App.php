@@ -28,6 +28,15 @@ class App extends Management_Controller {
             'status' => (int) $this->input->post('status')
         ];
 
+        if(isset($_FILES['logo']))
+        {
+            $file_name = $this->do_upload('logo');
+            if(!empty($file_name))
+            {
+                $data['logo'] = $file_name;
+            }
+        }
+        
         $this->load->model('franchise_model');
         if(!$franchise_id)
         {
@@ -53,6 +62,33 @@ class App extends Management_Controller {
                 'status' => 0,
                 'message' => 'Gagal menyimpan data'
             ]);
+        }
+    }
+
+    function do_upload($field_name)
+    {
+        $config['upload_path'] = FCPATH.'public/images/logo/franchise/';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg';
+        $config['file_ext_tolower'] = TRUE;
+        $config['overwrite'] = TRUE;
+
+        $config['file_name'] = 'logo_'.$this->normaliza_name($this->input->post('code')).'_'.$this->normaliza_name($this->input->post('name'));
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload($field_name))
+        {
+            dd($this->upload);
+            exit;
+
+            $this->_response_json([
+                'status' => 0,
+                'message' => strip_tags($this->upload->display_errors())
+            ]);
+        }
+        else
+        {
+            return $this->upload->data('file_name');
         }
     }
 }

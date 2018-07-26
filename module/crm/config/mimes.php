@@ -1,4 +1,4 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once(FCPATH.'configuration/mimes.php');
+return require_once(FCPATH.'configuration/mimes.php');

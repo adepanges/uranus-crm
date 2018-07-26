@@ -103,7 +103,7 @@
 @elseif ($i == 2)
     <div class="side botr">
 @endif
-        <img src="{{ base_url('images/logo/dermeva_logo_205x41.png') }}">
+        <img src="{{ $franchise_logo }}" width="205px">
         <hr>
         <h3>Faktur</h3>
         <b>{{ $value->nama_badan }}</b><br>
