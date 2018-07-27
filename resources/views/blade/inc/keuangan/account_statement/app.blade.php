@@ -38,7 +38,7 @@
                     </button>
                 </div>
                 <div class="col-sm-12 col-md-6">
-                    <button class="col-md-12 btn btn-success" onclick="modalKredit()">
+                    <button class="col-md-12 btn btn-success" onclick="addKredit()">
                         <h1 style="text-align: center;"><i class="fa fa-arrow-down"></i> KREDIT</h1>
                     </button>
                 </div>
@@ -94,6 +94,7 @@
                                     <th>Account</th>
                                     <th>Invoice Number</th>
                                     <th>Trx Date</th>
+                                    <th>Info</th>
                                     <th>Debit (-)</th>
                                     <th>Credit (+)</th>
                                     <th>Claim</th>
@@ -144,33 +145,6 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="opsiKreditModal" role="dialog" aria-labelledby="exampleModalLabel1"
-            style="z-index: 1041 !important;">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel1"></h4>
-                        </div>
-                        <div class="modal-body" style="height: 120px;">
-                            <div class="col-sm-12 col-md-6">
-                                <button class="col-md-12 btn btn-success" onclick="addPenjualan()">
-                                    <h1 style="text-align: center;">Penjualan</h1>
-                                </button>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                                <button class="col-md-12 btn" onclick="addNonPenjualan()">
-                                    <h1 style="text-align: center;">Non Penjualan</h1>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="modal fade" id="componentModal" role="dialog" aria-labelledby="exampleModalLabel1"
             style="z-index: 1041 !important;">
                 <div class="modal-dialog" role="document">
@@ -184,6 +158,28 @@
                                 <input type="hidden" name="account_statement_id">
                                 <input type="hidden" name="is_sales">
                                 <input type="hidden" name="transaction_type">
+
+                                <div id="section-opsi-penjualan" class="btn-group btn-group-justified select-mode m-b-30">
+                                    <div class="btn-group">
+                                        <button class="btn opsi-penjualan" data="penjualan" type="button">
+                                            <i style="font-size: 20px;" class="fa fa-shopping-cart"></i>
+                                            <br>
+                                            <span>Penjualan</span>
+                                        </button>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn opsi-penjualan" data="non-penjualan" type="button">
+                                            <i style="font-size: 20px;" class="fa fa-star"></i>
+                                            <br>
+                                            <span>Non Penjualan</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="section-nomor-invoice">
+                                    <label class="control-label">Nomor Invoice</label>
+                                    <input class="form-control" type="text" name="generated_invoice" placeholder="akan di generate" readonly>
+                                </div>
 
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Account</label>

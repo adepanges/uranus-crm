@@ -71,35 +71,42 @@
                             <h4 class="modal-title" id="exampleModalLabel1">Company Setting</h4>
                         </div>
                         <div class="modal-body">
-                            <form id="companySettingForm" data-toggle="validator" data-delay="100">
+                            <form id="companySettingForm" data-toggle="validator" data-delay="100" enctype="multipart/form-data">
                                 <input type="hidden" name="franchise_id">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Code</label>
+                                    <label class="control-label">Code</label>
                                     <input type="text" class="form-control" name="code" data-error="Hmm, code perusahaan harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Nama</label>
+                                    <label class="control-label">Nama</label>
                                     <input type="text" class="form-control" name="name" data-error="Hmm, nama perusahaan harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Nama Badan</label>
+                                    <label class="control-label">Nama Badan</label>
                                     <input type="text" class="form-control" name="nama_badan" data-error="Hmm, nama badan perusahaan harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Alamat</label>
+                                    <label class="control-label">Alamat</label>
                                     <textarea class="form-control" name="address" data-error="Hmm, alamat perusahaan harap diisi" required></textarea>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">NPWP</label>
+                                    <label class="control-label">NPWP</label>
                                     <input type="text" class="form-control" name="tax_number" data-error="Hmm, nama NPWP perusahaan harap diisi" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message-text" class="control-label" style="margin-right: 10px;">Active</label>
+                                    <label class="control-label">Logo</label>
+                                    <input type="file" class="form-control" name="logo" placeholder="Pilih file" accept=".gif,.jpg,.jpeg,.png">
+                                </div>
+                                <div class="form-group" id="logo-preview" style="display: none;">
+                                    <img class="light-logo" width="200px">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" style="margin-right: 10px;">Active</label>
                                     <input type="checkbox" name="status" value="1" checked class="js-switch" data-color="#99d683">
                                 </div>
                             </form>

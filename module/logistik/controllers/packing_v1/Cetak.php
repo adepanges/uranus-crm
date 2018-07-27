@@ -20,9 +20,11 @@ class Cetak extends Logistik_Controller {
             $data[$key] = $value;
         }
 
-        $this->blade->view('cetak/label_invoice', [
+        $this->_set_data([
             'invoices' => $data
         ]);
+
+        $this->blade->view('cetak/label_invoice', $this->data);
     }
 
     public function label($id = '')

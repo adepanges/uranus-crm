@@ -44,6 +44,7 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
+                { data: 'network_id' },
                 { data: "name" },
                 {
                     data: "status",
@@ -82,7 +83,7 @@ $(document).ready(function(){
                 }
             ]
         });
-        
+
     $('#btnSaveNetwork').click(function(e){
         if(formValidator('#networkForm')){
             var data = serialzeForm('#networkForm');

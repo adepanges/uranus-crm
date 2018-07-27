@@ -7,9 +7,9 @@
                     <a class="logo" href="{{ base_url() }}">
                         <span class="hidden-xs">
                             <!--This is dark logo text-->
-                            <img src="{{ base_url('images/logo/dermeva_logo_205x41.png') }}" alt="home" class="dark-logo" />
+                            <img src="{{ $franchise_logo }}" alt="home" class="dark-logo" width="205px"/>
                             <!--This is light logo text-->
-                            <img src="{{ base_url('images/logo/dermeva_logo_205x41.png') }}" alt="home" class="light-logo" />
+                            <img src="{{ $franchise_logo }}" alt="home" class="light-logo" width="205px"/>
                          </span>
                      </a>
                 </div>

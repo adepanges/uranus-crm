@@ -44,6 +44,7 @@ $(document).ready(function(){
                         return numberer++;
                     }
                 },
+                { data: 'product_package_id' },
                 { data: "code" },
                 { data: "name" },
                 { data: "price_type" },
@@ -144,6 +145,16 @@ $(document).ready(function(){
         }
     })
 });
+
+function addPackage(){
+    formPopulate('#packageForm', {
+        product_package_id: 0
+    });
+    $('#packageModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
 
 function updPackage(id){
     $('.preloader').fadeIn();

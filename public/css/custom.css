@@ -54,7 +54,7 @@ code.catch {
     font-weight: bold;
 }
 
-#list_cs {
+.container_opsi {
     border: 1px solid #808080;
     margin-left: 10px;
     background-color: #EDF1F5;
@@ -128,4 +128,8 @@ table tbody td {
 
 tr td.processed {
     text-align: center;
+}
+
+#dataTable>tbody>tr>td {
+    border-top: 2px solid #e4e7ea !important;
 }

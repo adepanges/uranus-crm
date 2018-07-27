@@ -45,6 +45,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>ID</th>
                                     <th>Code</th>
                                     <th>Name</th>
                                     <th>Tipe Harga</th>
@@ -53,7 +54,7 @@
                                     <th>
                                         Action
                                         @if($access_list->management_package_product_add)
-                                            <button onclick="addProduct()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
+                                            <button onclick="addPackage()" style="margin-left: 4px;" type="button" class="btn btn-success btn-circle btn-sm m-r-5"><i class="ti-plus"></i></button>
                                         @endif
                                     </th>
                                 </tr>

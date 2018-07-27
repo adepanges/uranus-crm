@@ -981,8 +981,46 @@ $(document).ready(function(){
             });
         });
     })
+
+    $('#inputKodeUnik').keypress(function(e) {
+        if(e.which == 13) {
+            saveKodeUnik();
+        }
+    });
 });
 
+function saveKodeUnik()
+{
+    $('.preloader').fadeIn();
+    $.ajax({
+        method: "POST",
+        url: document.app.site_url+'/orders_v1/app/upd_kode_unik',
+        data: {
+            order_id: document.app.penjualan.orders.order_id,
+            kode_unik: $('#inputKodeUnik').val()
+        }
+    })
+    .done(function( response ) {
+        $('.preloader').fadeOut();
+        var title = 'Berhasil!',
+            timer = 1000;
+
+        if(!response.status) {
+            var timer = 3000;
+            title = 'Gagal!';
+        } else {
+            document.location.reload();
+        }
+
+        swal({
+            title: title,
+            text: response.message,
+            timer: timer
+        },function(){
+
+        });
+    });
+}
 
 function initSelectOpt(ths, sl)
 {

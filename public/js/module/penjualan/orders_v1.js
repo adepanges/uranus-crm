@@ -198,7 +198,67 @@ $(document).ready(function(){
             ]
         });
 
-    $('#list_cs').on('click','button.close',function(){
+    var numbererListPackage = 1;
+    listPackageTable = $('#listPackageTable').on('preXhr.dt', function ( e, settings, data ){
+        numbererListPackage = data.start + 1;
+        $('.row .white-box').block({
+            message: '<h3>Please Wait...</h3>',
+            css: {
+                border: '1px solid #fff'
+            }
+        });
+        data.team_cs_id = $('#filter_team_cs').val();
+    }).on('xhr.dt', function ( e, settings, json, xhr ){
+        $('.row .white-box').unblock();
+        $("#listPackageTable_filter").hide();
+    }).DataTable({
+        serverSide: true,
+        ajax: {
+            url: document.app.site_url + '/product/get_package',
+            type: 'POST'
+        },
+        language: {
+            infoFiltered: ""
+        },
+        columns: [
+            {
+                name: 'Number',
+                width: "5%",
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    return numbererListPackage++;
+                }
+            },
+            { data: "code" },
+            { data: "name" },
+            { data: "price",
+                render: function ( data, type, full, meta ) {
+                    return rupiah(data);
+                }
+            },
+            {
+                data: 'product_package_id',
+                orderable: false,
+                render: function ( data, type, full, meta ) {
+                    var button = [], found = false;
+
+                    $('#list_package [name=product_package_id]').each(function(){
+                        if(data == $(this).val()) found = true;
+                    })
+
+                    if(!found)
+                    {
+                        full = btoa(JSON.stringify(full));
+                        button.push(`<button onclick="addPackagetoList('${full}')" class="btn btn-success btn-rounded"><i class="fa fa-plus"></i></button>`);
+                    }
+
+                    return button.join('');
+                }
+            }
+        ]
+    });
+
+    $('.container_opsi').on('click','button.close',function(){
         $(this).parent('.white-box').remove();
     })
 
@@ -206,7 +266,8 @@ $(document).ready(function(){
         var user_id = [],
             order_id = [],
             type = $('#assignOrdersModal [name=type_assign]:checked').val(),
-            total_orders = $('#assignOrdersModal [name=total_orders]').val();
+            total_orders = $('#assignOrdersModal [name=total_orders]').val(),
+            product_package_id = [];
 
 
         if($('#list_cs [name=user_id]').length == 0)
@@ -235,6 +296,10 @@ $(document).ready(function(){
             })
         }
 
+        $('#list_package [name=product_package_id]').each(function(){
+            product_package_id.push($(this).val());
+        })
+
         swal({
             title: "Apakah anda yakin?",
             text: "Anda akan assign ke masing masing cs yg dipilih!",
@@ -256,7 +321,8 @@ $(document).ready(function(){
                         user_id: btoa(JSON.stringify(user_id)),
                         order_id: btoa(JSON.stringify(order_id)),
                         type: type,
-                        total_orders: total_orders
+                        total_orders: total_orders,
+                            product_package_id: btoa(JSON.stringify(product_package_id))
                     }
                 })
                 .done(function( response ) {
@@ -278,6 +344,13 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('input[type=radio][name=type_assign]').change(function(){
+        var type_assign = $(this).val();
+
+        if(type_assign == 'bulk') $('#sectionPackage').fadeIn();
+        else $('#sectionPackage').fadeOut();
+    });
 });
 
 function assignOrders(){
@@ -295,6 +368,7 @@ function assignOrders(){
         keyboard: false
     });
 }
+
 function addCStoList(data){
     data = JSON.parse(atob(data));
     var el = `<div class="col-md-4 col-md-6 col-md-xs-12 white-box">
@@ -308,9 +382,28 @@ function addCStoList(data){
     listCSTable.ajax.reload();
 }
 
+function addPackagetoList(data){
+    data = JSON.parse(atob(data));
+    var el = `<div class="col-md-4 col-md-6 col-md-xs-12 white-box">
+        <input type="hidden" name="product_package_id" value="${data.product_package_id}">[${data.code}] ${data.name}<button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>`;
+    $('#list_package').append(el);
+    listPackageTable.ajax.reload();
+}
+
 function findCS(){
     listCSTable.ajax.reload();
     $('#findCSModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+}
+
+function findPackage(){
+    listPackageTable.ajax.reload();
+    $('#findPackageModal').modal({
         backdrop: 'static',
         keyboard: false
     });
