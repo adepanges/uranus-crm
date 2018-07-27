@@ -101,8 +101,6 @@ SELECT
         'penjualan_orders_trash_list',
         'penjualan_orders_trash_delete',
         'penjualan_orders_trash_pulihkan',
-        'report_simple',
-        'report_simple_list',
         'sso_user_profile',
         'sso_user_profile_save'
     ) THEN 1 ELSE 0 END AS flag
